@@ -1,0 +1,52 @@
+id: dieffenbachia
+name: "Dieffenbachia (Dumb Cane)"
+botanical_name: "Dieffenbachia spp."
+type: "Tropical Houseplant (Aroid)"
+toxicity: "TOXIC to humans and pets — ingesting causes severe mouth/throat swelling. Sap causes skin irritation; wear gloves when pruning."
+growth_habit: "Upright, thick cane-forming stems"
+
+location: ""  # fill in where this plant lives
+
+light:
+  ideal: "Bright, indirect light"
+  placement: "Near an East-facing window, or a few feet back from a South or West-facing window"
+  too_much: "Scorched leaves with brown, crispy spots"
+  too_little: "Significantly slowed growth; vibrant white/yellow variegation fades to solid green"
+
+watering:
+  when: "Allow the top 2–3 inches of soil to dry out completely before watering — check with a finger"
+  how: "Water thoroughly until it drains from the holes. Empty the saucer immediately; never let it sit in standing water."
+  overwatering_signs: "Soggy soil, root rot, yellowing or mushy stems"
+  underwatering_signs: "Drooping, dry soil deeper than 3 inches"
+  seasonal_note: "Water less frequently in Fall and Winter when growth naturally slows."
+  estimated_interval_days:
+    spring_summer: 7
+    fall_winter: 14
+
+environment:
+  temperature: "65°F–80°F (18°C–27°C). Keep away from cold drafts, uninsulated windows in winter, and AC vents. Below 60°F can damage the plant."
+  humidity: "Prefers 50–60%. Boost with a pebble tray, grouping plants together, or a small humidifier — especially important in dry winter months."
+
+soil:
+  mix: "Rich, well-draining potting mix"
+  recipe: "Standard indoor houseplant soil + generous handful of perlite + some orchid bark"
+  repotting: "Repot every 1–2 years, or when roots poke out of drainage holes. Go up only 1–2 inches in pot diameter. Best done in Spring or early Summer."
+
+feeding:
+  fertilizer: "Balanced water-soluble houseplant fertilizer at half-strength"
+  schedule: "Once monthly during growing season (Spring and Summer). Stop in Fall and Winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Remove dead or yellowing lower leaves as needed.
+  If the plant gets too tall or leggy, slice the main cane with a sterile knife
+  to encourage bushy new growth lower down. Always wear gloves — the sap
+  contains calcium oxalate crystals and causes skin irritation.
+
+maintenance:
+  cleaning: "Wipe large leaves with a damp cloth every few weeks to remove dust and support photosynthesis."
+
+notes:
+  - "Rotate: Give the pot a quarter-turn every time you water to prevent the plant from leaning toward the light and growing lopsided."
+  - "Sap safety: Wash hands (or wear gloves) after any contact with the sap when pruning or removing dead leaves."
+  - "Natural aging: Shedding the lowest, oldest leaves as new growth pushes from the top is normal — this is how the characteristic thick cane forms."
