@@ -1,0 +1,47 @@
+id: hoya-krimson-queen
+name: "Hoya 'Krimson Queen'"
+botanical_name: "Hoya carnosa 'Krimson Queen'"
+type: "Epiphytic Vine / Semi-Succulent"
+toxicity: "Non-toxic to cats and dogs"
+growth_habit: "Trailing / Climbing. Shoots bare vines first, then fills in with leaves."
+
+location: "West-facing window, ~1 foot from glass"
+
+light:
+  ideal: "Bright, indirect light"
+  placement: "East or West-facing window. Keep 1-2 feet back from West window glass to avoid scorching white leaf margins."
+  too_much: "Crispy, brown, or burnt edges on the white variegation"
+  too_little: "Stunted or zero growth; vine stretches with no new leaves; variegation fades to solid green"
+  notes: "High light causes new leaves and white edges to emerge with a pink tint"
+
+watering:
+  when: "Allow soil to dry out 100% between waterings — always check before watering"
+  how: "Water thoroughly until it drains from the holes. Empty the saucer immediately; never let it sit in water."
+  overwatering_signs: "Yellowing, mushy leaves; rotting stems"
+  underwatering_signs: "Leaves become thin, soft, wrinkled, or lose their firm, waxy rigidity"
+  estimated_interval_days:
+    spring_summer: 10
+    fall_winter: 21
+
+environment:
+  temperature: "60°F–85°F. Keep away from cold drafts and direct heating/AC vents."
+  humidity: "Tolerates average household humidity; thrives at 50–60%+"
+
+soil:
+  mix: "Chunky, airy mix — excellent drainage is essential"
+  recipe: "1/3 indoor potting soil + 1/3 perlite + 1/3 orchid bark"
+  repotting: "Prefers rootbound conditions. Only repot when roots are bursting from drainage holes; go up one pot size (1–2 inches larger)."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during active growing season (Spring and Summer). Pause in Fall and Winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Do NOT cut the long, bare vines — the plant uses these tendrils to seek out
+  climbing supports and will eventually grow leaves along them.
+  Only trim dead or damaged foliage.
+
+notes:
+  - "Acclimation: Transitioned slowly from a lower-light bathroom to the West-facing window — started 3–4 feet back, moved closer over two weeks to prevent sunburn."
+  - "Hoya pauses are normal: if care is correct but growth has stalled, the plant is likely building its root system underground."
