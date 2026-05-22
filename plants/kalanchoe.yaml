@@ -5,7 +5,7 @@ type: "Flowering Succulent Perennial"
 toxicity: "Toxic to cats and dogs — contains cardiac glycosides causing gastrointestinal upset and abnormal heart rhythms if ingested"
 growth_habit: "Compact, bushy, and upright. Scalloped, thick, dark green glossy leaves with large dense clusters of long-lasting flowers rising above the foliage."
 
-location: ""  # fill in where this plant lives
+location: "Big Room, West-facing window"
 
 light:
   ideal: "Bright, indirect light with some direct morning sun tolerated"
