@@ -1,0 +1,42 @@
+id: dracaena-malaika
+name: "Dracaena 'Malaika' (Ribbon Plant)"
+botanical_name: "Dracaena fragrans 'Malaika' (syn. Dracaena deremensis 'Malaika')"
+type: "Tropical Evergreen Houseplant"
+toxicity: "Toxic to cats and dogs — contains saponins causing vomiting, drooling, dilated pupils, and lethargy"
+growth_habit: "Upright and rosette-forming when young, eventually developing a woody central cane with a miniature palm-like appearance. Arching strap-like leaves with deep green margins, mint green stripes, and a crisp white center line."
+
+location: ""
+
+light:
+  ideal: "Bright, indirect sunlight — keeps the central white and lime-green stripe crisp and vibrant"
+  too_much: "Bleached or scorched variegated portions from direct intense sun"
+  too_little: "Growth slows dramatically; bright white variegation fades or turns more solidly green in moderate to low light"
+
+watering:
+  when: "Allow the top 50% of soil to dry out completely before watering — prefers to stay on the dry side"
+  how: "Water thoroughly until it runs from the drainage holes; empty the outer decorative pot immediately. Never let the inner grower pot sit in standing water."
+  water_quality: "Sensitive to fluoride, chlorine, and salts in tap water — causes brown crispy leaf tips. Use distilled, rainwater, or filtered water to prevent this."
+  overwatering_signs: "Yellowing leaves; mushy stems"
+  underwatering_signs: "Drooping or curling leaves"
+  estimated_interval_days:
+    spring_summer: 14
+    fall_winter: 21
+
+environment:
+  temperature: "18°C–24°C (65°F–75°F). Keep away from cold window drafts, AC vents, and direct heat sources."
+  humidity: "Adapts to average household humidity; appreciates moderate humidity (40–50%). If leaf tips get crunchy despite proper watering, a nearby humidifier can help."
+
+soil:
+  mix: "Loose, well-draining potting soil"
+  recipe: "Standard houseplant mix amended with perlite and a bit of peat moss for balanced drainage and aeration"
+  repotting: "Slow-growing with a modest root system — repot every 2–3 years. Choose a pot only 1–2 inches larger, with drainage holes."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during spring and summer. Do not fertilize at all in fall or winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+notes:
+  - "Currently a beautifully compact, full rosette growing close to the soil. Over time it will naturally drop lower leaves and build a woody trunk, developing a miniature palm-like appearance."
+  - "Grooming: Wipe long leaves with a damp cloth every few weeks to remove dust and keep them glossy. Gently peel away or snip naturally yellowing lower leaves at the base."
+  - "Trimming tips: If leaf tips develop minor brown crispy edges, trim with sharp scissors following the natural pointed curve of the leaf — never cut straight across."
