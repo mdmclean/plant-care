@@ -1,9 +1,9 @@
 id: kalanchoe
 name: "Kalanchoe (Flaming Katy)"
 botanical_name: "Kalanchoe blossfeldiana"
-type: "Succulent / Tropical Flowering Houseplant"
-toxicity: "Toxic to cats and dogs (contains cardiac glycosides — keep away from pets)."
-growth_habit: "Upright, bushy, and compact. Produces dense clusters of small four-petaled flowers."
+type: "Flowering Succulent Perennial"
+toxicity: "Toxic to cats and dogs — contains cardiac glycosides causing gastrointestinal upset and abnormal heart rhythms if ingested"
+growth_habit: "Compact, bushy, and upright. Scalloped, thick, dark green glossy leaves with large dense clusters of long-lasting flowers rising above the foliage."
 
 location: ""  # fill in where this plant lives
 
@@ -25,7 +25,7 @@ watering:
 
 environment:
   temperature: "60°F–85°F. Sensitive to frost — keep away from cold drafts and uninsulated windows in winter."
-  humidity: "Tolerates average household humidity well — being a succulent, it does not require extra humidity."
+  humidity: "Low to average household humidity. No misting or extra humidity needed — overly damp air can encourage fungal disease on the thick leaves."
 
 soil:
   mix: "Fast-draining succulent or cactus mix"
@@ -43,5 +43,6 @@ pruning: >
   cut stems back by about one-third to encourage bushy regrowth.
 
 notes:
-  - "Reblooming: Kalanchoes need a 'short day' treatment to produce new flower buds. For 6 weeks, give the plant 14 hours of complete darkness (cover with a box or move to a dark room) and only 10 hours of bright light per day. Do this in fall (around September–October). Resume normal care after 6 weeks and buds will form within a few weeks."
-  - "Currently blooming in an orange/yellow/coral color combination — this is a single-plant variety; color will stay consistent when it reblooms."
+  - "Currently in spectacular peak bloom — massive explosion of bright orange and yellow flowers."
+  - "Deadheading: As flower clusters fade and brown, snip the flower stems off just above the leaf line with clean scissors. Keeps the plant tidy and encourages remaining buds to open."
+  - "Reblooming: Once all flowers fade, the plant enters a leafy growth stage. To rebloom next year, give it a 6-week autumn rest period (around September–October) with 14 hours of complete uninterrupted darkness each night and only 10 hours of bright light per day. Combine with very minimal watering. Resume normal care after 6 weeks and buds will form within a few weeks."
