@@ -1,0 +1,47 @@
+id: kalanchoe
+name: "Kalanchoe (Flaming Katy)"
+botanical_name: "Kalanchoe blossfeldiana"
+type: "Succulent / Tropical Flowering Houseplant"
+toxicity: "Toxic to cats and dogs (contains cardiac glycosides — keep away from pets)."
+growth_habit: "Upright, bushy, and compact. Produces dense clusters of small four-petaled flowers."
+
+location: ""  # fill in where this plant lives
+
+light:
+  ideal: "Bright, indirect light with some direct morning sun tolerated"
+  placement: "East or South-facing windowsill; West window also works. Bright light extends bloom duration and encourages reblooming."
+  too_much: "Scorched, bleached leaves from harsh afternoon sun"
+  too_little: "Leggy growth; few or no blooms; green-only foliage with no new buds"
+
+watering:
+  when: "Allow soil to dry out completely between waterings — this is a succulent. Check that the top 2 inches and ideally more are fully dry."
+  how: "Water thoroughly until it drains from the holes, then empty the saucer. Never let it sit in standing water."
+  overwatering_signs: "Mushy, yellowing leaves; soft stems; root rot — the most common cause of death for this plant"
+  underwatering_signs: "Wrinkled or shriveled leaves (relatively rare and easy to recover from)"
+  seasonal_note: "Water even less during the post-bloom resting period and during the short-day reblooming treatment."
+  estimated_interval_days:
+    spring_summer: 14
+    fall_winter: 21
+
+environment:
+  temperature: "60°F–85°F. Sensitive to frost — keep away from cold drafts and uninsulated windows in winter."
+  humidity: "Tolerates average household humidity well — being a succulent, it does not require extra humidity."
+
+soil:
+  mix: "Fast-draining succulent or cactus mix"
+  recipe: "Succulent/cactus potting mix, or standard indoor potting soil + 50% perlite"
+  repotting: "Rarely needs repotting — prefers snug conditions. If needed, go up only 1–2 inches and repot in spring after blooming ends."
+
+feeding:
+  fertilizer: "Balanced water-soluble fertilizer at half-strength; a high-phosphorus formula can encourage more blooms"
+  schedule: "Once monthly during the growing and blooming season. Stop feeding during the resting and short-day reblooming treatment periods."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Deadhead spent flower clusters by pinching or snipping them off at the stem.
+  This keeps the plant tidy and redirects energy. Once all blooms are spent,
+  cut stems back by about one-third to encourage bushy regrowth.
+
+notes:
+  - "Reblooming: Kalanchoes need a 'short day' treatment to produce new flower buds. For 6 weeks, give the plant 14 hours of complete darkness (cover with a box or move to a dark room) and only 10 hours of bright light per day. Do this in fall (around September–October). Resume normal care after 6 weeks and buds will form within a few weeks."
+  - "Currently blooming in an orange/yellow/coral color combination — this is a single-plant variety; color will stay consistent when it reblooms."
