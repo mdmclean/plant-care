@@ -5,7 +5,7 @@ type: "Tropical Houseplant (Aroid)"
 toxicity: "TOXIC to humans and pets — ingesting causes severe mouth/throat swelling. Sap causes skin irritation; wear gloves when pruning."
 growth_habit: "Upright, thick cane-forming stems"
 
-location: ""  # fill in where this plant lives
+location: "Dining Room"
 
 light:
   ideal: "Bright, indirect light"
