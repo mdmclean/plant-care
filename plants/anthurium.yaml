@@ -1,0 +1,42 @@
+id: anthurium
+name: "Anthurium (Flamingo Flower)"
+botanical_name: "Anthurium andraeanum"
+type: "Herbaceous Tropical Evergreen"
+toxicity: "Toxic to cats and dogs — contains calcium oxalate crystals causing oral irritation and difficulty swallowing"
+growth_habit: "Clumping and upright. Produces glossy heart-shaped leaves on long slender stems and waxy heart-shaped spathes (modified leaves) in bright colors."
+
+location: ""
+
+light:
+  ideal: "Bright, indirect sunlight — needed to thrive and produce blooms"
+  too_much: "Scorched and bleached leaves from harsh direct sun"
+  too_little: "Blooming stops; stems grow long, weak, and floppy; plant leans toward light source"
+  notes: "Currently showing stretched, leggy stems — moving closer to a bright window will encourage sturdier growth."
+
+watering:
+  when: "Water when the top 1–2 inches of soil feel dry. Does not like to dry out completely, but hates soggy soil."
+  how: "Water thoroughly until it drains from the bottom; promptly empty the drainage saucer."
+  overwatering_signs: "Yellowing leaf tips"
+  underwatering_signs: "Crispy brown edges and droopiness"
+  estimated_interval_days:
+    spring_summer: 7
+    fall_winter: 12
+
+environment:
+  temperature: "18°C–27°C (65°F–80°F). Will suffer below 15°C (60°F)."
+  humidity: "Thrives above 50% humidity. Being a rainforest native, it highly benefits from a nearby humidifier, grouping with other plants, or a wet pebble tray to prevent crispy leaf tips."
+
+soil:
+  mix: "Extremely loose, chunky, and well-aerated — heavy dense soil will suffocate the roots"
+  recipe: "Equal parts regular potting soil + orchid bark + perlite"
+  repotting: "Repot every 2 years in spring. Likes roots snug — only go up 1–2 inches in pot size; ensure excellent drainage."
+
+feeding:
+  fertilizer: "High-phosphorus liquid fertilizer (bloom booster) diluted to quarter-strength"
+  schedule: "Every 4–6 weeks during spring and summer to encourage blooming. Pause in fall and winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+notes:
+  - "TLC Needed: Currently showing leggy stems and some dried foliage. Pruning crispy brown leaves at the stem base, moving to a brighter spot, and consistent humidity will help it recover."
+  - "Grooming: Use clean sharp scissors to snip completely dead or brown leaves right at the base of the stem — keeps the plant tidy and stops it wasting energy on dying foliage."
+  - "Blooms: The colorful 'petals' are modified leaves called spathes, not true flowers. The actual flowers are the tiny bumps on the central spike (spadix)."

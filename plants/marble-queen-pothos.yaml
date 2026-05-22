@@ -1,0 +1,44 @@
+id: marble-queen-pothos
+name: "Marble Queen Pothos"
+botanical_name: "Epipremnum aureum 'Marble Queen'"
+type: "Tropical Evergreen Trailing Vine"
+toxicity: "Toxic to cats and dogs — contains calcium oxalate crystals causing intense oral irritation and swelling if chewed"
+growth_habit: "Vining, trailing, or climbing. Heart-shaped leaves heavily variegated with streaks and splashes of creamy-white, mint, and deep green."
+
+location: ""
+
+light:
+  ideal: "Bright, indirect sunlight — essential for maintaining the white and green variegation"
+  too_much: "Scorched pale patches on leaves from harsh direct sun"
+  too_little: "Plant loses white coloring and reverts to solid green in deep shade"
+  notes: "High variegation requires plenty of bright, filtered light to keep producing snowy-white leaves."
+
+watering:
+  when: "Allow the top 50–75% of soil to dry out completely before watering again"
+  how: "Drench thoroughly until water flows from drainage holes, then empty the tray."
+  underwatering_signs: "Whole plant visibly droops when bone-dry — perks back up within hours of a good soak"
+  estimated_interval_days:
+    spring_summer: 12
+    fall_winter: 21
+
+environment:
+  temperature: "18°C–29°C (65°F–85°F). Protect from icy window drafts in winter and direct heat vents."
+  humidity: "Highly adaptable — loves moderate to high humidity but handles average household dry air well."
+
+soil:
+  mix: "Light, chunky, well-draining potting mix"
+  recipe: "Standard indoor potting mix amended with perlite and orchid bark to prevent waterlogged roots"
+  repotting: "Repot every 2 years. Tolerates being slightly root-bound well — repot when roots are growing from drainage holes, going up 2 inches in pot size."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during spring and summer. Hold off entirely in fall and winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Trim long, leggy, or sparse vines with clean scissors.
+  Cut just below a leaf node to encourage branching and bushier growth.
+
+notes:
+  - "Placement: Trailing vines look fantastic cascading from a high shelf or cabinet."
+  - "Propagation: One of the easiest plants to propagate. Cut trimmed vines into segments each with one leaf and a node, place in water, and roots appear in a couple of weeks — ready to plant back into the pot."

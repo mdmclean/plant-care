@@ -1,0 +1,40 @@
+id: aloe-vera
+name: "Aloe Vera"
+botanical_name: "Aloe vera (syn. Aloe barbadensis)"
+type: "Succulent Evergreen Perennial"
+toxicity: "Toxic to cats and dogs — contains saponins and anthraquinones causing vomiting and lethargy"
+growth_habit: "Stemless or short-stemmed clumping habit. Thick, fleshy, lance-shaped leaves with spotted patterns when young and small serrated teeth along the edges."
+
+location: ""
+
+light:
+  ideal: "Bright, direct sunlight to full sun — ideally 6+ hours of strong light daily"
+  too_little: "Leaves grow thin, weak, and droop or bend under their own weight in low-light corners"
+  notes: "Currently showing slight stretching and outward spread. Placing directly on a south- or west-facing windowsill will encourage sturdier, more upright growth."
+
+watering:
+  when: "Allow potting mix to dry out completely between waterings. When in doubt, do not water."
+  how: "Drench thoroughly until water drains from the bottom holes, then empty the saucer completely. Never let the pot sit in standing water."
+  overwatering_signs: "Soft, mushy, or translucent brown leaves"
+  underwatering_signs: "Shriveled or puckered leaves"
+  estimated_interval_days:
+    spring_summer: 21
+    fall_winter: 42
+
+environment:
+  temperature: "13°C–27°C (55°F–80°F). Cannot tolerate frost or freezing temperatures."
+  humidity: "Loves low humidity and dry air. Avoid humid rooms like bathrooms and never mist — can cause fungal spots or leaf rot."
+
+soil:
+  mix: "Sharply draining, gritty cactus and succulent potting mix"
+  repotting: "Terracotta is ideal — porous clay breathes and helps soil dry evenly. Only repot when completely root-bound or top-heavy. Keep soil level low so bottom leaves rest above the rim."
+
+feeding:
+  fertilizer: "Balanced succulent fertilizer at half-strength"
+  schedule: "Only 1–2 applications total across spring and summer. Do not feed in fall or winter."
+  active_months: [4, 6]  # Two spot applications — April and June
+
+notes:
+  - "Drooping lower leaves: Caused by slightly lower light than ideal combined with the weight of water in the leaves. Moving to the sunniest window will help new center growth come in tight and vertical."
+  - "Maintenance: Clear out dried, crispy brown debris from the base to keep clean and deter pests like mealybugs."
+  - "First Aid Gel: Clear gel inside mature leaves soothes minor burns. If needed, snip an entire lower leaf from the very base rather than cutting the tip — the plant heals cleanly at the main stem connection."

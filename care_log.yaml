@@ -20,3 +20,33 @@ kalanchoe:
   last_watered: ""
   last_fertilized: ""
   notes: ""
+
+monstera-deliciosa:
+  last_watered: ""
+  last_fertilized: ""
+  notes: ""
+
+money-tree:
+  last_watered: ""
+  last_fertilized: ""
+  notes: ""
+
+anthurium:
+  last_watered: ""
+  last_fertilized: ""
+  notes: ""
+
+marble-queen-pothos:
+  last_watered: ""
+  last_fertilized: ""
+  notes: ""
+
+aloe-vera:
+  last_watered: ""
+  last_fertilized: ""
+  notes: ""
+
+dracaena-malaika:
+  last_watered: ""
+  last_fertilized: ""
+  notes: ""
