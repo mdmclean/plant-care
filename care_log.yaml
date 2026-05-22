@@ -30,3 +30,8 @@ money-tree:
   last_watered: ""
   last_fertilized: ""
   notes: ""
+
+anthurium:
+  last_watered: ""
+  last_fertilized: ""
+  notes: ""
