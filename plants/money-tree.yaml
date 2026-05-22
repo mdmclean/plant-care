@@ -1,0 +1,47 @@
+id: money-tree
+name: "Money Tree"
+botanical_name: "Pachira aquatica"
+type: "Tropical Evergreen Tree / Houseplant"
+toxicity: "Non-toxic to cats and dogs (ASPCA approved)"
+growth_habit: "Upright with a braided central trunk and palmate leaves (5–7 leaflets per stem). Can grow tall indoors but tolerates pruning well."
+
+location: ""
+
+light:
+  ideal: "Bright, indirect sunlight"
+  too_much: "Scorched or bleached leaves from harsh direct afternoon sun"
+  too_little: "Leggy growth as plant stretches toward light; growth slows in moderate shade"
+  notes: "Rotate the pot 90 degrees every week to ensure even, balanced growth."
+
+watering:
+  when: "Water when the top 2–3 inches of soil have dried out completely"
+  how: "Pour evenly until water drains from the bottom holes; empty the drainage tray. Never let it sit in standing water — highly susceptible to root rot."
+  seasonal_note: "Reduce watering significantly in fall and winter when growth slows."
+  overwatering_signs: "Root rot; yellowing leaves"
+  underwatering_signs: "Drooping or wilting leaves with dry soil"
+  estimated_interval_days:
+    spring_summer: 10
+    fall_winter: 18
+
+environment:
+  temperature: "18°C–24°C (65°F–75°F). Keep away from cold drafts, open windows in winter, and direct heating vents."
+  humidity: "Loves high humidity (50%+). Use a pebble tray with water, group with other plants, or a humidifier if the home is dry."
+
+soil:
+  mix: "Well-draining potting mix"
+  recipe: "Standard peat-based potting soil mixed with plenty of perlite or sand"
+  repotting: "Repot every 2–3 years. Money trees prefer being slightly root-bound — a pot too large will hold excess moisture. Always ensure drainage holes."
+
+feeding:
+  fertilizer: "Balanced water-soluble houseplant fertilizer at half-strength"
+  schedule: "Once monthly during spring and summer. Do not fertilize in fall or winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Regular pruning maintains shape and encourages bushier growth.
+  Cut yellowing or dead leaves at the stem.
+  Snip long branches just above a leaf node to promote new branching.
+
+notes:
+  - "Moving Stress: Money trees dislike being moved frequently. Leaf drop after relocation is normal as it adjusts to new light and humidity. Pick a good spot and leave it be."
+  - "Trunk Care: The braided trunks are bound when young. As the plant grows, check the top of the braid to ensure nursery ties or wires aren't cutting into the bark and choking the stems."
