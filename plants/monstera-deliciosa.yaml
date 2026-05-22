@@ -1,0 +1,41 @@
+id: monstera-deliciosa
+name: "Monstera Deliciosa"
+botanical_name: "Monstera deliciosa"
+type: "Tropical Evergreen Climbing Vine"
+toxicity: "Toxic to cats and dogs — contains calcium oxalate crystals causing mouth irritation and drooling"
+growth_habit: "Vining and spreading. Juvenile leaves are solid and heart-shaped; mature leaves develop iconic splits and fenestrations with thick aerial roots."
+
+location: ""
+
+light:
+  ideal: "Bright, indirect sunlight — a few feet back from a sunny window is perfect"
+  too_much: "Bleached or scorched leaves from harsh direct sun"
+  too_little: "Dramatically slowed growth; new leaves unlikely to develop splits or fenestrations"
+
+watering:
+  when: "Water when the top 2–3 inches of soil feel completely dry to the touch"
+  how: "Drench thoroughly until water runs from drainage holes; empty the saucer underneath immediately"
+  overwatering_signs: "Yellowing lower leaves"
+  underwatering_signs: "Drooping leaves paired with dry soil"
+  estimated_interval_days:
+    spring_summer: 10
+    fall_winter: 14
+
+environment:
+  temperature: "18°C–30°C (65°F–85°F). Protect from cold drafts, AC vents, and heating vents."
+  humidity: "Naturally loves high humidity (above 50%), but adapts well to average household humidity. Group with other plants or use a humidifier to boost."
+
+soil:
+  mix: "Chunky, well-aerated mix — roots need to breathe and drain quickly"
+  recipe: "Standard potting soil + plenty of orchid bark + perlite"
+  repotting: "Repot every 1–2 years in spring. Choose a pot only 2–3 inches larger than the current one."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during spring and summer. Hold off completely in fall and winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+notes:
+  - "Teenage Phase: Currently in juvenile phase with solid, healthy, glossy leaves. As the plant grows larger and gets ample bright light, new leaves will naturally develop the famous splits and fenestrations."
+  - "Support Needed: This is a natural climber — insert a moss pole or coco coir stake into the pot center to give aerial roots something to grip, encouraging larger, more dramatic upright growth."
+  - "Maintenance: Wipe large leaves with a damp cloth every few weeks to remove dust and help the plant photosynthesize."
