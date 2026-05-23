@@ -2,7 +2,10 @@
 """Generate a GitHub Pages HTML report from plant care data."""
 
 import json
+import math
 import re
+import struct
+import zlib
 import yaml
 from datetime import date, datetime
 from pathlib import Path
@@ -13,6 +16,77 @@ CARE_LOG = BASE / "care_log.yaml"
 OUTPUT = BASE / "docs" / "index.html"
 
 SPRING_SUMMER = set(range(3, 9))  # March–August
+
+MANIFEST = {
+    "name": "Plant Care",
+    "short_name": "Plants",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#f1f8e9",
+    "theme_color": "#2e7d32",
+    "icons": [
+        {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+        {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+    ],
+}
+
+
+def _sw_js(today_str: str) -> str:
+    return f"""const CACHE = 'plant-care-{today_str}';
+const ASSETS = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+
+self.addEventListener('install', e => {{
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+}});
+
+self.addEventListener('activate', e => {{
+  e.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+}});
+
+self.addEventListener('fetch', e => {{
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+}});
+"""
+
+
+def _make_icon_png(size: int) -> bytes:
+    """Generate a simple plant-care PNG icon: dark green background, white leaf + stem."""
+    bg = (46, 125, 50)   # #2e7d32
+    fg = (255, 255, 255)
+
+    cx = cy = size / 2
+    a, b = size * 0.30, size * 0.16   # leaf ellipse semi-axes
+    stem_hw = max(1, size // 60)
+    stem_top = cy - size * 0.05
+    stem_bot = cy + size * 0.32
+    cos45 = sin45 = math.sqrt(2) / 2
+
+    raw = bytearray()
+    for y in range(size):
+        raw.append(0)  # filter byte
+        for x in range(size):
+            dx, dy = x - cx, y - cy
+            rx =  dx * cos45 + dy * sin45
+            ry = -dx * sin45 + dy * cos45
+            in_leaf = (rx / a) ** 2 + (ry / b) ** 2 <= 1
+            in_stem = abs(dx) <= stem_hw and stem_top <= y <= stem_bot
+            raw += bytes(fg if (in_leaf or in_stem) else bg)
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        crc = zlib.crc32(tag + data) & 0xFFFFFFFF
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", crc)
+
+    ihdr = struct.pack(">II", size, size) + bytes([8, 2, 0, 0, 0])
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", ihdr)
+        + chunk(b"IDAT", zlib.compress(bytes(raw)))
+        + chunk(b"IEND", b"")
+    )
 
 
 def load_plants():
@@ -111,6 +185,12 @@ def render(results, today):
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>🌿 Plant Care</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2e7d32">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Plant Care">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <style>
     :root {{
       --green-dk: #2e7d32; --green-md: #43a047; --green-bg: #f1f8e9;
@@ -340,6 +420,9 @@ document.addEventListener('keydown', e => {{
 
 buildList();
 </script>
+<script>
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+</script>
 </body>
 </html>"""
 
@@ -357,9 +440,21 @@ def main():
             continue
         results.append(evaluate(log_key, log_entry, plant))
 
-    OUTPUT.parent.mkdir(exist_ok=True)
+    docs = OUTPUT.parent
+    docs.mkdir(exist_ok=True)
     OUTPUT.write_text(render(results, today))
     print(f"Report written → {OUTPUT}")
+
+    (docs / "manifest.json").write_text(json.dumps(MANIFEST, indent=2))
+    print(f"Manifest written → {docs / 'manifest.json'}")
+
+    (docs / "sw.js").write_text(_sw_js(str(today)))
+    print(f"SW written → {docs / 'sw.js'}")
+
+    for size, name in [(192, "icon-192.png"), (512, "icon-512.png")]:
+        path = docs / name
+        path.write_bytes(_make_icon_png(size))
+        print(f"Icon written → {path}")
 
 
 if __name__ == "__main__":
