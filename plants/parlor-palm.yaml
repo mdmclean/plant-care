@@ -1,0 +1,47 @@
+id: parlor-palm
+name: "Parlor Palm"
+botanical_name: "Chamaedorea elegans"
+type: "Tropical Palm / Houseplant"
+toxicity: "Non-toxic to cats and dogs (ASPCA approved)"
+growth_habit: "Slow-growing, upright, and clumping. Delicate feathery deep green fronds growing from a central base."
+
+location: ""  # Shared pot with Anthurium
+
+light:
+  ideal: "Medium to bright, indirect sunlight"
+  tolerance: "Tolerates low light better than most palms"
+  too_much: "Scorched, yellowed, or bleached fronds from direct sun"
+  too_little: "Slower growth, but otherwise tolerates it well"
+
+watering:
+  when: "Water when the top 1–2 inches of soil feel dry — never bone-dry, never waterlogged"
+  how: "Drench thoroughly until water drains from the bottom; empty the drainage tray immediately."
+  overwatering_signs: "Soggy roots; yellowing fronds"
+  underwatering_signs: "Brown leaf tips; soil drying out too much between waterings"
+  water_quality: "Mineral buildup from tap water can also cause brown tips — consider filtered or distilled water."
+  estimated_interval_days:
+    spring_summer: 7
+    fall_winter: 12
+
+environment:
+  temperature: "18°C–27°C (65°F–80°F). Keep away from cold drafts and AC vents."
+  humidity: "Appreciates moderate to high humidity. Use a humidifier or wet pebble tray if indoor air is dry — low humidity can invite spider mites."
+
+soil:
+  mix: "Loose, well-draining, peat-based potting mix"
+  recipe: "High-quality indoor potting soil + perlite or orchid bark"
+  repotting: "Prefers to be slightly root-bound. Repot every 2–3 years to refresh soil; go up only one pot size. Root system is shallow and relatively delicate."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during spring and summer. Do not fertilize in fall or winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Never prune from the top — palms grow from a terminal bud and cutting it kills the plant.
+  Only remove completely yellowed or brown lower fronds, snipping cleanly at the base of the stem.
+
+notes:
+  - "Shared pot: Growing together with the Anthurium. Their watering needs are compatible — water both on the same schedule."
+  - "Currently looking full, lush, and vibrant with just minor dry pale tips on some fronds — very common indoors."
+  - "Pest watch: Dense fine foliage can attract spider mites if air is too dry. Periodically wipe fronds with a damp cloth or give the plant a gentle shower rinse to deter pests and remove dust."

@@ -1,0 +1,42 @@
+id: snake-plant
+name: "Snake Plant"
+botanical_name: "Dracaena trifasciata (formerly Sansevieria trifasciata)"
+type: "Succulent Evergreen Perennial"
+toxicity: "Toxic to cats and dogs — contains saponins causing nausea, vomiting, and diarrhea"
+growth_habit: "Upright, clumping. Stiff, sword-shaped leaves with dark green banding and often a yellow margin. Extremely slow-growing, especially when rootbound."
+
+location: "Big Room, upstairs"
+
+light:
+  ideal: "Bright, indirect light to some direct sun — more light means faster growth"
+  tolerance: "Tolerates low light better than almost any other houseplant, but growth slows to nearly nothing"
+  too_much: "Scorched, bleached patches from harsh direct midday sun"
+  notes: "Currently in bright indirect light — good. Moving closer to the window or giving a few hours of gentle morning sun could help encourage new growth."
+
+watering:
+  when: "Allow soil to dry out completely between waterings — this is essentially a succulent"
+  how: "Water thoroughly until it drains from the bottom; empty the saucer immediately. Never let it sit in standing water."
+  overwatering_signs: "Soft, mushy, yellow leaves at the base — the most common way snake plants die"
+  underwatering_signs: "Wrinkling or slight softening of leaves (very tolerant of drought)"
+  estimated_interval_days:
+    spring_summer: 21
+    fall_winter: 42
+
+environment:
+  temperature: "15°C–29°C (60°F–85°F). Tolerates a wide range but dislikes cold drafts and frost."
+  humidity: "Highly adaptable — prefers dry to average household humidity. No misting needed."
+
+soil:
+  mix: "Fast-draining, gritty mix — good drainage is essential to prevent root rot"
+  recipe: "Cactus/succulent potting mix, or standard potting soil + 50% perlite"
+  repotting: "Repot when roots are visibly circling the bottom or pushing out of drainage holes. After 3+ years they are likely rootbound — check roots and repot into a pot 1–2 inches larger if so. Terracotta pots help soil dry faster and reduce rot risk."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during spring and summer only. Do not fertilize in fall or winter."
+  active_months: [4, 5, 6, 7, 8]  # April through August
+
+notes:
+  - "Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out — tightly wound, circling roots confirm it's time to repot."
+  - "Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually."
+  - "Resilience: One of the most forgiving houseplants — can tolerate neglect, low light, and irregular watering better than almost anything else."

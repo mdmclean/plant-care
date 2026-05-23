@@ -3,50 +3,65 @@
 
 hoya-krimson-queen:
   last_watered: 2026-05-18
-  last_fertilized: 2026-05-01
+  last_fertilized: 2026-05-23
   notes: ""
 
 dieffenbachia:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
 
 rieger-begonia:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
 
 kalanchoe:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
 
 monstera-deliciosa:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
 
 money-tree:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
 
 anthurium:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
 
 marble-queen-pothos:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
 
 aloe-vera:
-  last_watered: ""
+  last_watered: 2026-05-23
   last_fertilized: ""
   notes: ""
 
 dracaena-malaika:
-  last_watered: ""
-  last_fertilized: ""
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
+  notes: ""
+
+parlor-palm:
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
+  notes: "Shared pot with Anthurium"
+
+snake-plant-1:
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
+  notes: ""
+
+snake-plant-2:
+  last_watered: 2026-05-23
+  last_fertilized: 2026-05-23
   notes: ""
