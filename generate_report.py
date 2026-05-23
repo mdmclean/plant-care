@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate a GitHub Pages HTML report from plant care data."""
 
+import json
 import re
 import yaml
 from datetime import date, datetime
@@ -25,7 +26,6 @@ def load_plants():
 def find_plant(log_key, plants):
     if log_key in plants:
         return plants[log_key]
-    # Snake-plant-1 / snake-plant-2 → snake-plant
     base = re.sub(r"-\d+$", "", log_key)
     return plants.get(base)
 
@@ -68,112 +68,278 @@ def evaluate(log_key, log_entry, plant):
         else:
             fert = ("ok", f"Last fertilized {days_f}d ago — next due in ~{28 - days_f}d")
     else:
-        fert = ("paused", f"Feeding paused — not in active season")
+        fert = ("paused", "Feeding paused — not in active season")
 
     notes = plant.get("notes") or []
     if isinstance(notes, str):
         notes = [notes]
 
-    return dict(name=name, location=location,
-                water_status=water[0], water_msg=water[1],
-                fert_status=fert[0], fert_msg=fert[1],
-                notes=notes)
-
-
-BADGE_STYLES = {
-    "ok":      ("#e8f5e9", "#2e7d32", "#4caf50"),
-    "check":   ("#fff3e0", "#bf360c", "#ff9800"),
-    "due":     ("#e3f2fd", "#1565c0", "#2196f3"),
-    "paused":  ("#f5f5f5", "#757575", "#bdbdbd"),
-    "unknown": ("#fce4ec", "#880e4f", "#e91e63"),
-}
-
-
-def badge(status, icon, msg):
-    bg, fg, border = BADGE_STYLES.get(status, BADGE_STYLES["unknown"])
-    return (f'<div class="badge" style="background:{bg};color:{fg};'
-            f'border-left:4px solid {border}">{icon} {msg}</div>')
-
-
-def card(r):
-    has_action = r["water_status"] == "check" or r["fert_status"] == "due"
-    if r["water_status"] == "check":
-        top_border = "#ff9800"
-    elif r["fert_status"] == "due":
-        top_border = "#2196f3"
-    else:
-        top_border = "#c8e6c9"
-
-    loc = f'<div class="location">📍 {r["location"]}</div>' if r["location"] else ""
-
-    notes_html = ""
-    if r["notes"]:
-        items = "".join(f"<li>{n}</li>" for n in r["notes"])
-        notes_html = f'<div class="notes"><strong>💡</strong><ul>{items}</ul></div>'
-
-    return f"""<div class="card" style="border-top:4px solid {top_border}">
-  <div class="card-header">
-    <div class="plant-name">{r['name']}</div>
-    {loc}
-  </div>
-  {badge(r['water_status'], '💧', r['water_msg'])}
-  {badge(r['fert_status'], '🌱', r['fert_msg'])}
-  {notes_html}
-</div>"""
+    return dict(
+        name=name,
+        location=location,
+        water_status=water[0],
+        water_msg=water[1],
+        fert_status=fert[0],
+        fert_msg=fert[1],
+        notes=notes,
+        has_action=(water[0] == "check" or fert[0] == "due"),
+    )
 
 
 def render(results, today):
-    action = [r for r in results if r["water_status"] == "check" or r["fert_status"] == "due"]
-    good = [r for r in results if r not in action]
+    action = [r for r in results if r["has_action"]]
+    good = [r for r in results if not r["has_action"]]
+    ordered = action + good
 
-    def section(title, items):
-        if not items:
-            return ""
-        cards = "\n".join(card(r) for r in items)
-        return f'<h2 class="section-title">{title}</h2><div class="grid">{cards}</div>'
-
-    action_sec = section(f"⚠️ Action Needed ({len(action)})", action)
-    good_sec = section(f"✅ All Good ({len(good)})", good)
+    plants_json = json.dumps([{
+        "name": r["name"],
+        "location": r["location"],
+        "waterStatus": r["water_status"],
+        "waterMsg": r["water_msg"],
+        "fertStatus": r["fert_status"],
+        "fertMsg": r["fert_msg"],
+        "notes": r["notes"],
+        "hasAction": r["has_action"],
+    } for r in ordered])
 
     day = today.strftime("%-d")
-    full_date = today.strftime(f"%A, %B {day}, %Y")
+    short_date = today.strftime(f"%b {day}")
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>🌿 Plant Care — {today.strftime(f'%B {day}, %Y')}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>🌿 Plant Care</title>
   <style>
-    *{{box-sizing:border-box;margin:0;padding:0}}
-    body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f8e9;color:#1b1b1b;min-height:100vh}}
-    header{{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;padding:2rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.15)}}
-    header h1{{font-size:2rem;font-weight:700;letter-spacing:-.5px}}
-    header .date{{opacity:.9;margin-top:.4rem;font-size:1.05rem}}
-    main{{max-width:1100px;margin:0 auto;padding:2rem 1rem 3rem}}
-    .section-title{{font-size:1.05rem;font-weight:700;margin:2rem 0 1rem;padding:.5rem 1rem;border-radius:8px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08)}}
-    .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}}
-    .card{{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}}
-    .card-header{{margin-bottom:.75rem}}
-    .plant-name{{font-size:1.05rem;font-weight:700;color:#1b5e20}}
-    .location{{font-size:.82rem;color:#666;margin-top:.2rem}}
-    .badge{{padding:.5rem .75rem;border-radius:6px;margin:.3rem 0;font-size:.85rem;line-height:1.45}}
-    .notes{{margin-top:.75rem;padding:.65rem .75rem;background:#fffde7;border-radius:6px;font-size:.78rem;border-left:3px solid #f9a825}}
-    .notes ul{{margin-left:1.1rem;margin-top:.3rem}}
-    .notes li{{margin:.2rem 0;color:#555;line-height:1.4}}
-    footer{{text-align:center;padding:1.5rem;color:#888;font-size:.78rem;border-top:1px solid #dcedc8}}
+    :root {{
+      --green-dk: #2e7d32; --green-md: #43a047; --green-bg: #f1f8e9;
+      --orange: #e65100; --orange-bg: #fff3e0; --orange-border: #ff9800;
+      --blue: #1565c0;   --blue-bg: #e3f2fd;   --blue-border: #2196f3;
+      --ok: #2e7d32;     --ok-bg: #e8f5e9;     --ok-border: #4caf50;
+      --gray: #757575;   --gray-bg: #f5f5f5;   --gray-border: #bdbdbd;
+      --red-bg: #fce4ec; --red: #880e4f;       --red-border: #e91e63;
+    }}
+    * {{ box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }}
+    html, body {{ height: 100%; overflow: hidden; }}
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--green-bg); color: #1b1b1b; }}
+
+    /* ── Views ── */
+    .view {{ position: fixed; inset: 0; display: flex; flex-direction: column;
+             transition: transform .25s ease, opacity .25s ease; }}
+    .view.hidden {{ display: none; }}
+
+    /* ── Header ── */
+    .hdr {{ background: linear-gradient(135deg, var(--green-dk), var(--green-md));
+            color: #fff; display: flex; align-items: center; gap: .6rem;
+            padding: .9rem 1rem; flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,.2); }}
+    .hdr-title {{ flex: 1; font-size: 1rem; font-weight: 700; min-width: 0;
+                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+    .hdr-sub {{ font-size: .78rem; opacity: .85; white-space: nowrap; }}
+    .back-btn {{ background: rgba(255,255,255,.18); border: none; color: #fff;
+                 border-radius: 8px; padding: .4rem .7rem; font-size: .88rem;
+                 cursor: pointer; flex-shrink: 0; }}
+    .back-btn:active {{ background: rgba(255,255,255,.35); }}
+
+    /* ── List ── */
+    #list-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }}
+    .sec-label {{ font-size: .72rem; font-weight: 700; letter-spacing: .07em;
+                  text-transform: uppercase; color: var(--gray);
+                  padding: .9rem 1rem .35rem; }}
+    .row {{ display: flex; align-items: center; gap: .65rem; background: #fff;
+            margin: .3rem .75rem; border-radius: 12px; padding: .85rem 1rem;
+            cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.07); }}
+    .row:active {{ background: #f7f7f7; }}
+    .row.urgent {{ border-left: 4px solid var(--orange-border); }}
+    .row-info {{ flex: 1; min-width: 0; }}
+    .row-name {{ font-weight: 600; font-size: .92rem;
+                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+    .row-loc {{ font-size: .76rem; color: var(--gray); margin-top: .15rem; }}
+    .row-dots {{ display: flex; gap: .3rem; flex-shrink: 0; }}
+    .dot {{ width: 26px; height: 26px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: .8rem; }}
+    .dot.check   {{ background: var(--orange-bg); }}
+    .dot.due     {{ background: var(--blue-bg); }}
+    .dot.ok      {{ background: var(--ok-bg); }}
+    .dot.paused  {{ background: var(--gray-bg); }}
+    .dot.unknown {{ background: var(--red-bg); }}
+    .chevron {{ color: #c8c8c8; font-size: 1rem; flex-shrink: 0; }}
+
+    /* ── Detail ── */
+    #detail-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+                      padding: 1rem .75rem 5.5rem; }}
+    .d-loc {{ font-size: .82rem; color: var(--gray); margin-bottom: .9rem; }}
+    .badge {{ padding: .55rem .8rem; border-radius: 8px; margin: .4rem 0;
+              font-size: .875rem; line-height: 1.5; border-left: 4px solid; }}
+    .badge.check   {{ background: var(--orange-bg); color: var(--orange); border-color: var(--orange-border); }}
+    .badge.due     {{ background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }}
+    .badge.ok      {{ background: var(--ok-bg);     color: var(--ok);     border-color: var(--ok-border); }}
+    .badge.paused  {{ background: var(--gray-bg);   color: var(--gray);   border-color: var(--gray-border); }}
+    .badge.unknown {{ background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }}
+    .notes {{ margin-top: .85rem; padding: .75rem; background: #fffde7;
+              border-radius: 8px; border-left: 3px solid #f9a825; font-size: .8rem; }}
+    .notes ul {{ margin-left: 1.1rem; margin-top: .3rem; }}
+    .notes li {{ margin: .25rem 0; color: #555; line-height: 1.4; }}
+
+    /* ── Detail nav bar ── */
+    .d-nav {{ position: fixed; bottom: 0; left: 0; right: 0; display: flex;
+              align-items: center; background: #fff;
+              border-top: 1px solid #e0e0e0;
+              padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
+              box-shadow: 0 -2px 8px rgba(0,0,0,.07); gap: .75rem; }}
+    .nav-btn {{ background: var(--green-bg); border: 1.5px solid #c8e6c9;
+                color: var(--green-dk); border-radius: 10px; padding: .55rem 1rem;
+                font-size: .9rem; font-weight: 600; cursor: pointer; flex-shrink: 0; }}
+    .nav-btn:active {{ background: #dcedc8; }}
+    .nav-btn:disabled {{ opacity: .3; pointer-events: none; }}
+    .nav-hint {{ flex: 1; font-size: .73rem; color: var(--gray); text-align: center;
+                 overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+
+    /* ── Slide animation ── */
+    @keyframes fromRight {{ from {{ opacity:0; transform:translateX(36px) }} to {{ opacity:1; transform:translateX(0) }} }}
+    @keyframes fromLeft  {{ from {{ opacity:0; transform:translateX(-36px) }} to {{ opacity:1; transform:translateX(0) }} }}
+    .from-right {{ animation: fromRight .22s ease-out; }}
+    .from-left  {{ animation: fromLeft  .22s ease-out; }}
   </style>
 </head>
 <body>
-  <header>
-    <h1>🌿 Plant Care</h1>
-    <div class="date">{full_date}</div>
-  </header>
-  <main>
-    {action_sec}
-    {good_sec}
-  </main>
-  <footer>Updated by daily routine · {today.isoformat()}</footer>
+
+<!-- List view -->
+<div class="view" id="list-view">
+  <div class="hdr">
+    <span class="hdr-title">🌿 Plant Care</span>
+    <span class="hdr-sub">{short_date}</span>
+  </div>
+  <div id="list-scroll"></div>
+</div>
+
+<!-- Detail view -->
+<div class="view hidden" id="detail-view">
+  <div class="hdr">
+    <button class="back-btn" id="back-btn">&#8592; List</button>
+    <span class="hdr-title" id="d-title"></span>
+    <span class="hdr-sub" id="d-counter"></span>
+  </div>
+  <div id="detail-scroll"></div>
+  <div class="d-nav" id="d-nav">
+    <button class="nav-btn" id="prev-btn">&#8592;</button>
+    <span class="nav-hint" id="nav-hint"></span>
+    <button class="nav-btn" id="next-btn">&#8594;</button>
+  </div>
+</div>
+
+<script>
+const P = {plants_json};
+let cur = 0;
+
+// ── List ──
+function buildList() {{
+  const urgent = P.filter(p => p.hasAction);
+  const ok     = P.filter(p => !p.hasAction);
+  let h = '';
+  if (urgent.length) {{
+    h += `<div class="sec-label">⚠️ Needs attention (${{urgent.length}})</div>`;
+    urgent.forEach((p, i) => h += rowHTML(p, i));
+  }}
+  if (ok.length) {{
+    h += `<div class="sec-label">✅ All good (${{ok.length}})</div>`;
+    ok.forEach((p, i) => h += rowHTML(p, urgent.length + i));
+  }}
+  const el = document.getElementById('list-scroll');
+  el.innerHTML = h;
+  el.querySelectorAll('.row').forEach(r =>
+    r.addEventListener('click', () => openDetail(+r.dataset.i))
+  );
+}}
+
+function rowHTML(p, i) {{
+  const loc = p.location ? `<div class="row-loc">📍 ${{p.location}}</div>` : '';
+  return `<div class="row${{p.hasAction ? ' urgent' : ''}}" data-i="${{i}}">
+  <div class="row-info">
+    <div class="row-name">${{p.name}}</div>${{loc}}
+  </div>
+  <div class="row-dots">
+    <div class="dot ${{p.waterStatus}}">💧</div>
+    <div class="dot ${{p.fertStatus}}">🌱</div>
+  </div>
+  <div class="chevron">›</div>
+</div>`;
+}}
+
+// ── Detail ──
+function openDetail(i) {{
+  cur = i;
+  document.getElementById('list-view').classList.add('hidden');
+  document.getElementById('detail-view').classList.remove('hidden');
+  renderDetail(i, 0);
+}}
+
+function renderDetail(i, dir) {{
+  cur = i;
+  const p = P[i];
+  document.getElementById('d-title').textContent = p.name;
+  document.getElementById('d-counter').textContent = `${{i + 1}} / ${{P.length}}`;
+  document.getElementById('prev-btn').disabled = i === 0;
+  document.getElementById('next-btn').disabled = i === P.length - 1;
+
+  const adj = P[i + 1] || P[i - 1];
+  document.getElementById('nav-hint').textContent =
+    P[i + 1] ? P[i + 1].name : (P[i - 1] ? P[i - 1].name : '');
+
+  const notesHTML = p.notes && p.notes.length
+    ? `<div class="notes"><strong>💡 Notes</strong><ul>${{
+        p.notes.map(n => `<li>${{n}}</li>`).join('')}}</ul></div>`
+    : '';
+
+  const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
+  const scr = document.getElementById('detail-scroll');
+  scr.innerHTML = `<div class="${{animClass}}">
+    ${{p.location ? `<div class="d-loc">📍 ${{p.location}}</div>` : ''}}
+    <div class="badge ${{p.waterStatus}}">💧 ${{p.waterMsg}}</div>
+    <div class="badge ${{p.fertStatus}}">🌱 ${{p.fertMsg}}</div>
+    ${{notesHTML}}
+  </div>`;
+  scr.scrollTop = 0;
+}}
+
+function goTo(i, dir) {{
+  if (i < 0 || i >= P.length) return;
+  renderDetail(i, dir);
+}}
+
+// ── Events ──
+document.getElementById('back-btn').addEventListener('click', () => {{
+  document.getElementById('detail-view').classList.add('hidden');
+  document.getElementById('list-view').classList.remove('hidden');
+}});
+document.getElementById('prev-btn').addEventListener('click', () => goTo(cur - 1, -1));
+document.getElementById('next-btn').addEventListener('click', () => goTo(cur + 1,  1));
+
+// Swipe (horizontal > vertical and > 50px threshold)
+let tx = 0, ty = 0;
+const scr = document.getElementById('detail-scroll');
+scr.addEventListener('touchstart', e => {{
+  tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+}}, {{passive: true}});
+scr.addEventListener('touchend', e => {{
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 50)
+    goTo(dx < 0 ? cur + 1 : cur - 1, dx < 0 ? 1 : -1);
+}}, {{passive: true}});
+
+// Arrow keys / Escape
+document.addEventListener('keydown', e => {{
+  if (document.getElementById('detail-view').classList.contains('hidden')) return;
+  if (e.key === 'ArrowRight') goTo(cur + 1,  1);
+  if (e.key === 'ArrowLeft')  goTo(cur - 1, -1);
+  if (e.key === 'Escape')     document.getElementById('back-btn').click();
+}});
+
+buildList();
+</script>
 </body>
 </html>"""
 

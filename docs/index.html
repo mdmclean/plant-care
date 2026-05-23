@@ -2,153 +2,236 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>🌿 Plant Care — May 23, 2026</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>🌿 Plant Care</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f8e9;color:#1b1b1b;min-height:100vh}
-    header{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;padding:2rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-    header h1{font-size:2rem;font-weight:700;letter-spacing:-.5px}
-    header .date{opacity:.9;margin-top:.4rem;font-size:1.05rem}
-    main{max-width:1100px;margin:0 auto;padding:2rem 1rem 3rem}
-    .section-title{font-size:1.05rem;font-weight:700;margin:2rem 0 1rem;padding:.5rem 1rem;border-radius:8px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
-    .card{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-    .card-header{margin-bottom:.75rem}
-    .plant-name{font-size:1.05rem;font-weight:700;color:#1b5e20}
-    .location{font-size:.82rem;color:#666;margin-top:.2rem}
-    .badge{padding:.5rem .75rem;border-radius:6px;margin:.3rem 0;font-size:.85rem;line-height:1.45}
-    .notes{margin-top:.75rem;padding:.65rem .75rem;background:#fffde7;border-radius:6px;font-size:.78rem;border-left:3px solid #f9a825}
-    .notes ul{margin-left:1.1rem;margin-top:.3rem}
-    .notes li{margin:.2rem 0;color:#555;line-height:1.4}
-    footer{text-align:center;padding:1.5rem;color:#888;font-size:.78rem;border-top:1px solid #dcedc8}
+    :root {
+      --green-dk: #2e7d32; --green-md: #43a047; --green-bg: #f1f8e9;
+      --orange: #e65100; --orange-bg: #fff3e0; --orange-border: #ff9800;
+      --blue: #1565c0;   --blue-bg: #e3f2fd;   --blue-border: #2196f3;
+      --ok: #2e7d32;     --ok-bg: #e8f5e9;     --ok-border: #4caf50;
+      --gray: #757575;   --gray-bg: #f5f5f5;   --gray-border: #bdbdbd;
+      --red-bg: #fce4ec; --red: #880e4f;       --red-border: #e91e63;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--green-bg); color: #1b1b1b; }
+
+    /* ── Views ── */
+    .view { position: fixed; inset: 0; display: flex; flex-direction: column;
+             transition: transform .25s ease, opacity .25s ease; }
+    .view.hidden { display: none; }
+
+    /* ── Header ── */
+    .hdr { background: linear-gradient(135deg, var(--green-dk), var(--green-md));
+            color: #fff; display: flex; align-items: center; gap: .6rem;
+            padding: .9rem 1rem; flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+    .hdr-title { flex: 1; font-size: 1rem; font-weight: 700; min-width: 0;
+                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hdr-sub { font-size: .78rem; opacity: .85; white-space: nowrap; }
+    .back-btn { background: rgba(255,255,255,.18); border: none; color: #fff;
+                 border-radius: 8px; padding: .4rem .7rem; font-size: .88rem;
+                 cursor: pointer; flex-shrink: 0; }
+    .back-btn:active { background: rgba(255,255,255,.35); }
+
+    /* ── List ── */
+    #list-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .sec-label { font-size: .72rem; font-weight: 700; letter-spacing: .07em;
+                  text-transform: uppercase; color: var(--gray);
+                  padding: .9rem 1rem .35rem; }
+    .row { display: flex; align-items: center; gap: .65rem; background: #fff;
+            margin: .3rem .75rem; border-radius: 12px; padding: .85rem 1rem;
+            cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+    .row:active { background: #f7f7f7; }
+    .row.urgent { border-left: 4px solid var(--orange-border); }
+    .row-info { flex: 1; min-width: 0; }
+    .row-name { font-weight: 600; font-size: .92rem;
+                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row-loc { font-size: .76rem; color: var(--gray); margin-top: .15rem; }
+    .row-dots { display: flex; gap: .3rem; flex-shrink: 0; }
+    .dot { width: 26px; height: 26px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: .8rem; }
+    .dot.check   { background: var(--orange-bg); }
+    .dot.due     { background: var(--blue-bg); }
+    .dot.ok      { background: var(--ok-bg); }
+    .dot.paused  { background: var(--gray-bg); }
+    .dot.unknown { background: var(--red-bg); }
+    .chevron { color: #c8c8c8; font-size: 1rem; flex-shrink: 0; }
+
+    /* ── Detail ── */
+    #detail-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+                      padding: 1rem .75rem 5.5rem; }
+    .d-loc { font-size: .82rem; color: var(--gray); margin-bottom: .9rem; }
+    .badge { padding: .55rem .8rem; border-radius: 8px; margin: .4rem 0;
+              font-size: .875rem; line-height: 1.5; border-left: 4px solid; }
+    .badge.check   { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-border); }
+    .badge.due     { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
+    .badge.ok      { background: var(--ok-bg);     color: var(--ok);     border-color: var(--ok-border); }
+    .badge.paused  { background: var(--gray-bg);   color: var(--gray);   border-color: var(--gray-border); }
+    .badge.unknown { background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }
+    .notes { margin-top: .85rem; padding: .75rem; background: #fffde7;
+              border-radius: 8px; border-left: 3px solid #f9a825; font-size: .8rem; }
+    .notes ul { margin-left: 1.1rem; margin-top: .3rem; }
+    .notes li { margin: .25rem 0; color: #555; line-height: 1.4; }
+
+    /* ── Detail nav bar ── */
+    .d-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex;
+              align-items: center; background: #fff;
+              border-top: 1px solid #e0e0e0;
+              padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
+              box-shadow: 0 -2px 8px rgba(0,0,0,.07); gap: .75rem; }
+    .nav-btn { background: var(--green-bg); border: 1.5px solid #c8e6c9;
+                color: var(--green-dk); border-radius: 10px; padding: .55rem 1rem;
+                font-size: .9rem; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+    .nav-btn:active { background: #dcedc8; }
+    .nav-btn:disabled { opacity: .3; pointer-events: none; }
+    .nav-hint { flex: 1; font-size: .73rem; color: var(--gray); text-align: center;
+                 overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ── Slide animation ── */
+    @keyframes fromRight { from { opacity:0; transform:translateX(36px) } to { opacity:1; transform:translateX(0) } }
+    @keyframes fromLeft  { from { opacity:0; transform:translateX(-36px) } to { opacity:1; transform:translateX(0) } }
+    .from-right { animation: fromRight .22s ease-out; }
+    .from-left  { animation: fromLeft  .22s ease-out; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🌿 Plant Care</h1>
-    <div class="date">Saturday, May 23, 2026</div>
-  </header>
-  <main>
-    
-    <h2 class="section-title">✅ All Good (13)</h2><div class="grid"><div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Hoya 'Krimson Queen'</div>
-    <div class="location">📍 Upstairs Bathroom, skylight</div>
+
+<!-- List view -->
+<div class="view" id="list-view">
+  <div class="hdr">
+    <span class="hdr-title">🌿 Plant Care</span>
+    <span class="hdr-sub">May 23</span>
   </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 5d ago — next check in ~5d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Acclimation: Transitioned slowly from a lower-light bathroom to the West-facing window — started 3–4 feet back, moved closer over two weeks to prevent sunburn.</li><li>Hoya pauses are normal: if care is correct but growth has stalled, the plant is likely building its root system underground.</li></ul></div>
+  <div id="list-scroll"></div>
 </div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Dieffenbachia (Dumb Cane)</div>
-    <div class="location">📍 Dining Room, West-facing window</div>
+
+<!-- Detail view -->
+<div class="view hidden" id="detail-view">
+  <div class="hdr">
+    <button class="back-btn" id="back-btn">&#8592; List</button>
+    <span class="hdr-title" id="d-title"></span>
+    <span class="hdr-sub" id="d-counter"></span>
   </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~7d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Rotate: Give the pot a quarter-turn every time you water to prevent the plant from leaning toward the light and growing lopsided.</li><li>Sap safety: Wash hands (or wear gloves) after any contact with the sap when pruning or removing dead leaves.</li><li>Natural aging: Shedding the lowest, oldest leaves as new growth pushes from the top is normal — this is how the characteristic thick cane forms.</li></ul></div>
+  <div id="detail-scroll"></div>
+  <div class="d-nav" id="d-nav">
+    <button class="nav-btn" id="prev-btn">&#8592;</button>
+    <span class="nav-hint" id="nav-hint"></span>
+    <button class="nav-btn" id="next-btn">&#8594;</button>
+  </div>
 </div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Rieger Begonia (Elatior Begonia)</div>
-    <div class="location">📍 Big Room, West-facing window</div>
+
+<script>
+const P = [{"name": "Hoya 'Krimson Queen'", "location": "Upstairs Bathroom, skylight", "waterStatus": "ok", "waterMsg": "Last watered 5d ago \u2014 next check in ~5d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Acclimation: Transitioned slowly from a lower-light bathroom to the West-facing window \u2014 started 3\u20134 feet back, moved closer over two weeks to prevent sunburn.", "Hoya pauses are normal: if care is correct but growth has stalled, the plant is likely building its root system underground."], "hasAction": false}, {"name": "Dieffenbachia (Dumb Cane)", "location": "Dining Room, West-facing window", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~7d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Rotate: Give the pot a quarter-turn every time you water to prevent the plant from leaning toward the light and growing lopsided.", "Sap safety: Wash hands (or wear gloves) after any contact with the sap when pruning or removing dead leaves.", "Natural aging: Shedding the lowest, oldest leaves as new growth pushes from the top is normal \u2014 this is how the characteristic thick cane forms."], "hasAction": false}, {"name": "Rieger Begonia (Elatior Begonia)", "location": "Big Room, West-facing window", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~7d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Transition shock is normal: dropping buds or leaves in the first two weeks after bringing home from a greenhouse is very common. Be patient during acclimation.", "Seasonal bloomer: it is normal for Rieger begonias to die back after their heavy bloom cycle ends. Many treat them as long-lasting floral arrangements. With careful pruning and a resting period (reduced water, cooler temps), you can coax them to rebloom the following year."], "hasAction": false}, {"name": "Kalanchoe (Flaming Katy)", "location": "Big Room, West-facing window", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~14d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Currently in spectacular peak bloom \u2014 massive explosion of bright orange and yellow flowers.", "Deadheading: As flower clusters fade and brown, snip the flower stems off just above the leaf line with clean scissors. Keeps the plant tidy and encourages remaining buds to open.", "Reblooming: Once all flowers fade, the plant enters a leafy growth stage. To rebloom next year, give it a 6-week autumn rest period (around September\u2013October) with 14 hours of complete uninterrupted darkness each night and only 10 hours of bright light per day. Combine with very minimal watering. Resume normal care after 6 weeks and buds will form within a few weeks."], "hasAction": false}, {"name": "Monstera Deliciosa", "location": "Dining room, west-facing", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~10d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Teenage Phase: Currently in juvenile phase with solid, healthy, glossy leaves. As the plant grows larger and gets ample bright light, new leaves will naturally develop the famous splits and fenestrations.", "Support Needed: This is a natural climber \u2014 insert a moss pole or coco coir stake into the pot center to give aerial roots something to grip, encouraging larger, more dramatic upright growth.", "Maintenance: Wipe large leaves with a damp cloth every few weeks to remove dust and help the plant photosynthesize."], "hasAction": false}, {"name": "Money Tree", "location": "Dining room, west-facing", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~10d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Moving Stress: Money trees dislike being moved frequently. Leaf drop after relocation is normal as it adjusts to new light and humidity. Pick a good spot and leave it be.", "Trunk Care: The braided trunks are bound when young. As the plant grows, check the top of the braid to ensure nursery ties or wires aren't cutting into the bark and choking the stems."], "hasAction": false}, {"name": "Anthurium (Flamingo Flower)", "location": "", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~7d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["TLC Needed: Currently showing leggy stems and some dried foliage. Pruning crispy brown leaves at the stem base, moving to a brighter spot, and consistent humidity will help it recover.", "Grooming: Use clean sharp scissors to snip completely dead or brown leaves right at the base of the stem \u2014 keeps the plant tidy and stops it wasting energy on dying foliage.", "Blooms: The colorful 'petals' are modified leaves called spathes, not true flowers. The actual flowers are the tiny bumps on the central spike (spadix)."], "hasAction": false}, {"name": "Marble Queen Pothos", "location": "", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~12d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Placement: Trailing vines look fantastic cascading from a high shelf or cabinet.", "Propagation: One of the easiest plants to propagate. Cut trimmed vines into segments each with one leaf and a node, place in water, and roots appear in a couple of weeks \u2014 ready to plant back into the pot."], "hasAction": false}, {"name": "Aloe Vera", "location": "", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~21d", "fertStatus": "paused", "fertMsg": "Feeding paused \u2014 not in active season", "notes": ["Drooping lower leaves: Caused by slightly lower light than ideal combined with the weight of water in the leaves. Moving to the sunniest window will help new center growth come in tight and vertical.", "Maintenance: Clear out dried, crispy brown debris from the base to keep clean and deter pests like mealybugs.", "First Aid Gel: Clear gel inside mature leaves soothes minor burns. If needed, snip an entire lower leaf from the very base rather than cutting the tip \u2014 the plant heals cleanly at the main stem connection."], "hasAction": false}, {"name": "Dracaena 'Malaika' (Ribbon Plant)", "location": "Dining room, west-facing", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~14d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Currently a beautifully compact, full rosette growing close to the soil. Over time it will naturally drop lower leaves and build a woody trunk, developing a miniature palm-like appearance.", "Grooming: Wipe long leaves with a damp cloth every few weeks to remove dust and keep them glossy. Gently peel away or snip naturally yellowing lower leaves at the base.", "Trimming tips: If leaf tips develop minor brown crispy edges, trim with sharp scissors following the natural pointed curve of the leaf \u2014 never cut straight across."], "hasAction": false}, {"name": "Parlor Palm", "location": "", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~7d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Shared pot: Growing together with the Anthurium. Their watering needs are compatible \u2014 water both on the same schedule.", "Currently looking full, lush, and vibrant with just minor dry pale tips on some fronds \u2014 very common indoors.", "Pest watch: Dense fine foliage can attract spider mites if air is too dry. Periodically wipe fronds with a damp cloth or give the plant a gentle shower rinse to deter pests and remove dust."], "hasAction": false}, {"name": "Snake Plant #1", "location": "Big Room, upstairs", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~21d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out \u2014 tightly wound, circling roots confirm it's time to repot.", "Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.", "Resilience: One of the most forgiving houseplants \u2014 can tolerate neglect, low light, and irregular watering better than almost anything else."], "hasAction": false}, {"name": "Snake Plant #2", "location": "Big Room, upstairs", "waterStatus": "ok", "waterMsg": "Last watered 0d ago \u2014 next check in ~21d", "fertStatus": "ok", "fertMsg": "Last fertilized 0d ago \u2014 next due in ~28d", "notes": ["Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out \u2014 tightly wound, circling roots confirm it's time to repot.", "Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.", "Resilience: One of the most forgiving houseplants \u2014 can tolerate neglect, low light, and irregular watering better than almost anything else."], "hasAction": false}];
+let cur = 0;
+
+// ── List ──
+function buildList() {
+  const urgent = P.filter(p => p.hasAction);
+  const ok     = P.filter(p => !p.hasAction);
+  let h = '';
+  if (urgent.length) {
+    h += `<div class="sec-label">⚠️ Needs attention (${urgent.length})</div>`;
+    urgent.forEach((p, i) => h += rowHTML(p, i));
+  }
+  if (ok.length) {
+    h += `<div class="sec-label">✅ All good (${ok.length})</div>`;
+    ok.forEach((p, i) => h += rowHTML(p, urgent.length + i));
+  }
+  const el = document.getElementById('list-scroll');
+  el.innerHTML = h;
+  el.querySelectorAll('.row').forEach(r =>
+    r.addEventListener('click', () => openDetail(+r.dataset.i))
+  );
+}
+
+function rowHTML(p, i) {
+  const loc = p.location ? `<div class="row-loc">📍 ${p.location}</div>` : '';
+  return `<div class="row${p.hasAction ? ' urgent' : ''}" data-i="${i}">
+  <div class="row-info">
+    <div class="row-name">${p.name}</div>${loc}
   </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~7d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Transition shock is normal: dropping buds or leaves in the first two weeks after bringing home from a greenhouse is very common. Be patient during acclimation.</li><li>Seasonal bloomer: it is normal for Rieger begonias to die back after their heavy bloom cycle ends. Many treat them as long-lasting floral arrangements. With careful pruning and a resting period (reduced water, cooler temps), you can coax them to rebloom the following year.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Kalanchoe (Flaming Katy)</div>
-    <div class="location">📍 Big Room, West-facing window</div>
+  <div class="row-dots">
+    <div class="dot ${p.waterStatus}">💧</div>
+    <div class="dot ${p.fertStatus}">🌱</div>
   </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~14d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Currently in spectacular peak bloom — massive explosion of bright orange and yellow flowers.</li><li>Deadheading: As flower clusters fade and brown, snip the flower stems off just above the leaf line with clean scissors. Keeps the plant tidy and encourages remaining buds to open.</li><li>Reblooming: Once all flowers fade, the plant enters a leafy growth stage. To rebloom next year, give it a 6-week autumn rest period (around September–October) with 14 hours of complete uninterrupted darkness each night and only 10 hours of bright light per day. Combine with very minimal watering. Resume normal care after 6 weeks and buds will form within a few weeks.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Monstera Deliciosa</div>
-    <div class="location">📍 Dining room, west-facing</div>
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~10d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Teenage Phase: Currently in juvenile phase with solid, healthy, glossy leaves. As the plant grows larger and gets ample bright light, new leaves will naturally develop the famous splits and fenestrations.</li><li>Support Needed: This is a natural climber — insert a moss pole or coco coir stake into the pot center to give aerial roots something to grip, encouraging larger, more dramatic upright growth.</li><li>Maintenance: Wipe large leaves with a damp cloth every few weeks to remove dust and help the plant photosynthesize.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Money Tree</div>
-    <div class="location">📍 Dining room, west-facing</div>
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~10d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Moving Stress: Money trees dislike being moved frequently. Leaf drop after relocation is normal as it adjusts to new light and humidity. Pick a good spot and leave it be.</li><li>Trunk Care: The braided trunks are bound when young. As the plant grows, check the top of the braid to ensure nursery ties or wires aren't cutting into the bark and choking the stems.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Anthurium (Flamingo Flower)</div>
-    
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~7d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>TLC Needed: Currently showing leggy stems and some dried foliage. Pruning crispy brown leaves at the stem base, moving to a brighter spot, and consistent humidity will help it recover.</li><li>Grooming: Use clean sharp scissors to snip completely dead or brown leaves right at the base of the stem — keeps the plant tidy and stops it wasting energy on dying foliage.</li><li>Blooms: The colorful 'petals' are modified leaves called spathes, not true flowers. The actual flowers are the tiny bumps on the central spike (spadix).</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Marble Queen Pothos</div>
-    
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~12d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Placement: Trailing vines look fantastic cascading from a high shelf or cabinet.</li><li>Propagation: One of the easiest plants to propagate. Cut trimmed vines into segments each with one leaf and a node, place in water, and roots appear in a couple of weeks — ready to plant back into the pot.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Aloe Vera</div>
-    
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~21d</div>
-  <div class="badge" style="background:#f5f5f5;color:#757575;border-left:4px solid #bdbdbd">🌱 Feeding paused — not in active season</div>
-  <div class="notes"><strong>💡</strong><ul><li>Drooping lower leaves: Caused by slightly lower light than ideal combined with the weight of water in the leaves. Moving to the sunniest window will help new center growth come in tight and vertical.</li><li>Maintenance: Clear out dried, crispy brown debris from the base to keep clean and deter pests like mealybugs.</li><li>First Aid Gel: Clear gel inside mature leaves soothes minor burns. If needed, snip an entire lower leaf from the very base rather than cutting the tip — the plant heals cleanly at the main stem connection.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Dracaena 'Malaika' (Ribbon Plant)</div>
-    <div class="location">📍 Dining room, west-facing</div>
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~14d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Currently a beautifully compact, full rosette growing close to the soil. Over time it will naturally drop lower leaves and build a woody trunk, developing a miniature palm-like appearance.</li><li>Grooming: Wipe long leaves with a damp cloth every few weeks to remove dust and keep them glossy. Gently peel away or snip naturally yellowing lower leaves at the base.</li><li>Trimming tips: If leaf tips develop minor brown crispy edges, trim with sharp scissors following the natural pointed curve of the leaf — never cut straight across.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Parlor Palm</div>
-    
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~7d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Shared pot: Growing together with the Anthurium. Their watering needs are compatible — water both on the same schedule.</li><li>Currently looking full, lush, and vibrant with just minor dry pale tips on some fronds — very common indoors.</li><li>Pest watch: Dense fine foliage can attract spider mites if air is too dry. Periodically wipe fronds with a damp cloth or give the plant a gentle shower rinse to deter pests and remove dust.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Snake Plant #1</div>
-    <div class="location">📍 Big Room, upstairs</div>
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~21d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out — tightly wound, circling roots confirm it's time to repot.</li><li>Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.</li><li>Resilience: One of the most forgiving houseplants — can tolerate neglect, low light, and irregular watering better than almost anything else.</li></ul></div>
-</div>
-<div class="card" style="border-top:4px solid #c8e6c9">
-  <div class="card-header">
-    <div class="plant-name">Snake Plant #2</div>
-    <div class="location">📍 Big Room, upstairs</div>
-  </div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">💧 Last watered 0d ago — next check in ~21d</div>
-  <div class="badge" style="background:#e8f5e9;color:#2e7d32;border-left:4px solid #4caf50">🌱 Last fertilized 0d ago — next due in ~28d</div>
-  <div class="notes"><strong>💡</strong><ul><li>Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out — tightly wound, circling roots confirm it's time to repot.</li><li>Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.</li><li>Resilience: One of the most forgiving houseplants — can tolerate neglect, low light, and irregular watering better than almost anything else.</li></ul></div>
-</div></div>
-  </main>
-  <footer>Updated by daily routine · 2026-05-23</footer>
+  <div class="chevron">›</div>
+</div>`;
+}
+
+// ── Detail ──
+function openDetail(i) {
+  cur = i;
+  document.getElementById('list-view').classList.add('hidden');
+  document.getElementById('detail-view').classList.remove('hidden');
+  renderDetail(i, 0);
+}
+
+function renderDetail(i, dir) {
+  cur = i;
+  const p = P[i];
+  document.getElementById('d-title').textContent = p.name;
+  document.getElementById('d-counter').textContent = `${i + 1} / ${P.length}`;
+  document.getElementById('prev-btn').disabled = i === 0;
+  document.getElementById('next-btn').disabled = i === P.length - 1;
+
+  const adj = P[i + 1] || P[i - 1];
+  document.getElementById('nav-hint').textContent =
+    P[i + 1] ? P[i + 1].name : (P[i - 1] ? P[i - 1].name : '');
+
+  const notesHTML = p.notes && p.notes.length
+    ? `<div class="notes"><strong>💡 Notes</strong><ul>${
+        p.notes.map(n => `<li>${n}</li>`).join('')}</ul></div>`
+    : '';
+
+  const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
+  const scr = document.getElementById('detail-scroll');
+  scr.innerHTML = `<div class="${animClass}">
+    ${p.location ? `<div class="d-loc">📍 ${p.location}</div>` : ''}
+    <div class="badge ${p.waterStatus}">💧 ${p.waterMsg}</div>
+    <div class="badge ${p.fertStatus}">🌱 ${p.fertMsg}</div>
+    ${notesHTML}
+  </div>`;
+  scr.scrollTop = 0;
+}
+
+function goTo(i, dir) {
+  if (i < 0 || i >= P.length) return;
+  renderDetail(i, dir);
+}
+
+// ── Events ──
+document.getElementById('back-btn').addEventListener('click', () => {
+  document.getElementById('detail-view').classList.add('hidden');
+  document.getElementById('list-view').classList.remove('hidden');
+});
+document.getElementById('prev-btn').addEventListener('click', () => goTo(cur - 1, -1));
+document.getElementById('next-btn').addEventListener('click', () => goTo(cur + 1,  1));
+
+// Swipe (horizontal > vertical and > 50px threshold)
+let tx = 0, ty = 0;
+const scr = document.getElementById('detail-scroll');
+scr.addEventListener('touchstart', e => {
+  tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+}, {passive: true});
+scr.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 50)
+    goTo(dx < 0 ? cur + 1 : cur - 1, dx < 0 ? 1 : -1);
+}, {passive: true});
+
+// Arrow keys / Escape
+document.addEventListener('keydown', e => {
+  if (document.getElementById('detail-view').classList.contains('hidden')) return;
+  if (e.key === 'ArrowRight') goTo(cur + 1,  1);
+  if (e.key === 'ArrowLeft')  goTo(cur - 1, -1);
+  if (e.key === 'Escape')     document.getElementById('back-btn').click();
+});
+
+buildList();
+</script>
 </body>
 </html>
