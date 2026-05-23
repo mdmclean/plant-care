@@ -7,9 +7,11 @@ to produce a personalized checklist of what each plant needs today.
 ## File Structure
 
 ```
-plants/          # One YAML file per plant — static care instructions
-care_log.yaml    # Tracks the last time each plant was watered / fertilized
-CLAUDE.md        # This file — instructions for the daily routine
+plants/              # One YAML file per plant — static care instructions
+care_log.yaml        # Tracks the last time each plant was watered / fertilized
+generate_report.py   # Generates docs/index.html for GitHub Pages
+docs/index.html      # GitHub Pages report (auto-generated — do not edit manually)
+CLAUDE.md            # This file — instructions for the daily routine
 ```
 
 ## How to Run the Daily Routine
@@ -59,6 +61,15 @@ If no action is needed for a plant, say so in one line and move on.
 
 After the user confirms they've cared for a plant, update `care_log.yaml` with
 today's date for the relevant action (`last_watered` and/or `last_fertilized`).
+
+Then regenerate the GitHub Pages report and commit everything:
+
+```bash
+python3 generate_report.py
+git add care_log.yaml docs/index.html
+git commit -m "care log: update [plant names] — [date]"
+git push -u origin main
+```
 
 ## Adding a New Plant
 
