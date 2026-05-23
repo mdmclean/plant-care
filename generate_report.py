@@ -151,6 +151,7 @@ def evaluate(log_key, log_entry, plant):
     return dict(
         name=name,
         location=location,
+        image=plant.get("image") or "",
         water_status=water[0],
         water_msg=water[1],
         fert_status=fert[0],
@@ -168,6 +169,7 @@ def render(results, today):
     plants_json = json.dumps([{
         "name": r["name"],
         "location": r["location"],
+        "image": r["image"],
         "waterStatus": r["water_status"],
         "waterMsg": r["water_msg"],
         "fertStatus": r["fert_status"],
@@ -277,6 +279,11 @@ def render(results, today):
     .nav-hint {{ flex: 1; font-size: .73rem; color: var(--gray); text-align: center;
                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
 
+    /* ── Plant photo ── */
+    .plant-photo {{ width: 100%; max-height: 260px; object-fit: cover;
+                   border-radius: 10px; margin-bottom: .85rem;
+                   background: #e8f5e9; display: block; }}
+
     /* ── Slide animation ── */
     @keyframes fromRight {{ from {{ opacity:0; transform:translateX(36px) }} to {{ opacity:1; transform:translateX(0) }} }}
     @keyframes fromLeft  {{ from {{ opacity:0; transform:translateX(-36px) }} to {{ opacity:1; transform:translateX(0) }} }}
@@ -373,9 +380,15 @@ function renderDetail(i, dir) {{
         p.notes.map(n => `<li>${{n}}</li>`).join('')}}</ul></div>`
     : '';
 
+  const photoHTML = p.image
+    ? `<img class="plant-photo" src="${{p.image}}" alt="${{p.name}}"
+           onerror="this.style.display='none'">`
+    : '';
+
   const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
   const scr = document.getElementById('detail-scroll');
   scr.innerHTML = `<div class="${{animClass}}">
+    ${{photoHTML}}
     ${{p.location ? `<div class="d-loc">📍 ${{p.location}}</div>` : ''}}
     <div class="badge ${{p.waterStatus}}">💧 ${{p.waterMsg}}</div>
     <div class="badge ${{p.fertStatus}}">🌱 ${{p.fertMsg}}</div>
