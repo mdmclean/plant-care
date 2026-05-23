@@ -55,3 +55,13 @@ parlor-palm:
   last_watered: 2026-05-23
   last_fertilized: 2026-05-23
   notes: "Shared pot with Anthurium"
+
+snake-plant-1:
+  last_watered: 2026-05-23
+  last_fertilized: ""
+  notes: ""
+
+snake-plant-2:
+  last_watered: 2026-05-23
+  last_fertilized: ""
+  notes: ""
