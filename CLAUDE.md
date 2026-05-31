@@ -62,11 +62,12 @@ If no action is needed for a plant, say so in one line and move on.
 After the user confirms they've cared for a plant, update `care_log.yaml` with
 today's date for the relevant action (`last_watered` and/or `last_fertilized`).
 
-Then regenerate the GitHub Pages report and commit everything:
+Then regenerate the GitHub Pages report and commit everything directly to `main`
+(never use feature branches — all changes go straight to main):
 
 ```bash
 python3 generate_report.py
-git add care_log.yaml docs/index.html
+git add care_log.yaml plants/*.yaml docs/
 git commit -m "care log: update [plant names] — [date]"
 git push -u origin main
 ```
