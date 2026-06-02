@@ -62,13 +62,14 @@ If no action is needed for a plant, say so in one line and move on.
 After the user confirms they've cared for a plant, update `care_log.yaml` with
 today's date for the relevant action (`last_watered` and/or `last_fertilized`).
 
-Then commit everything directly to `main` and push — GitHub Actions will
-automatically regenerate the report (never use feature branches):
+Then, without waiting to be asked, commit the changes, open a PR against `main`,
+and immediately merge it. GitHub Actions will automatically regenerate the report.
 
 ```bash
 git add care_log.yaml plants/*.yaml
 git commit -m "care log: update [plant names] — [date]"
-git push -u origin main
+git push -u origin <branch>
+# create PR via GitHub MCP, then merge it
 ```
 
 ## Adding a New Plant
