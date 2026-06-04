@@ -2,7 +2,7 @@
 # Dates use YYYY-MM-DD format.
 
 hoya-krimson-queen:
-  last_watered: 2026-05-23
+  last_watered: 2026-06-04
   last_fertilized: 2026-05-23
   notes: ""
 
@@ -22,12 +22,12 @@ kalanchoe:
   notes: ""
 
 monstera-deliciosa:
-  last_watered: 2026-05-23
+  last_watered: 2026-06-04
   last_fertilized: 2026-05-23
   notes: ""
 
 money-tree:
-  last_watered: 2026-05-23
+  last_watered: 2026-06-04
   last_fertilized: 2026-05-23
   notes: ""
 
