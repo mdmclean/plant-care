@@ -1,4 +1,4 @@
-const CACHE = 'plant-care-2026-06-03';
+const CACHE = 'plant-care-2026-06-04';
 const ASSETS = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
