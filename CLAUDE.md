@@ -4,6 +4,19 @@
 This repo stores plant care profiles and a care log. The daily routine reads both
 to produce a personalized checklist of what each plant needs today.
 
+## Committing & Merging Changes
+
+For **any** requested change (adding a plant, adding a photo, updating the care
+log, editing a profile, etc.), do not wait to be asked to ship it. Once the
+change is complete, without prompting:
+
+1. Commit with a clear, descriptive message.
+2. Push the working branch.
+3. Open a PR against `main` via the GitHub MCP, then immediately merge it.
+
+GitHub Actions regenerates the report on merge. Only pause to ask first if a
+change is destructive or ambiguous (e.g. deleting a plant, overwriting data).
+
 ## File Structure
 
 ```
