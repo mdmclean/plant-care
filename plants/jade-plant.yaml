@@ -1,0 +1,56 @@
+# jade-plant
+id: jade-plant
+name: "Jade Plant"
+photos:
+  - file: "images/jade-plant-2026-06-15.jpeg"
+    date: "2026-06-15"
+botanical_name: "Crassula ovata"
+type: "Succulent Evergreen Shrub"
+toxicity: "Toxic to cats and dogs — ingestion can cause vomiting, lethargy, and incoordination"
+growth_habit: "Slow-growing, upright, branching succulent with thick woody stems and plump, oval, paired leaves. Develops a small tree-like form with age. Young cuttings start out thin and leggy before thickening up."
+
+location: ""
+
+light:
+  ideal: "Bright light with several hours of direct sun — a south- or west-facing window is ideal"
+  too_much: "Leaves may take on a red/blushed edge in very strong sun (cosmetic); sudden harsh sun on an unacclimated plant can scorch"
+  too_little: "Stretched, leggy growth with long gaps between small leaves; weak, floppy stems that reach toward the light"
+  notes: "Insufficient light is the most common problem — jade needs more sun than most houseplants to grow compact and sturdy."
+
+watering:
+  when: "Allow the soil to dry out 100% between waterings — always check before watering. When in doubt, wait."
+  how: "Water thoroughly until it drains from the holes, then empty the saucer immediately. Never let it sit in water — highly prone to root rot."
+  seasonal_note: "Water sparingly in fall and winter when growth slows."
+  overwatering_signs: "Soft, mushy, yellowing or translucent leaves; leaves dropping at the slightest touch; rotting stem base"
+  underwatering_signs: "Wrinkled, puckered, or shriveled leaves that lose their firm plumpness"
+  estimated_interval_days:
+    spring_summer: 14
+    fall_winter: 30
+
+environment:
+  temperature: "18°C–24°C (65°F–75°F). Keep above 10°C (50°F); cannot tolerate frost."
+  humidity: "Prefers dry household air. Avoid humid rooms and never mist — moisture sitting on leaves invites rot and fungal spots."
+
+soil:
+  mix: "Sharply draining, gritty cactus and succulent mix"
+  recipe: "Cactus/succulent potting mix with extra perlite or coarse sand for drainage"
+  repotting: "Prefers to be snug in its pot. Repot only every 2–3 years or when root-bound. Terracotta is ideal — porous clay helps the soil dry evenly."
+
+feeding:
+  fertilizer: "Balanced succulent fertilizer at half-strength"
+  schedule: "Once monthly during the active growing season (spring and summer). Do not feed in fall or winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Pinch or prune leggy stems just above a leaf pair to encourage branching and a
+  bushier, sturdier shape. Pruned tips root easily as new cuttings — let the cut
+  end callous over for a day or two before placing on soil.
+
+propagation: >
+  Very easy from leaf or stem cuttings. Let the cut surface dry/callous for 1–3
+  days, set on top of barely-moist gritty soil, and keep in bright light. Water
+  only sparingly until roots establish to avoid rotting the cutting.
+
+notes:
+  - "Newly potted cutting: keep watering light until roots are well established — soggy soil is the fastest way to lose a young jade."
+  - "Photo check (2026-06-15): Small, recently potted cutting. The leaves are a healthy firm green with no yellowing or mushiness, which is a good sign. Growth is leggy/stretched, though — there's a long bare reddish stem with leaves bunched only near the tip, a classic sign of too little light. Move it to the brightest window available (south- or west-facing) to encourage compact growth, and once it's rooted and growing you can pinch the tip above a leaf pair to push side branching. Soil reads dry on top; the pale specks are perlite/mineral, not pest activity. Hold off on heavy watering while it's establishing."
