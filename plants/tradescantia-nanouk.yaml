@@ -1,0 +1,52 @@
+# tradescantia-nanouk
+id: tradescantia-nanouk
+name: "Tradescantia 'Nanouk'"
+image: "images/tradescantia-nanouk.jpeg"
+botanical_name: "Tradescantia albiflora 'Nanouk' (Fantasy Venice)"
+type: "Trailing Herbaceous Perennial"
+toxicity: "Mildly toxic to cats and dogs — sap can cause mouth/stomach irritation and the foliage can cause skin dermatitis"
+growth_habit: "Fast-growing, trailing/spreading. Fleshy stems with broad, striped leaves in green, pink, and cream; vivid purple undersides."
+
+location: ""
+
+light:
+  ideal: "Bright, indirect light — the more light, the stronger the pink/lilac variegation"
+  placement: "An East or West-facing window is ideal. A little gentle direct morning sun is fine."
+  too_much: "Scorched, bleached, or crispy patches from harsh midday direct sun"
+  too_little: "Leggy, stretched stems with wide gaps between leaves; pink fades and growth reverts toward plain green"
+  notes: "Pinch/rotate regularly to keep it full and the colors vibrant."
+
+watering:
+  when: "Keep lightly moist while establishing roots; once established, let the top 1–2 inches dry out between waterings. Check before watering."
+  how: "Water thoroughly until it drains from the holes, then empty the saucer. Sensitive to staying soggy."
+  overwatering_signs: "Mushy, blackening stems; rot at the soil line"
+  underwatering_signs: "Limp, curling, or crispy leaves; stems go thin and dry"
+  estimated_interval_days:
+    spring_summer: 5
+    fall_winter: 10
+
+environment:
+  temperature: "55°F–80°F. Keep away from cold drafts and frost."
+  humidity: "Tolerates average household humidity; appreciates 50%+."
+
+soil:
+  mix: "Light, well-draining potting mix"
+  recipe: "2/3 indoor potting soil + 1/3 perlite"
+  repotting: "Pot up once roots fill the current container. Refreshes well with frequent pruning and re-rooting of cuttings."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during active growing season (Spring and Summer). Pause in Fall and Winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Pinch back stem tips regularly to encourage dense, bushy growth and prevent
+  legginess. Tip cuttings root easily in water or straight into moist soil.
+
+propagation:
+  method: "Stem-tip cuttings — root in water or directly in moist soil"
+  notes: "Currently propagating. Keep soil consistently lightly moist (not soggy) and in bright indirect light until new growth confirms roots have established, then shift to the normal dry-down watering routine."
+
+notes:
+  - "Newly propagated: prioritize steady light moisture and warmth over a strict watering interval until rooted."
+  - "Variegation is light-dependent — if the pink dwindles, give it more bright indirect light. Prune any all-green reverting stems."
