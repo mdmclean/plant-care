@@ -79,11 +79,17 @@ Create a new file in `plants/` following the same YAML schema as
 
 ## Adding a Photo of a Plant
 
+Plants keep a **photo history** — each photo is dated, and the report shows a
+per-plant gallery that opens on the latest shot and scrolls back through older
+ones. The date is overlaid by the report (do NOT burn text into the image).
+
 When the user supplies a photo of a plant, do the following:
 
-1. **Save and downscale the image.** Store it in `docs/images/<plant-id>.jpeg`
-   (matching the plant's `id`). Photos straight from a phone are large
-   (multiple MB / 4000px+), so always downscale before committing:
+1. **Save and downscale the image.** Name it
+   `docs/images/<plant-id>-<YYYY-MM-DD>.jpeg` (the plant `id` plus the date the
+   photo was taken/added) so each entry in the history is distinct. Photos
+   straight from a phone are large (multiple MB / 4000px+), so always downscale
+   before committing:
    ```python
    from PIL import Image, ImageOps
    im = Image.open(src)
@@ -93,32 +99,24 @@ When the user supplies a photo of a plant, do the following:
    im.save(dest, "JPEG", quality=82, optimize=True)
    ```
    This keeps files around a few hundred KB instead of several MB.
-   Then **stamp the date added** in the bottom-right corner so each photo
-   carries its own timeline:
-   ```python
-   from PIL import ImageDraw, ImageFont
-   text = f"Added {today}"            # today as YYYY-MM-DD
-   size = max(16, im.width // 28)
-   try:    font = ImageFont.truetype("DejaVuSans-Bold.ttf", size)
-   except Exception: font = ImageFont.load_default(size)
-   draw = ImageDraw.Draw(im)
-   l, t, r, b = draw.textbbox((0, 0), text, font=font)
-   pad = max(8, im.width // 100)
-   x, y = im.width - (r - l) - pad * 2, im.height - (b - t) - pad * 2
-   ov = Image.new("RGBA", im.size, (0, 0, 0, 0))
-   ImageDraw.Draw(ov).rectangle([x - pad, y - pad, x + (r - l) + pad, y + (b - t) + pad], fill=(0, 0, 0, 140))
-   im = Image.alpha_composite(im.convert("RGBA"), ov).convert("RGB")
-   ImageDraw.Draw(im).text((x - l, y - t), text, font=font, fill=(255, 255, 255))
+2. **Append it to the plant's `photos` history.** Add a `photos:` list near the
+   top of the plant's YAML (just after `name:`), newest entries can go in any
+   order — the report sorts by `date`. **Append, never replace** prior photos:
+   ```yaml
+   photos:
+     - file: "images/money-tree-2026-06-15.jpeg"
+       date: "2026-06-15"
+     - file: "images/money-tree-2026-09-01.jpeg"   # a later check-in
+       date: "2026-09-01"
    ```
-   Stamp the photo *before* saving the final JPEG.
-2. **Link it from the plant file.** Add an `image: "images/<plant-id>.jpeg"`
-   field near the top of the plant's YAML (just after `name:`), matching the
-   pattern in `plants/hoya-krimson-queen.yaml`.
+   (A legacy single `image: "..."` field is still honored as a one-photo,
+   undated history.)
 3. **Analyze the photo and update the plant's `notes`.** Look at the plant's
    condition and add a dated observation note (e.g.
    `"Photo check (YYYY-MM-DD): ..."`). Call out leaf color, signs of over/under-
    watering (yellowing, browning, drooping, scorch), pests, leggy/stretching
    growth, and anything that suggests a care adjustment. Keep it specific to
-   what is actually visible in the image.
-4. **Regenerate the report** by running `python3 generate_report.py` (the report
-   displays the photo), then commit and push.
+   what is actually visible in the image. With a photo history, also compare
+   against earlier shots and note visible change (new growth, decline, etc.).
+4. **Regenerate the report** by running `python3 generate_report.py` (it renders
+   the gallery and overlays each photo's date), then commit and push.
