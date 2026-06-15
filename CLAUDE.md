@@ -76,3 +76,31 @@ git push -u origin <branch>
 
 Create a new file in `plants/` following the same YAML schema as
 `plants/hoya-krimson-queen.yaml`. Add a matching entry in `care_log.yaml`.
+
+## Adding a Photo of a Plant
+
+When the user supplies a photo of a plant, do the following:
+
+1. **Save and downscale the image.** Store it in `docs/images/<plant-id>.jpeg`
+   (matching the plant's `id`). Photos straight from a phone are large
+   (multiple MB / 4000px+), so always downscale before committing:
+   ```python
+   from PIL import Image, ImageOps
+   im = Image.open(src)
+   im = ImageOps.exif_transpose(im)        # honor camera rotation
+   im.thumbnail((1200, 1200), Image.LANCZOS)  # cap longest side at 1200px
+   if im.mode != "RGB": im = im.convert("RGB")
+   im.save(dest, "JPEG", quality=82, optimize=True)
+   ```
+   This keeps files around a few hundred KB instead of several MB.
+2. **Link it from the plant file.** Add an `image: "images/<plant-id>.jpeg"`
+   field near the top of the plant's YAML (just after `name:`), matching the
+   pattern in `plants/hoya-krimson-queen.yaml`.
+3. **Analyze the photo and update the plant's `notes`.** Look at the plant's
+   condition and add a dated observation note (e.g.
+   `"Photo check (YYYY-MM-DD): ..."`). Call out leaf color, signs of over/under-
+   watering (yellowing, browning, drooping, scorch), pests, leggy/stretching
+   growth, and anything that suggests a care adjustment. Keep it specific to
+   what is actually visible in the image.
+4. **Regenerate the report** by running `python3 generate_report.py` (the report
+   displays the photo), then commit and push.
