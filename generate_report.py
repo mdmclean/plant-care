@@ -22,8 +22,8 @@ MANIFEST = {
     "short_name": "Plants",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#f1f8e9",
-    "theme_color": "#2e7d32",
+    "background_color": "#eef1ef",
+    "theme_color": "#064e3b",
     "icons": [
         {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
         {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
@@ -188,145 +188,185 @@ def render(results, today):
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>🌿 Plant Care</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2e7d32">
+  <meta name="theme-color" content="#064e3b" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#053a2b" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Plant Care">
   <link rel="apple-touch-icon" href="icon-192.png">
   <style>
     :root {{
-      --green-dk: #2e7d32; --green-md: #43a047; --green-bg: #f1f8e9;
-      --orange: #e65100; --orange-bg: #fff3e0; --orange-border: #ff9800;
-      --blue: #1565c0;   --blue-bg: #e3f2fd;   --blue-border: #2196f3;
-      --ok: #2e7d32;     --ok-bg: #e8f5e9;     --ok-border: #4caf50;
-      --gray: #757575;   --gray-bg: #f5f5f5;   --gray-border: #bdbdbd;
-      --red-bg: #fce4ec; --red: #880e4f;       --red-border: #e91e63;
+      color-scheme: light dark;
+      --bg: #eef1ef; --surface: #ffffff; --surface-2: #f3f5f4;
+      --border: #e4e8e6;
+      --shadow: 0 1px 2px rgba(16,24,20,.05), 0 6px 16px rgba(16,24,20,.06);
+      --shadow-up: 0 -1px 16px rgba(16,24,20,.07);
+      --text: #111714; --text-2: #5d6a64; --text-3: #aeb6b1;
+      --accent: #059669; --accent-press: #047857; --on-accent: #ffffff;
+      --accent-shadow: 0 6px 18px rgba(5,150,105,.32);
+      --header-bg: linear-gradient(135deg, #064e3b 0%, #0a7d59 100%);
+      --warn: #f59e0b; --warn-bg: #fff3df; --warn-text: #b45309;
+      --info: #3b82f6; --info-bg: #e7eeff; --info-text: #1d4ed8;
+      --ok: #10b981; --ok-bg: #e1f6ee; --ok-text: #047857;
+      --ok-solid: #059669; --info-solid: #2563eb;
+      --paused: #9aa7a1; --paused-bg: #eef1ef; --paused-text: #6b766f;
+      --danger: #ef4444; --danger-bg: #fce8ea; --danger-text: #be123c;
+      --note-bg: #fff8e6; --note-border: #f59e0b; --note-text: #7a5e16;
+      --toast-bg: #16201c; --toast-text: #f2f5f3;
+      --radius: 16px; --radius-sm: 12px; --radius-pill: 999px;
+    }}
+    @media (prefers-color-scheme: dark) {{
+      :root {{
+        --bg: #0c100e; --surface: #161d19; --surface-2: #1e2622;
+        --border: rgba(255,255,255,.09);
+        --shadow: 0 1px 2px rgba(0,0,0,.5), 0 8px 20px rgba(0,0,0,.4);
+        --shadow-up: 0 -2px 18px rgba(0,0,0,.45);
+        --text: #e9efec; --text-2: #93a29b; --text-3: #5e6a64;
+        --accent: #10b981; --accent-press: #0c9a6c; --on-accent: #04130d;
+        --accent-shadow: 0 6px 20px rgba(16,185,129,.28);
+        --header-bg: linear-gradient(135deg, #053a2b 0%, #066a4b 100%);
+        --warn: #fbbf24; --warn-bg: rgba(251,191,36,.14); --warn-text: #fcd34d;
+        --info: #60a5fa; --info-bg: rgba(96,165,250,.15); --info-text: #93c5fd;
+        --ok: #34d399; --ok-bg: rgba(52,211,153,.15); --ok-text: #6ee7b7;
+        --ok-solid: #047857; --info-solid: #1d4ed8;
+        --paused: #6b766f; --paused-bg: rgba(255,255,255,.05); --paused-text: #9aa7a1;
+        --danger: #f87171; --danger-bg: rgba(248,113,113,.15); --danger-text: #fca5a5;
+        --note-bg: rgba(251,191,36,.1); --note-border: #fbbf24; --note-text: #e6d6a8;
+        --toast-bg: #eef1ef; --toast-text: #15201c;
+      }}
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }}
     .hidden {{ display: none !important; }}
     html, body {{ height: 100%; overflow: hidden; }}
-    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--green-bg); color: #1b1b1b; }}
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: var(--bg); color: var(--text);
+            -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }}
 
     /* ── Views ── */
-    .view {{ position: fixed; inset: 0; display: flex; flex-direction: column;
-             transition: transform .25s ease, opacity .25s ease; }}
-    .view.hidden {{ display: none; }}
+    .view {{ position: fixed; inset: 0; display: flex; flex-direction: column; }}
 
     /* ── Header ── */
-    .hdr {{ background: linear-gradient(135deg, var(--green-dk), var(--green-md));
-            color: #fff; display: flex; align-items: center; gap: .6rem;
-            padding: .9rem 1rem; flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,.2); }}
-    .hdr-title {{ flex: 1; font-size: 1rem; font-weight: 700; min-width: 0;
+    .hdr {{ background: var(--header-bg); color: #fff;
+            display: flex; align-items: center; gap: .65rem;
+            padding: calc(.95rem + env(safe-area-inset-top)) 1.1rem .95rem;
+            flex-shrink: 0; position: relative; z-index: 2; }}
+    .hdr-title {{ flex: 1; font-size: 1.15rem; font-weight: 800; min-width: 0;
+                  letter-spacing: -.02em;
                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
-    .hdr-sub {{ font-size: .78rem; opacity: .85; white-space: nowrap; }}
-    .back-btn {{ background: rgba(255,255,255,.18); border: none; color: #fff;
-                 border-radius: 8px; padding: .4rem .7rem; font-size: .88rem;
-                 cursor: pointer; flex-shrink: 0; }}
-    .back-btn:active {{ background: rgba(255,255,255,.35); }}
+    .hdr-sub {{ font-size: .68rem; font-weight: 700; letter-spacing: .06em;
+                text-transform: uppercase; white-space: nowrap;
+                background: rgba(255,255,255,.18); color: #fff;
+                padding: .3rem .6rem; border-radius: var(--radius-pill); }}
+    .back-btn {{ background: rgba(255,255,255,.16); border: none; color: #fff;
+                 border-radius: 10px; padding: .42rem .8rem; font-size: .85rem;
+                 font-weight: 600; cursor: pointer; flex-shrink: 0; }}
+    .back-btn:active {{ background: rgba(255,255,255,.32); }}
 
     /* ── List ── */
-    #list-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }}
-    .sec-label {{ font-size: .72rem; font-weight: 700; letter-spacing: .07em;
-                  text-transform: uppercase; color: var(--gray);
-                  padding: .9rem 1rem .35rem; }}
-    .row {{ display: flex; align-items: center; gap: .65rem; background: #fff;
-            margin: .3rem .75rem; border-radius: 12px; padding: .85rem 1rem;
-            cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.07); }}
-    .row:active {{ background: #f7f7f7; }}
-    .row.urgent {{ border-left: 4px solid var(--orange-border); }}
+    #list-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+                    padding-bottom: .4rem; }}
+    .sec-label {{ font-size: .7rem; font-weight: 800; letter-spacing: .09em;
+                  text-transform: uppercase; color: var(--text-2);
+                  padding: 1.1rem 1.15rem .4rem; }}
+    .row {{ position: relative; display: flex; align-items: center; gap: .7rem;
+            background: var(--surface); border: 1px solid var(--border);
+            margin: .45rem .8rem; border-radius: var(--radius);
+            padding: .9rem 1rem; cursor: pointer; box-shadow: var(--shadow);
+            transition: transform .12s ease, background .12s ease; }}
+    .row:active {{ transform: scale(.988); background: var(--surface-2); }}
+    .row.urgent::before {{ content: ''; position: absolute; left: 0; top: 13px; bottom: 13px;
+                           width: 4px; border-radius: 0 4px 4px 0; background: var(--warn); }}
     .row-info {{ flex: 1; min-width: 0; }}
-    .row-name {{ font-weight: 600; font-size: .92rem;
+    .row-name {{ font-weight: 700; font-size: .96rem; letter-spacing: -.01em;
                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
-    .row-loc {{ font-size: .76rem; color: var(--gray); margin-top: .15rem; }}
-    .row-dots {{ display: flex; gap: .3rem; flex-shrink: 0; }}
-    .dot {{ width: 26px; height: 26px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: .8rem; }}
-    .dot.check   {{ background: var(--orange-bg); }}
-    .dot.due     {{ background: var(--blue-bg); }}
-    .dot.ok      {{ background: var(--ok-bg); }}
-    .dot.paused  {{ background: var(--gray-bg); }}
-    .dot.unknown {{ background: var(--red-bg); }}
-    .chevron {{ color: #c8c8c8; font-size: 1rem; flex-shrink: 0; }}
+    .row-loc {{ font-size: .76rem; color: var(--text-2); margin-top: .2rem; }}
+    .row-dots {{ display: flex; gap: .35rem; flex-shrink: 0; }}
+    .chevron {{ color: var(--text-3); font-size: 1.1rem; flex-shrink: 0; margin-left: .1rem; }}
 
     /* ── Detail ── */
     #detail-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                      padding: 1rem .75rem 5.5rem; }}
-    .d-loc {{ font-size: .82rem; color: var(--gray); margin-bottom: .9rem; }}
-    .badge {{ padding: .55rem .8rem; border-radius: 8px; margin: .4rem 0;
-              font-size: .875rem; line-height: 1.5; border-left: 4px solid; }}
-    .badge.check   {{ background: var(--orange-bg); color: var(--orange); border-color: var(--orange-border); }}
-    .badge.due     {{ background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }}
-    .badge.ok      {{ background: var(--ok-bg);     color: var(--ok);     border-color: var(--ok-border); }}
-    .badge.paused  {{ background: var(--gray-bg);   color: var(--gray);   border-color: var(--gray-border); }}
-    .badge.unknown {{ background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }}
-    .notes {{ margin-top: .85rem; padding: .75rem; background: #fffde7;
-              border-radius: 8px; border-left: 3px solid #f9a825; font-size: .8rem; }}
-    .notes ul {{ margin-left: 1.1rem; margin-top: .3rem; }}
-    .notes li {{ margin: .25rem 0; color: #555; line-height: 1.4; }}
+                      padding: 1.1rem .9rem 6rem; }}
+    .d-loc {{ font-size: .82rem; color: var(--text-2); margin-bottom: 1rem; }}
+    .badge {{ padding: .7rem .9rem; border-radius: var(--radius-sm); margin: .45rem 0;
+              font-size: .875rem; line-height: 1.5; font-weight: 500; border-left: 3px solid; }}
+    .badge.check   {{ background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }}
+    .badge.due     {{ background: var(--info-bg);   color: var(--info-text);   border-color: var(--info); }}
+    .badge.ok      {{ background: var(--ok-bg);     color: var(--ok-text);     border-color: var(--ok); }}
+    .badge.paused  {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--paused); }}
+    .badge.unknown {{ background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger); }}
+    .notes {{ margin-top: 1rem; padding: .85rem .9rem; background: var(--note-bg);
+              border-radius: var(--radius-sm); border-left: 3px solid var(--note-border);
+              font-size: .82rem; color: var(--note-text); }}
+    .notes strong {{ color: var(--text); }}
+    .notes ul {{ margin-left: 1.1rem; margin-top: .35rem; }}
+    .notes li {{ margin: .3rem 0; line-height: 1.45; }}
 
     /* ── Detail nav bar ── */
     .d-nav {{ position: fixed; bottom: 0; left: 0; right: 0; display: flex;
-              align-items: center; background: #fff;
-              border-top: 1px solid #e0e0e0;
+              align-items: center; gap: .75rem; background: var(--surface);
+              border-top: 1px solid var(--border);
               padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-              box-shadow: 0 -2px 8px rgba(0,0,0,.07); gap: .75rem; }}
-    .nav-btn {{ background: var(--green-bg); border: 1.5px solid #c8e6c9;
-                color: var(--green-dk); border-radius: 10px; padding: .55rem 1rem;
-                font-size: .9rem; font-weight: 600; cursor: pointer; flex-shrink: 0; }}
-    .nav-btn:active {{ background: #dcedc8; }}
+              box-shadow: var(--shadow-up); }}
+    .nav-btn {{ background: var(--surface-2); border: 1px solid var(--border);
+                color: var(--text); border-radius: var(--radius-sm);
+                padding: .55rem 1.1rem; font-size: 1rem; font-weight: 700;
+                cursor: pointer; flex-shrink: 0; }}
+    .nav-btn:active {{ background: var(--bg); }}
     .nav-btn:disabled {{ opacity: .3; pointer-events: none; }}
-    .nav-hint {{ flex: 1; font-size: .73rem; color: var(--gray); text-align: center;
+    .nav-hint {{ flex: 1; font-size: .73rem; color: var(--text-2); text-align: center;
                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
 
     /* ── Plant photo ── */
     .plant-photo {{ width: 100%; max-height: 260px; object-fit: cover;
-                   border-radius: 10px; margin-bottom: .85rem;
-                   background: #e8f5e9; display: block; }}
+                   border-radius: var(--radius); margin-bottom: 1rem;
+                   border: 1px solid var(--border);
+                   background: var(--surface-2); display: block; }}
 
     /* ── Check-off toggles (list rows) ── */
-    .chk {{ width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-            border: 1.5px solid #e0e0e0; background: #fff; font-size: .95rem;
+    .chk {{ width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+            border: 1.5px solid var(--border); background: var(--surface-2); font-size: 1rem;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; opacity: .45; filter: grayscale(1);
-            transition: opacity .15s, filter .15s, box-shadow .15s, background .15s; }}
-    .chk:active {{ transform: scale(.92); }}
+            cursor: pointer; opacity: .5; filter: grayscale(1);
+            transition: opacity .15s, filter .15s, box-shadow .15s, background .15s, transform .1s; }}
+    .chk:active {{ transform: scale(.9); }}
     .chk.done {{ opacity: 1; filter: none; background: var(--ok-bg);
-                 border-color: var(--ok-border);
-                 box-shadow: inset 0 0 0 2px var(--ok-border); }}
-    .chk.wet.done {{ background: var(--blue-bg); border-color: var(--blue-border);
-                     box-shadow: inset 0 0 0 2px var(--blue-border); }}
+                 border-color: var(--ok); box-shadow: inset 0 0 0 2px var(--ok); }}
+    .chk.wet.done {{ background: var(--info-bg); border-color: var(--info);
+                     box-shadow: inset 0 0 0 2px var(--info); }}
 
     /* ── Action bar (list view) ── */
     .action-bar {{ flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
-                   background: #fff; border-top: 1px solid #e0e0e0;
+                   background: var(--surface); border-top: 1px solid var(--border);
                    padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-                   box-shadow: 0 -2px 8px rgba(0,0,0,.07); }}
-    .bar-count {{ flex: 1; font-size: .8rem; color: var(--gray);
+                   box-shadow: var(--shadow-up); }}
+    .bar-count {{ flex: 1; font-size: .8rem; font-weight: 500; color: var(--text-2);
                   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
-    .clear-btn {{ background: none; border: none; color: var(--gray);
-                  font-size: .8rem; text-decoration: underline; cursor: pointer;
-                  flex-shrink: 0; padding: .2rem; }}
-    .copy-btn {{ background: var(--green-dk); color: #fff; border: none;
-                 border-radius: 10px; padding: .6rem 1.1rem; font-size: .9rem;
-                 font-weight: 700; cursor: pointer; flex-shrink: 0; }}
-    .copy-btn:disabled {{ opacity: .35; pointer-events: none; }}
-    .copy-btn:active {{ background: var(--green-md); }}
+    .clear-btn {{ background: none; border: none; color: var(--text-2);
+                  font-size: .8rem; cursor: pointer; flex-shrink: 0; padding: .3rem .2rem; }}
+    .clear-btn:active {{ color: var(--text); }}
+    .copy-btn {{ background: var(--accent); color: var(--on-accent); border: none;
+                 border-radius: var(--radius-sm); padding: .62rem 1.2rem; font-size: .9rem;
+                 font-weight: 800; letter-spacing: -.01em; cursor: pointer; flex-shrink: 0;
+                 box-shadow: var(--accent-shadow); transition: transform .1s ease; }}
+    .copy-btn:disabled {{ opacity: .4; box-shadow: none; pointer-events: none; }}
+    .copy-btn:active {{ transform: scale(.96); background: var(--accent-press); }}
 
     /* ── Detail check-off buttons ── */
-    .d-actions {{ display: flex; gap: .6rem; margin-top: 1rem; }}
-    .d-chk {{ flex: 1; padding: .7rem; border-radius: 10px; cursor: pointer;
-              border: 1.5px solid #c8e6c9; background: var(--green-bg);
-              color: var(--green-dk); font-size: .85rem; font-weight: 600; }}
-    .d-chk.done {{ background: var(--ok-border); color: #fff; border-color: var(--ok-border); }}
-    .d-chk[data-act="wet"].done {{ background: var(--blue-border); border-color: var(--blue-border); }}
+    .d-actions {{ display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.1rem; }}
+    .d-chk {{ flex: 1 1 30%; min-width: 96px; padding: .75rem .5rem; border-radius: var(--radius-sm);
+              cursor: pointer; border: 1.5px solid var(--border); background: var(--surface-2);
+              color: var(--text); font-size: .82rem; font-weight: 700; transition: transform .1s ease; }}
+    .d-chk:active {{ transform: scale(.96); }}
+    .d-chk.done {{ background: var(--ok-solid); color: #fff; border-color: var(--ok-solid); }}
+    .d-chk[data-act="wet"].done {{ background: var(--info-solid); border-color: var(--info-solid); }}
 
     /* ── Toast ── */
-    .toast {{ position: fixed; left: 50%; bottom: 5rem; z-index: 50;
+    .toast {{ position: fixed; left: 50%; bottom: 5.5rem; z-index: 50;
               transform: translateX(-50%) translateY(20px);
-              background: #323232; color: #fff; padding: .7rem 1.1rem;
-              border-radius: 24px; font-size: .85rem; max-width: 80%;
+              background: var(--toast-bg); color: var(--toast-text);
+              padding: .75rem 1.2rem; border-radius: var(--radius-pill);
+              font-size: .85rem; font-weight: 600; max-width: 80%;
+              box-shadow: 0 8px 24px rgba(0,0,0,.25);
               opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }}
     .toast.show {{ opacity: 1; transform: translateX(-50%) translateY(0); }}
 
