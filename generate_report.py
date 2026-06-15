@@ -110,6 +110,40 @@ def days_since(val):
     return (date.today() - datetime.strptime(str(val), "%Y-%m-%d").date()).days
 
 
+def _fmt_photo_date(s):
+    """Format an ISO date string for the photo overlay, e.g. 'Jun 15, 2026'."""
+    try:
+        return datetime.strptime(s, "%Y-%m-%d").strftime(f"%b {datetime.strptime(s, '%Y-%m-%d').day}, %Y")
+    except Exception:
+        return s
+
+
+def photo_list(plant):
+    """Return a plant's photos as a chronological list (oldest → newest).
+
+    Accepts either a `photos:` list (each item a dict with `file` + `date`, or a
+    bare path string) or a legacy single `image:` field. Each returned item has
+    `src`, `date`, and a display `label`.
+    """
+    raw = plant.get("photos")
+    items = []
+    if raw:
+        for ph in raw:
+            if isinstance(ph, str):
+                items.append({"src": ph, "date": ""})
+            elif isinstance(ph, dict) and ph.get("file"):
+                items.append({"src": ph["file"], "date": str(ph.get("date") or "")})
+    else:
+        img = plant.get("image")
+        if img:
+            items.append({"src": img, "date": ""})
+    # Oldest first; undated entries sort ahead of dated ones (empty string < any date).
+    items.sort(key=lambda p: p["date"])
+    for it in items:
+        it["label"] = _fmt_photo_date(it["date"]) if it["date"] else ""
+    return items
+
+
 def evaluate(log_key, log_entry, plant):
     today = date.today()
     month = today.month
@@ -151,7 +185,7 @@ def evaluate(log_key, log_entry, plant):
     return dict(
         name=name,
         location=location,
-        image=plant.get("image") or "",
+        photos=photo_list(plant),
         water_status=water[0],
         water_msg=water[1],
         fert_status=fert[0],
@@ -169,7 +203,7 @@ def render(results, today):
     plants_json = json.dumps([{
         "name": r["name"],
         "location": r["location"],
-        "image": r["image"],
+        "photos": r["photos"],
         "waterStatus": r["water_status"],
         "waterMsg": r["water_msg"],
         "fertStatus": r["fert_status"],
@@ -316,11 +350,34 @@ def render(results, today):
     .nav-hint {{ flex: 1; font-size: .73rem; color: var(--text-2); text-align: center;
                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
 
-    /* ── Plant photo ── */
-    .plant-photo {{ width: 100%; max-height: 260px; object-fit: cover;
-                   border-radius: var(--radius); margin-bottom: 1rem;
-                   border: 1px solid var(--border);
-                   background: var(--surface-2); display: block; }}
+    /* ── Plant photo gallery ── */
+    .gallery {{ position: relative; margin-bottom: 1rem; }}
+    .gallery-track {{ display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+                      -webkit-overflow-scrolling: touch; border-radius: var(--radius);
+                      border: 1px solid var(--border); background: var(--surface-2);
+                      scrollbar-width: none; }}
+    .gallery-track::-webkit-scrollbar {{ display: none; }}
+    .slide {{ position: relative; flex: 0 0 100%; scroll-snap-align: center; }}
+    .plant-photo {{ width: 100%; height: 260px; object-fit: cover; display: block;
+                    background: var(--surface-2); }}
+    .photo-date {{ position: absolute; right: .55rem; bottom: .55rem;
+                   background: rgba(0,0,0,.58); color: #fff; font-size: .72rem; font-weight: 700;
+                   padding: .26rem .58rem; border-radius: var(--radius-pill);
+                   letter-spacing: .02em; }}
+    .g-nav {{ position: absolute; top: 50%; transform: translateY(-50%);
+              width: 34px; height: 34px; border-radius: 50%; border: none;
+              background: rgba(0,0,0,.42); color: #fff; font-size: 1.4rem; line-height: 1;
+              cursor: pointer; display: flex; align-items: center; justify-content: center;
+              padding-bottom: 3px; }}
+    .g-prev {{ left: .5rem; }}
+    .g-next {{ right: .5rem; }}
+    .g-nav:active {{ background: rgba(0,0,0,.72); }}
+    .g-nav:disabled {{ opacity: 0; pointer-events: none; }}
+    .g-dots {{ position: absolute; left: 0; right: 0; bottom: .5rem; display: flex;
+               justify-content: center; gap: .32rem; }}
+    .g-dot {{ width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.55);
+              cursor: pointer; transition: background .15s, width .15s, height .15s; }}
+    .g-dot.active {{ background: #fff; width: 7px; height: 7px; }}
 
     /* ── Check-off toggles (list rows) ── */
     .chk {{ width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
@@ -504,10 +561,7 @@ function renderDetail(i, dir) {{
         p.notes.map(n => `<li>${{n}}</li>`).join('')}}</ul></div>`
     : '';
 
-  const photoHTML = p.image
-    ? `<img class="plant-photo" src="${{p.image}}" alt="${{p.name}}"
-           onerror="this.style.display='none'">`
-    : '';
+  const photoHTML = galleryHTML(p);
 
   const dLabels = {{
     w:   {{on: '💧 Watered ✓',      off: '💧 Mark watered'}},
@@ -529,11 +583,59 @@ function renderDetail(i, dir) {{
     ${{notesHTML}}
   </div>`;
   scr.scrollTop = 0;
+  initGallery(scr);
 
   scr.querySelectorAll('.d-chk').forEach(b => b.addEventListener('click', () => {{
     toggleA(p.name, b.dataset.act);
     renderDetail(i, 0);  // re-render so mutually-exclusive buttons refresh
   }}));
+}}
+
+// ── Photo gallery (per plant) ──
+function galleryHTML(p) {{
+  const photos = p.photos || [];
+  if (!photos.length) return '';
+  const slides = photos.map(ph => `<div class="slide">
+      <img class="plant-photo" src="${{ph.src}}" alt="${{p.name}}"
+           onerror="this.closest('.slide').style.display='none'">
+      ${{ph.label ? `<span class="photo-date">${{ph.label}}</span>` : ''}}
+    </div>`).join('');
+  const multi = photos.length > 1;
+  const nav = multi
+    ? `<button class="g-nav g-prev" aria-label="Older photo">&#8249;</button>
+       <button class="g-nav g-next" aria-label="Newer photo">&#8250;</button>
+       <div class="g-dots">${{photos.map((_, i) => `<span class="g-dot" data-i="${{i}}"></span>`).join('')}}</div>`
+    : '';
+  return `<div class="gallery"><div class="gallery-track">${{slides}}</div>${{nav}}</div>`;
+}}
+
+function initGallery(root) {{
+  const g = root.querySelector('.gallery');
+  if (!g) return;
+  const track = g.querySelector('.gallery-track');
+  const slides = [...track.querySelectorAll('.slide')];
+  if (slides.length < 2) return;
+  const dots = [...g.querySelectorAll('.g-dot')];
+  const prev = g.querySelector('.g-prev'), next = g.querySelector('.g-next');
+  const curIdx = () => Math.round(track.scrollLeft / track.clientWidth);
+  const goTo = idx => {{
+    idx = Math.max(0, Math.min(slides.length - 1, idx));
+    track.scrollTo({{left: idx * track.clientWidth, behavior: 'smooth'}});
+  }};
+  const sync = () => {{
+    const i = curIdx();
+    dots.forEach((d, j) => d.classList.toggle('active', j === i));
+    prev.disabled = i === 0;             // leftmost = oldest
+    next.disabled = i === slides.length - 1;  // rightmost = newest
+  }};
+  prev.addEventListener('click', () => goTo(curIdx() - 1));
+  next.addEventListener('click', () => goTo(curIdx() + 1));
+  dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+  track.addEventListener('scroll', () => {{
+    clearTimeout(track._t); track._t = setTimeout(sync, 60);
+  }}, {{passive: true}});
+  // Open focused on the latest photo (rightmost), then let the user scroll back.
+  requestAnimationFrame(() => {{ track.scrollLeft = track.scrollWidth; sync(); }});
 }}
 
 function goTo(i, dir) {{
@@ -646,6 +748,7 @@ scr.addEventListener('touchstart', e => {{
   tx = e.touches[0].clientX; ty = e.touches[0].clientY;
 }}, {{passive: true}});
 scr.addEventListener('touchend', e => {{
+  if (e.target.closest('.gallery')) return;  // photo carousel owns horizontal swipes
   const dx = e.changedTouches[0].clientX - tx;
   const dy = e.changedTouches[0].clientY - ty;
   if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 50)
