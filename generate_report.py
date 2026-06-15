@@ -450,6 +450,20 @@ def render(results, today):
     @keyframes fromLeft  {{ from {{ opacity:0; transform:translateX(-36px) }} to {{ opacity:1; transform:translateX(0) }} }}
     .from-right {{ animation: fromRight .22s ease-out; }}
     .from-left  {{ animation: fromLeft  .22s ease-out; }}
+
+    /* ── Wide screens (desktop browser) ── */
+    /* Mobile shows a cropped 260px banner; on a wide window that becomes a
+       thin sliver. Here we lay the detail out in two columns: the full,
+       uncropped photo on the left and the care info beside it. */
+    @media (min-width: 720px) {{
+      #detail-scroll {{ padding: 1.6rem 1.6rem 6rem; }}
+      .d-body {{ display: flex; align-items: flex-start; gap: 1.8rem;
+                 max-width: 1100px; margin: 0 auto; }}
+      .gallery {{ flex: 0 0 48%; max-width: 480px; margin-bottom: 0;
+                  position: sticky; top: 0; }}
+      .plant-photo {{ height: auto; max-height: 78vh; object-fit: contain; }}
+      .d-content {{ flex: 1 1 0; min-width: 0; }}
+    }}
   </style>
 </head>
 <body>
@@ -628,13 +642,15 @@ function renderDetail(i, dir) {{
 
   const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
   const scr = document.getElementById('detail-scroll');
-  scr.innerHTML = `<div class="${{animClass}}">
+  scr.innerHTML = `<div class="${{animClass}} d-body">
     ${{photoHTML}}
-    ${{p.location ? `<div class="d-loc">📍 ${{p.location}}</div>` : ''}}
-    <div class="badge ${{p.waterStatus}}">💧 ${{p.waterMsg}}</div>
-    <div class="badge ${{p.fertStatus}}">🌱 ${{p.fertMsg}}</div>
-    ${{actionsHTML}}
-    ${{notesHTML}}
+    <div class="d-content">
+      ${{p.location ? `<div class="d-loc">📍 ${{p.location}}</div>` : ''}}
+      <div class="badge ${{p.waterStatus}}">💧 ${{p.waterMsg}}</div>
+      <div class="badge ${{p.fertStatus}}">🌱 ${{p.fertMsg}}</div>
+      ${{actionsHTML}}
+      ${{notesHTML}}
+    </div>
   </div>`;
   scr.scrollTop = 0;
   initGallery(scr);
