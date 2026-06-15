@@ -295,6 +295,8 @@ def render(results, today):
     .chk.done {{ opacity: 1; filter: none; background: var(--ok-bg);
                  border-color: var(--ok-border);
                  box-shadow: inset 0 0 0 2px var(--ok-border); }}
+    .chk.wet.done {{ background: var(--blue-bg); border-color: var(--blue-border);
+                     box-shadow: inset 0 0 0 2px var(--blue-border); }}
 
     /* ── Action bar (list view) ── */
     .action-bar {{ flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
@@ -318,6 +320,7 @@ def render(results, today):
               border: 1.5px solid #c8e6c9; background: var(--green-bg);
               color: var(--green-dk); font-size: .85rem; font-weight: 600; }}
     .d-chk.done {{ background: var(--ok-border); color: #fff; border-color: var(--ok-border); }}
+    .d-chk[data-act="wet"].done {{ background: var(--blue-border); border-color: var(--blue-border); }}
 
     /* ── Toast ── */
     .toast {{ position: fixed; left: 50%; bottom: 5rem; z-index: 50;
@@ -344,7 +347,7 @@ def render(results, today):
   </div>
   <div id="list-scroll"></div>
   <div class="action-bar" id="action-bar">
-    <span class="bar-count" id="bar-count">Tap 💧 / 🌱 to check off as you go</span>
+    <span class="bar-count" id="bar-count">Tap 💧 / 🚱 / 🌱 to check off as you go</span>
     <button class="clear-btn hidden" id="clear-btn">Clear</button>
     <button class="copy-btn" id="copy-btn" disabled>📋 Copy</button>
   </div>
@@ -378,14 +381,18 @@ const SKEY = 'pc-actions-' + TODAY;
 let actions = {{}};
 try {{ actions = JSON.parse(localStorage.getItem(SKEY)) || {{}}; }} catch (e) {{ actions = {{}}; }}
 
-function getA(name) {{ return actions[name] || {{w: false, f: false}}; }}
+function getA(name) {{ return actions[name] || {{w: false, wet: false, f: false}}; }}
 function toggleA(name, key) {{
   const a = getA(name);
-  a[key] = !a[key];
+  const nv = !a[key];
+  a[key] = nv;
+  // Watered and "soil still wet" are mutually exclusive outcomes of one check.
+  if (nv && key === 'w') a.wet = false;
+  if (nv && key === 'wet') a.w = false;
   actions[name] = a;
   try {{ localStorage.setItem(SKEY, JSON.stringify(actions)); }} catch (e) {{}}
   updateBar();
-  return a[key];
+  return nv;
 }}
 
 // ── List ──
@@ -402,15 +409,17 @@ function buildList() {{
     ok.forEach((p, i) => h += rowHTML(p, urgent.length + i));
   }}
   const el = document.getElementById('list-scroll');
+  const prevScroll = el.scrollTop;
   el.innerHTML = h;
   el.querySelectorAll('.chk').forEach(b => b.addEventListener('click', e => {{
     e.stopPropagation();
-    const on = toggleA(P[+b.dataset.i].name, b.dataset.act);
-    b.classList.toggle('done', on);
+    toggleA(P[+b.dataset.i].name, b.dataset.act);
+    buildList();  // rebuild so mutually-exclusive siblings refresh
   }}));
   el.querySelectorAll('.row').forEach(r =>
     r.addEventListener('click', () => openDetail(+r.dataset.i))
   );
+  el.scrollTop = prevScroll;
   updateBar();
 }}
 
@@ -422,8 +431,9 @@ function rowHTML(p, i) {{
     <div class="row-name">${{p.name}}</div>${{loc}}
   </div>
   <div class="row-dots">
-    <button class="chk${{a.w ? ' done' : ''}}" data-i="${{i}}" data-act="w" aria-label="Mark watered">💧</button>
-    <button class="chk${{a.f ? ' done' : ''}}" data-i="${{i}}" data-act="f" aria-label="Mark fertilized">🌱</button>
+    <button class="chk${{a.w ? ' done' : ''}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">💧</button>
+    <button class="chk wet${{a.wet ? ' done' : ''}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">🚱</button>
+    <button class="chk${{a.f ? ' done' : ''}}" data-i="${{i}}" data-act="f" aria-label="Mark fertilized" title="Fertilized">🌱</button>
   </div>
   <div class="chevron">›</div>
 </div>`;
@@ -459,11 +469,14 @@ function renderDetail(i, dir) {{
            onerror="this.style.display='none'">`
     : '';
 
+  const dLabels = {{
+    w:   {{on: '💧 Watered ✓',      off: '💧 Mark watered'}},
+    wet: {{on: '🚱 Soil still wet ✓', off: '🚱 Soil still wet'}},
+    f:   {{on: '🌱 Fertilized ✓',   off: '🌱 Mark fertilized'}},
+  }};
   const a = getA(p.name);
-  const actionsHTML = `<div class="d-actions">
-    <button class="d-chk${{a.w ? ' done' : ''}}" data-act="w">💧 ${{a.w ? 'Watered ✓' : 'Mark watered'}}</button>
-    <button class="d-chk${{a.f ? ' done' : ''}}" data-act="f">🌱 ${{a.f ? 'Fertilized ✓' : 'Mark fertilized'}}</button>
-  </div>`;
+  const dBtn = k => `<button class="d-chk${{a[k] ? ' done' : ''}}" data-act="${{k}}">${{a[k] ? dLabels[k].on : dLabels[k].off}}</button>`;
+  const actionsHTML = `<div class="d-actions">${{dBtn('w')}}${{dBtn('wet')}}${{dBtn('f')}}</div>`;
 
   const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
   const scr = document.getElementById('detail-scroll');
@@ -478,12 +491,8 @@ function renderDetail(i, dir) {{
   scr.scrollTop = 0;
 
   scr.querySelectorAll('.d-chk').forEach(b => b.addEventListener('click', () => {{
-    const act = b.dataset.act;
-    const on = toggleA(p.name, act);
-    b.classList.toggle('done', on);
-    b.textContent = (act === 'w' ? '💧 ' : '🌱 ') +
-      (on ? (act === 'w' ? 'Watered ✓' : 'Fertilized ✓')
-          : (act === 'w' ? 'Mark watered' : 'Mark fertilized'));
+    toggleA(p.name, b.dataset.act);
+    renderDetail(i, 0);  // re-render so mutually-exclusive buttons refresh
   }}));
 }}
 
@@ -494,24 +503,26 @@ function goTo(i, dir) {{
 
 // ── Action bar: copy / clear ──
 function checkedNames() {{
-  const watered = [], fed = [];
+  const watered = [], stillWet = [], fed = [];
   P.forEach(p => {{
     const a = getA(p.name);
     if (a.w) watered.push(p.name);
+    if (a.wet) stillWet.push(p.name);
     if (a.f) fed.push(p.name);
   }});
-  return {{watered, fed}};
+  return {{watered, stillWet, fed}};
 }}
 
 function updateBar() {{
-  const {{watered, fed}} = checkedNames();
-  const total = watered.length + fed.length;
+  const {{watered, stillWet, fed}} = checkedNames();
+  const total = watered.length + stillWet.length + fed.length;
   const count = document.getElementById('bar-count');
   if (total === 0) {{
-    count.textContent = 'Tap 💧 / 🌱 to check off as you go';
+    count.textContent = 'Tap 💧 / 🚱 / 🌱 to check off as you go';
   }} else {{
     const parts = [];
     if (watered.length) parts.push(`💧 ${{watered.length}} watered`);
+    if (stillWet.length) parts.push(`🚱 ${{stillWet.length}} still wet`);
     if (fed.length) parts.push(`🌱 ${{fed.length}} fertilized`);
     count.textContent = parts.join('  ·  ');
   }}
@@ -520,11 +531,16 @@ function updateBar() {{
 }}
 
 function buildSummary() {{
-  const {{watered, fed}} = checkedNames();
+  const {{watered, stillWet, fed}} = checkedNames();
   const lines = [`Plant care — ${{SUMMARY_DATE}}`, ''];
   if (watered.length) {{
     lines.push('Watered:');
     watered.forEach(n => lines.push(`- ${{n}}`));
+    lines.push('');
+  }}
+  if (stillWet.length) {{
+    lines.push('Soil checked — still wet, skipped watering:');
+    stillWet.forEach(n => lines.push(`- ${{n}}`));
     lines.push('');
   }}
   if (fed.length) {{
