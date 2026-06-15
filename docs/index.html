@@ -102,10 +102,9 @@
                   padding: .16rem .5rem; border-radius: var(--radius-pill);
                   display: inline-flex; align-items: center; gap: .25rem;
                   border: 1px solid transparent; white-space: nowrap; }
-    .need-chip.water   { background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }
-    .need-chip.fert    { background: var(--info-bg);   color: var(--info-text);   border-color: var(--info); }
+    .need-chip.water,
+    .need-chip.fert    { background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }
     .need-chip.unknown { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger); }
-    .need-chip.allgood { background: var(--ok-bg);     color: var(--ok-text); }
     .row-dots { display: flex; gap: .35rem; flex-shrink: 0; }
     .chevron { color: var(--text-3); font-size: 1.1rem; flex-shrink: 0; margin-left: .1rem; }
 
@@ -178,18 +177,12 @@
             cursor: pointer; opacity: .5; filter: grayscale(1);
             transition: opacity .15s, filter .15s, box-shadow .15s, background .15s, transform .1s; }
     .chk:active { transform: scale(.9); }
-    /* A button this plant actually needs today: full-color, drawing the eye. */
-    .chk.need { opacity: 1; filter: none; }
-    .chk.need[data-act="w"], .chk.need[data-act="wet"] {
-      background: var(--warn-bg); border-color: var(--warn);
-      box-shadow: inset 0 0 0 1.5px var(--warn); }
-    .chk.need[data-act="f"] {
-      background: var(--info-bg); border-color: var(--info);
-      box-shadow: inset 0 0 0 1.5px var(--info); }
+    /* A button this plant needs today: orange, drawing the eye. */
+    .chk.need { opacity: 1; filter: none; background: var(--warn-bg);
+                 border-color: var(--warn); box-shadow: inset 0 0 0 1.5px var(--warn); }
+    /* Checked off: green (applies to all three, incl. soil-still-wet). */
     .chk.done { opacity: 1; filter: none; background: var(--ok-bg);
                  border-color: var(--ok); box-shadow: inset 0 0 0 2px var(--ok); }
-    .chk.wet.done { background: var(--info-bg); border-color: var(--info);
-                     box-shadow: inset 0 0 0 2px var(--info); }
 
     /* ── Action bar (list view) ── */
     .action-bar { flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
@@ -214,8 +207,8 @@
               cursor: pointer; border: 1.5px solid var(--border); background: var(--surface-2);
               color: var(--text); font-size: .82rem; font-weight: 700; transition: transform .1s ease; }
     .d-chk:active { transform: scale(.96); }
+    .d-chk.need { background: var(--warn); color: #fff; border-color: var(--warn); }
     .d-chk.done { background: var(--ok-solid); color: #fff; border-color: var(--ok-solid); }
-    .d-chk[data-act="wet"].done { background: var(--info-solid); border-color: var(--info-solid); }
 
     /* ── Toast ── */
     .toast { position: fixed; left: 50%; bottom: 5.5rem; z-index: 50;
@@ -332,13 +325,15 @@ function rowHTML(p, i) {
   if (waterNeed) chips.push('<span class="need-chip water">💧 Soil check due</span>');
   if (noRecord)  chips.push('<span class="need-chip unknown">💧 No water record</span>');
   if (fertNeed)  chips.push('<span class="need-chip fert">🌱 Feed due</span>');
-  if (!chips.length) chips.push('<span class="need-chip allgood">✓ Nothing due</span>');
-  const needs = `<div class="row-needs">${chips.join('')}</div>`;
+  const needs = chips.length ? `<div class="row-needs">${chips.join('')}</div>` : '';
 
-  // Highlight only the buttons relevant to what this plant needs.
+  // Orange = needs attention, green = checked off. Once one of the water pair
+  // (watered / soil-still-wet) is checked, the other drops to neutral.
   const cls = (act, done) => {
     let c = 'chk' + (act === 'wet' ? ' wet' : '');
     if (done) return c + ' done';
+    if (act === 'w' && a.wet) return c;
+    if (act === 'wet' && a.w) return c;
     if ((act === 'w' || act === 'wet') && (waterNeed || noRecord)) c += ' need';
     if (act === 'f' && fertNeed) c += ' need';
     return c;
@@ -389,7 +384,19 @@ function renderDetail(i, dir) {
     f:   {on: '🌱 Fertilized ✓',   off: '🌱 Mark fertilized'},
   };
   const a = getA(p.name);
-  const dBtn = k => `<button class="d-chk${a[k] ? ' done' : ''}" data-act="${k}">${a[k] ? dLabels[k].on : dLabels[k].off}</button>`;
+  const waterNeed = p.waterStatus === 'check' || p.waterStatus === 'unknown';
+  const fertNeed  = p.fertStatus === 'due';
+  // Same rules as the list: orange = needs attention, green = checked off,
+  // and the unchosen half of the water pair stays neutral.
+  const dCls = k => {
+    if (a[k]) return 'd-chk done';
+    if (k === 'w' && a.wet) return 'd-chk';
+    if (k === 'wet' && a.w) return 'd-chk';
+    if ((k === 'w' || k === 'wet') && waterNeed) return 'd-chk need';
+    if (k === 'f' && fertNeed) return 'd-chk need';
+    return 'd-chk';
+  };
+  const dBtn = k => `<button class="${dCls(k)}" data-act="${k}">${a[k] ? dLabels[k].on : dLabels[k].off}</button>`;
   const actionsHTML = `<div class="d-actions">${dBtn('w')}${dBtn('wet')}${dBtn('f')}</div>`;
 
   const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
