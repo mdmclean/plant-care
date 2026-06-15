@@ -203,6 +203,7 @@ def render(results, today):
       --red-bg: #fce4ec; --red: #880e4f;       --red-border: #e91e63;
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }}
+    .hidden {{ display: none !important; }}
     html, body {{ height: 100%; overflow: hidden; }}
     body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--green-bg); color: #1b1b1b; }}
@@ -284,6 +285,48 @@ def render(results, today):
                    border-radius: 10px; margin-bottom: .85rem;
                    background: #e8f5e9; display: block; }}
 
+    /* ── Check-off toggles (list rows) ── */
+    .chk {{ width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+            border: 1.5px solid #e0e0e0; background: #fff; font-size: .95rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: .45; filter: grayscale(1);
+            transition: opacity .15s, filter .15s, box-shadow .15s, background .15s; }}
+    .chk:active {{ transform: scale(.92); }}
+    .chk.done {{ opacity: 1; filter: none; background: var(--ok-bg);
+                 border-color: var(--ok-border);
+                 box-shadow: inset 0 0 0 2px var(--ok-border); }}
+
+    /* ── Action bar (list view) ── */
+    .action-bar {{ flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
+                   background: #fff; border-top: 1px solid #e0e0e0;
+                   padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
+                   box-shadow: 0 -2px 8px rgba(0,0,0,.07); }}
+    .bar-count {{ flex: 1; font-size: .8rem; color: var(--gray);
+                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .clear-btn {{ background: none; border: none; color: var(--gray);
+                  font-size: .8rem; text-decoration: underline; cursor: pointer;
+                  flex-shrink: 0; padding: .2rem; }}
+    .copy-btn {{ background: var(--green-dk); color: #fff; border: none;
+                 border-radius: 10px; padding: .6rem 1.1rem; font-size: .9rem;
+                 font-weight: 700; cursor: pointer; flex-shrink: 0; }}
+    .copy-btn:disabled {{ opacity: .35; pointer-events: none; }}
+    .copy-btn:active {{ background: var(--green-md); }}
+
+    /* ── Detail check-off buttons ── */
+    .d-actions {{ display: flex; gap: .6rem; margin-top: 1rem; }}
+    .d-chk {{ flex: 1; padding: .7rem; border-radius: 10px; cursor: pointer;
+              border: 1.5px solid #c8e6c9; background: var(--green-bg);
+              color: var(--green-dk); font-size: .85rem; font-weight: 600; }}
+    .d-chk.done {{ background: var(--ok-border); color: #fff; border-color: var(--ok-border); }}
+
+    /* ── Toast ── */
+    .toast {{ position: fixed; left: 50%; bottom: 5rem; z-index: 50;
+              transform: translateX(-50%) translateY(20px);
+              background: #323232; color: #fff; padding: .7rem 1.1rem;
+              border-radius: 24px; font-size: .85rem; max-width: 80%;
+              opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }}
+    .toast.show {{ opacity: 1; transform: translateX(-50%) translateY(0); }}
+
     /* ── Slide animation ── */
     @keyframes fromRight {{ from {{ opacity:0; transform:translateX(36px) }} to {{ opacity:1; transform:translateX(0) }} }}
     @keyframes fromLeft  {{ from {{ opacity:0; transform:translateX(-36px) }} to {{ opacity:1; transform:translateX(0) }} }}
@@ -300,7 +343,14 @@ def render(results, today):
     <span class="hdr-sub">{short_date}</span>
   </div>
   <div id="list-scroll"></div>
+  <div class="action-bar" id="action-bar">
+    <span class="bar-count" id="bar-count">Tap 💧 / 🌱 to check off as you go</span>
+    <button class="clear-btn hidden" id="clear-btn">Clear</button>
+    <button class="copy-btn" id="copy-btn" disabled>📋 Copy</button>
+  </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <!-- Detail view -->
 <div class="view hidden" id="detail-view">
@@ -321,6 +371,23 @@ def render(results, today):
 const P = {plants_json};
 let cur = 0;
 
+// ── Check-off state (persisted per-day) ──
+const TODAY = "{today.isoformat()}";
+const SUMMARY_DATE = "{short_date}";
+const SKEY = 'pc-actions-' + TODAY;
+let actions = {{}};
+try {{ actions = JSON.parse(localStorage.getItem(SKEY)) || {{}}; }} catch (e) {{ actions = {{}}; }}
+
+function getA(name) {{ return actions[name] || {{w: false, f: false}}; }}
+function toggleA(name, key) {{
+  const a = getA(name);
+  a[key] = !a[key];
+  actions[name] = a;
+  try {{ localStorage.setItem(SKEY, JSON.stringify(actions)); }} catch (e) {{}}
+  updateBar();
+  return a[key];
+}}
+
 // ── List ──
 function buildList() {{
   const urgent = P.filter(p => p.hasAction);
@@ -336,20 +403,27 @@ function buildList() {{
   }}
   const el = document.getElementById('list-scroll');
   el.innerHTML = h;
+  el.querySelectorAll('.chk').forEach(b => b.addEventListener('click', e => {{
+    e.stopPropagation();
+    const on = toggleA(P[+b.dataset.i].name, b.dataset.act);
+    b.classList.toggle('done', on);
+  }}));
   el.querySelectorAll('.row').forEach(r =>
     r.addEventListener('click', () => openDetail(+r.dataset.i))
   );
+  updateBar();
 }}
 
 function rowHTML(p, i) {{
   const loc = p.location ? `<div class="row-loc">📍 ${{p.location}}</div>` : '';
+  const a = getA(p.name);
   return `<div class="row${{p.hasAction ? ' urgent' : ''}}" data-i="${{i}}">
   <div class="row-info">
     <div class="row-name">${{p.name}}</div>${{loc}}
   </div>
   <div class="row-dots">
-    <div class="dot ${{p.waterStatus}}">💧</div>
-    <div class="dot ${{p.fertStatus}}">🌱</div>
+    <button class="chk${{a.w ? ' done' : ''}}" data-i="${{i}}" data-act="w" aria-label="Mark watered">💧</button>
+    <button class="chk${{a.f ? ' done' : ''}}" data-i="${{i}}" data-act="f" aria-label="Mark fertilized">🌱</button>
   </div>
   <div class="chevron">›</div>
 </div>`;
@@ -385,6 +459,12 @@ function renderDetail(i, dir) {{
            onerror="this.style.display='none'">`
     : '';
 
+  const a = getA(p.name);
+  const actionsHTML = `<div class="d-actions">
+    <button class="d-chk${{a.w ? ' done' : ''}}" data-act="w">💧 ${{a.w ? 'Watered ✓' : 'Mark watered'}}</button>
+    <button class="d-chk${{a.f ? ' done' : ''}}" data-act="f">🌱 ${{a.f ? 'Fertilized ✓' : 'Mark fertilized'}}</button>
+  </div>`;
+
   const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
   const scr = document.getElementById('detail-scroll');
   scr.innerHTML = `<div class="${{animClass}}">
@@ -392,9 +472,19 @@ function renderDetail(i, dir) {{
     ${{p.location ? `<div class="d-loc">📍 ${{p.location}}</div>` : ''}}
     <div class="badge ${{p.waterStatus}}">💧 ${{p.waterMsg}}</div>
     <div class="badge ${{p.fertStatus}}">🌱 ${{p.fertMsg}}</div>
+    ${{actionsHTML}}
     ${{notesHTML}}
   </div>`;
   scr.scrollTop = 0;
+
+  scr.querySelectorAll('.d-chk').forEach(b => b.addEventListener('click', () => {{
+    const act = b.dataset.act;
+    const on = toggleA(p.name, act);
+    b.classList.toggle('done', on);
+    b.textContent = (act === 'w' ? '💧 ' : '🌱 ') +
+      (on ? (act === 'w' ? 'Watered ✓' : 'Fertilized ✓')
+          : (act === 'w' ? 'Mark watered' : 'Mark fertilized'));
+  }}));
 }}
 
 function goTo(i, dir) {{
@@ -402,10 +492,93 @@ function goTo(i, dir) {{
   renderDetail(i, dir);
 }}
 
+// ── Action bar: copy / clear ──
+function checkedNames() {{
+  const watered = [], fed = [];
+  P.forEach(p => {{
+    const a = getA(p.name);
+    if (a.w) watered.push(p.name);
+    if (a.f) fed.push(p.name);
+  }});
+  return {{watered, fed}};
+}}
+
+function updateBar() {{
+  const {{watered, fed}} = checkedNames();
+  const total = watered.length + fed.length;
+  const count = document.getElementById('bar-count');
+  if (total === 0) {{
+    count.textContent = 'Tap 💧 / 🌱 to check off as you go';
+  }} else {{
+    const parts = [];
+    if (watered.length) parts.push(`💧 ${{watered.length}} watered`);
+    if (fed.length) parts.push(`🌱 ${{fed.length}} fertilized`);
+    count.textContent = parts.join('  ·  ');
+  }}
+  document.getElementById('copy-btn').disabled = total === 0;
+  document.getElementById('clear-btn').classList.toggle('hidden', total === 0);
+}}
+
+function buildSummary() {{
+  const {{watered, fed}} = checkedNames();
+  const lines = [`Plant care — ${{SUMMARY_DATE}}`, ''];
+  if (watered.length) {{
+    lines.push('Watered:');
+    watered.forEach(n => lines.push(`- ${{n}}`));
+    lines.push('');
+  }}
+  if (fed.length) {{
+    lines.push('Fertilized:');
+    fed.forEach(n => lines.push(`- ${{n}}`));
+    lines.push('');
+  }}
+  return lines.join('\\n').trim();
+}}
+
+function showToast(msg) {{
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}}
+
+function copyText(text) {{
+  if (navigator.clipboard && navigator.clipboard.writeText) {{
+    return navigator.clipboard.writeText(text);
+  }}
+  return new Promise((resolve, reject) => {{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {{ document.execCommand('copy'); resolve(); }}
+    catch (e) {{ reject(e); }}
+    finally {{ document.body.removeChild(ta); }}
+  }});
+}}
+
+document.getElementById('copy-btn').addEventListener('click', () => {{
+  const text = buildSummary();
+  if (!text) return;
+  copyText(text)
+    .then(() => showToast('📋 Copied — paste into your chat'))
+    .catch(() => showToast('Copy failed — long-press to select'));
+}});
+
+document.getElementById('clear-btn').addEventListener('click', () => {{
+  actions = {{}};
+  try {{ localStorage.removeItem(SKEY); }} catch (e) {{}}
+  buildList();
+}});
+
 // ── Events ──
 document.getElementById('back-btn').addEventListener('click', () => {{
   document.getElementById('detail-view').classList.add('hidden');
   document.getElementById('list-view').classList.remove('hidden');
+  buildList();
 }});
 document.getElementById('prev-btn').addEventListener('click', () => goTo(cur - 1, -1));
 document.getElementById('next-btn').addEventListener('click', () => goTo(cur + 1,  1));
