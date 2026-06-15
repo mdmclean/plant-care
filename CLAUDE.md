@@ -93,6 +93,24 @@ When the user supplies a photo of a plant, do the following:
    im.save(dest, "JPEG", quality=82, optimize=True)
    ```
    This keeps files around a few hundred KB instead of several MB.
+   Then **stamp the date added** in the bottom-right corner so each photo
+   carries its own timeline:
+   ```python
+   from PIL import ImageDraw, ImageFont
+   text = f"Added {today}"            # today as YYYY-MM-DD
+   size = max(16, im.width // 28)
+   try:    font = ImageFont.truetype("DejaVuSans-Bold.ttf", size)
+   except Exception: font = ImageFont.load_default(size)
+   draw = ImageDraw.Draw(im)
+   l, t, r, b = draw.textbbox((0, 0), text, font=font)
+   pad = max(8, im.width // 100)
+   x, y = im.width - (r - l) - pad * 2, im.height - (b - t) - pad * 2
+   ov = Image.new("RGBA", im.size, (0, 0, 0, 0))
+   ImageDraw.Draw(ov).rectangle([x - pad, y - pad, x + (r - l) + pad, y + (b - t) + pad], fill=(0, 0, 0, 140))
+   im = Image.alpha_composite(im.convert("RGBA"), ov).convert("RGB")
+   ImageDraw.Draw(im).text((x - l, y - t), text, font=font, fill=(255, 255, 255))
+   ```
+   Stamp the photo *before* saving the final JPEG.
 2. **Link it from the plant file.** Add an `image: "images/<plant-id>.jpeg"`
    field near the top of the plant's YAML (just after `name:`), matching the
    pattern in `plants/hoya-krimson-queen.yaml`.
