@@ -166,13 +166,19 @@ def evaluate(log_key, log_entry, plant):
     else:
         water = ("ok", f"Last watered {days_w}d ago — next check in ~{interval - days_w}d")
 
-    # Fertilizer
+    # Fertilizer — liquid feed is delivered with a watering, so only call it
+    # "due" today if we're also watering today. Otherwise it waits for the next
+    # watering (informational, not an attention item).
+    watering_occasion = water[0] != "ok"
     active = (plant.get("feeding") or {}).get("active_months") or []
     days_f = days_since((log_entry or {}).get("last_fertilized"))
     if month in active:
         if days_f is None or days_f >= 28:
             last_str = f"{days_f}d ago" if days_f else "never recorded"
-            fert = ("due", f"Due this month — apply half-strength fertilizer (last: {last_str})")
+            if watering_occasion:
+                fert = ("due", f"Due now — feed with today's watering (half-strength; last: {last_str})")
+            else:
+                fert = ("pending", f"Feed with next watering — overdue but soil isn't dry yet (last: {last_str})")
         else:
             fert = ("ok", f"Last fertilized {days_f}d ago — next due in ~{28 - days_f}d")
     else:
@@ -322,6 +328,7 @@ def render(results, today):
     .need-chip.water,
     .need-chip.fert    {{ background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }}
     .need-chip.unknown {{ background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger); }}
+    .need-chip.soon    {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--border); }}
     .row-dots {{ display: flex; gap: .35rem; flex-shrink: 0; }}
     .chevron {{ color: var(--text-3); font-size: 1.1rem; flex-shrink: 0; margin-left: .1rem; }}
 
@@ -333,6 +340,7 @@ def render(results, today):
               font-size: .875rem; line-height: 1.5; font-weight: 500; border-left: 3px solid; }}
     .badge.check   {{ background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }}
     .badge.due     {{ background: var(--info-bg);   color: var(--info-text);   border-color: var(--info); }}
+    .badge.pending {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--paused); }}
     .badge.ok      {{ background: var(--ok-bg);     color: var(--ok-text);     border-color: var(--ok); }}
     .badge.paused  {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--paused); }}
     .badge.unknown {{ background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger); }}
@@ -537,11 +545,13 @@ function rowHTML(p, i) {{
   const waterNeed = p.waterStatus === 'check';
   const noRecord  = p.waterStatus === 'unknown';
   const fertNeed  = p.fertStatus === 'due';
+  const fertPending = p.fertStatus === 'pending';
 
   const chips = [];
   if (waterNeed) chips.push('<span class="need-chip water">💧 Soil check due</span>');
   if (noRecord)  chips.push('<span class="need-chip unknown">💧 No water record</span>');
   if (fertNeed)  chips.push('<span class="need-chip fert">🌱 Feed due</span>');
+  if (fertPending) chips.push('<span class="need-chip soon">🌱 Feed at next watering</span>');
   const needs = chips.length ? `<div class="row-needs">${{chips.join('')}}</div>` : '';
 
   // Orange = needs attention, green = checked off. Once one of the water pair
