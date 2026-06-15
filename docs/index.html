@@ -573,7 +573,7 @@ document.getElementById('prev-btn').addEventListener('click', () => goTo(cur - 1
 document.getElementById('next-btn').addEventListener('click', () => goTo(cur + 1,  1));
 
 // Swipe (horizontal > vertical and > 50px threshold).
-// Swipe left returns to the list view; swipe right does nothing.
+// Swipe right returns to the list view; swipe left does nothing.
 // Use the on-screen ← / → buttons to page through plants.
 let tx = 0, ty = 0;
 const scr = document.getElementById('detail-scroll');
@@ -584,8 +584,8 @@ scr.addEventListener('touchend', e => {
   if (e.target.closest('.gallery')) return;  // photo carousel owns horizontal swipes
   const dx = e.changedTouches[0].clientX - tx;
   const dy = e.changedTouches[0].clientY - ty;
-  if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 50 && dx < 0)
-    document.getElementById('back-btn').click();  // swipe left → back to list
+  if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 50 && dx > 0)
+    document.getElementById('back-btn').click();  // swipe right → back to list
 }, {passive: true});
 
 // Arrow keys / Escape
