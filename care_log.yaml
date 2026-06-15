@@ -2,7 +2,7 @@
 # Dates use YYYY-MM-DD format.
 
 hoya-krimson-queen:
-  last_watered: 2026-06-04
+  last_watered: 2026-06-15
   last_fertilized: 2026-05-23
   notes: ""
 
@@ -12,7 +12,7 @@ dieffenbachia:
   notes: ""
 
 rieger-begonia:
-  last_watered: 2026-06-06
+  last_watered: 2026-06-15
   last_fertilized: 2026-05-23
   notes: ""
 
@@ -22,7 +22,7 @@ kalanchoe:
   notes: ""
 
 monstera-deliciosa:
-  last_watered: 2026-06-04
+  last_watered: 2026-06-15
   last_fertilized: 2026-05-23
   notes: ""
 
@@ -57,11 +57,11 @@ parlor-palm:
   notes: "Shared pot with Anthurium"
 
 snake-plant-1:
-  last_watered: 2026-05-23
+  last_watered: 2026-06-15
   last_fertilized: 2026-05-23
   notes: ""
 
 snake-plant-2:
-  last_watered: 2026-05-23
+  last_watered: 2026-06-15
   last_fertilized: 2026-05-23
   notes: ""
