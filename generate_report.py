@@ -245,7 +245,7 @@ def render(results, today):
       --accent: #059669; --accent-press: #047857; --on-accent: #ffffff;
       --accent-shadow: 0 6px 18px rgba(5,150,105,.32);
       --header-bg: linear-gradient(135deg, #064e3b 0%, #0a7d59 100%);
-      --warn: #f59e0b; --warn-bg: #fff3df; --warn-text: #b45309;
+      --warn: #f59e0b; --warn-bg: #fff3df; --warn-text: #8a3a05;
       --info: #3b82f6; --info-bg: #e7eeff; --info-text: #1d4ed8;
       --ok: #10b981; --ok-bg: #e1f6ee; --ok-text: #047857;
       --ok-solid: #059669; --info-solid: #2563eb;
@@ -308,6 +308,7 @@ def render(results, today):
     .sec-label {{ font-size: .7rem; font-weight: 800; letter-spacing: .09em;
                   text-transform: uppercase; color: var(--text-2);
                   padding: 1.1rem 1.15rem .4rem; }}
+    .sec-label.warn {{ color: var(--warn-text); }}
     .row {{ position: relative; display: flex; align-items: center; gap: .7rem;
             background: var(--surface); border: 1px solid var(--border);
             margin: .45rem .8rem; border-radius: var(--radius);
@@ -336,8 +337,8 @@ def render(results, today):
     #detail-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
                       padding: 1.1rem .9rem 6rem; }}
     .d-loc {{ font-size: .82rem; color: var(--text-2); margin-bottom: 1rem; }}
-    .badge {{ padding: .7rem .9rem; border-radius: var(--radius-sm); margin: .45rem 0;
-              font-size: .875rem; line-height: 1.5; font-weight: 500; border-left: 3px solid; }}
+    .badge {{ padding: .5rem .75rem; border-radius: var(--radius-sm); margin: .35rem 0;
+              font-size: .85rem; line-height: 1.4; font-weight: 500; border-left: 3px solid; }}
     .badge.check   {{ background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }}
     .badge.due     {{ background: var(--info-bg);   color: var(--info-text);   border-color: var(--info); }}
     .badge.pending {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--paused); }}
@@ -348,8 +349,8 @@ def render(results, today):
               border-radius: var(--radius-sm); border-left: 3px solid var(--note-border);
               font-size: .82rem; color: var(--note-text); }}
     .notes strong {{ color: var(--text); }}
-    .notes ul {{ margin-left: 1.1rem; margin-top: .35rem; }}
-    .notes li {{ margin: .3rem 0; line-height: 1.45; }}
+    .notes ul {{ margin-left: 1.1rem; margin-top: .5rem; }}
+    .notes li {{ margin: .55rem 0; line-height: 1.6; }}
 
     /* ── Detail nav bar ── */
     .d-nav {{ position: fixed; bottom: 0; left: 0; right: 0; display: flex;
@@ -396,8 +397,8 @@ def render(results, today):
     .g-dot.active {{ background: #fff; width: 7px; height: 7px; }}
 
     /* ── Check-off toggles (list rows) ── */
-    .chk {{ width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
-            border: 1.5px solid var(--border); background: var(--surface-2); font-size: 1rem;
+    .chk {{ width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+            border: 1.5px solid var(--border); background: var(--surface-2); font-size: 1.05rem;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; opacity: .5; filter: grayscale(1);
             transition: opacity .15s, filter .15s, box-shadow .15s, background .15s, transform .1s; }}
@@ -476,7 +477,7 @@ def render(results, today):
   </div>
   <div id="list-scroll"></div>
   <div class="action-bar" id="action-bar">
-    <span class="bar-count" id="bar-count">Tap 💧 / 🚱 / 🌱 to check off as you go</span>
+    <span class="bar-count" id="bar-count">Tap 💧 / 💦 / 🌱 to check off as you go</span>
     <button class="clear-btn hidden" id="clear-btn">Clear</button>
     <button class="copy-btn" id="copy-btn" disabled>📋 Copy</button>
   </div>
@@ -530,7 +531,7 @@ function buildList() {{
   const ok     = P.filter(p => !p.hasAction);
   let h = '';
   if (urgent.length) {{
-    h += `<div class="sec-label">⚠️ Needs attention (${{urgent.length}})</div>`;
+    h += `<div class="sec-label warn">⚠️ Needs attention (${{urgent.length}})</div>`;
     urgent.forEach((p, i) => h += rowHTML(p, i));
   }}
   if (ok.length) {{
@@ -585,7 +586,7 @@ function rowHTML(p, i) {{
   </div>
   <div class="row-dots">
     <button class="${{cls('w', a.w)}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">💧</button>
-    <button class="${{cls('wet', a.wet)}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">🚱</button>
+    <button class="${{cls('wet', a.wet)}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">💦</button>
     <button class="${{cls('f', a.f)}}" data-i="${{i}}" data-act="f" aria-label="Mark fertilized" title="Fertilized">🌱</button>
   </div>
   <div class="chevron">›</div>
@@ -621,7 +622,7 @@ function renderDetail(i, dir) {{
 
   const dLabels = {{
     w:   {{on: '💧 Watered ✓',      off: '💧 Mark watered'}},
-    wet: {{on: '🚱 Soil still wet ✓', off: '🚱 Soil still wet'}},
+    wet: {{on: '💦 Soil still wet ✓', off: '💦 Soil still wet'}},
     f:   {{on: '🌱 Fertilized ✓',   off: '🌱 Mark fertilized'}},
   }};
   const a = getA(p.name);
@@ -730,11 +731,11 @@ function updateBar() {{
   const total = watered.length + stillWet.length + fed.length;
   const count = document.getElementById('bar-count');
   if (total === 0) {{
-    count.textContent = 'Tap 💧 / 🚱 / 🌱 to check off as you go';
+    count.textContent = 'Tap 💧 / 💦 / 🌱 to check off as you go';
   }} else {{
     const parts = [];
     if (watered.length) parts.push(`💧 ${{watered.length}} watered`);
-    if (stillWet.length) parts.push(`🚱 ${{stillWet.length}} still wet`);
+    if (stillWet.length) parts.push(`💦 ${{stillWet.length}} still wet`);
     if (fed.length) parts.push(`🌱 ${{fed.length}} fertilized`);
     count.textContent = parts.join('  ·  ');
   }}
