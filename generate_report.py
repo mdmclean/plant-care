@@ -317,10 +317,20 @@ def render(results, today):
     .row:active {{ transform: scale(.988); background: var(--surface-2); }}
     .row.urgent::before {{ content: ''; position: absolute; left: 0; top: 13px; bottom: 13px;
                            width: 4px; border-radius: 0 4px 4px 0; background: var(--warn); }}
+    /* Small uniform thumbnail docked at the far left. A leaf emoji sits behind
+       as the placeholder; the photo covers it when loaded and removes itself on
+       error, falling back to the leaf. Sized to keep the row compact. */
+    .row-avatar {{ position: relative; width: 46px; height: 46px; flex-shrink: 0;
+                   border-radius: 12px; overflow: hidden; display: flex;
+                   align-items: center; justify-content: center; font-size: 1.35rem;
+                   background: var(--surface-2); border: 1px solid var(--border); }}
+    .row-avatar img {{ position: absolute; inset: 0; width: 100%; height: 100%;
+                       object-fit: cover; }}
     .row-info {{ flex: 1; min-width: 0; }}
     .row-name {{ font-weight: 700; font-size: .96rem; letter-spacing: -.01em;
                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
-    .row-loc {{ font-size: .76rem; color: var(--text-2); margin-top: .2rem; }}
+    .row-loc {{ font-size: .76rem; color: var(--text-2); margin-top: .2rem;
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
     .row-needs {{ display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .4rem; }}
     .need-chip {{ font-size: .7rem; font-weight: 700; letter-spacing: -.01em;
                   padding: .16rem .5rem; border-radius: var(--radius-pill);
@@ -574,6 +584,13 @@ function rowHTML(p, i) {{
   if (fertPending) chips.push('<span class="need-chip soon">🌱 Feed at next watering</span>');
   const needs = chips.length ? `<div class="row-needs">${{chips.join('')}}</div>` : '';
 
+  // Thumbnail: newest photo (photos are oldest→newest) with a leaf fallback.
+  const photos = p.photos || [];
+  const latest = photos.length ? photos[photos.length - 1] : null;
+  const avatar = `<div class="row-avatar">🌿${{
+    latest ? `<img src="${{latest.src}}" alt="" loading="lazy" onerror="this.remove()">` : ''
+  }}</div>`;
+
   // Orange = needs attention, green = checked off. Once one of the water pair
   // (watered / soil-still-wet) is checked, the other drops to neutral.
   const cls = (act, done) => {{
@@ -586,6 +603,7 @@ function rowHTML(p, i) {{
     return c;
   }};
   return `<div class="row${{p.hasAction ? ' urgent' : ''}}" data-i="${{i}}">
+  ${{avatar}}
   <div class="row-info">
     <div class="row-name">${{p.name}}</div>${{loc}}${{needs}}
   </div>
