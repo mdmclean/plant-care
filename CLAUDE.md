@@ -93,7 +93,8 @@ Create a new file in `plants/` following the same YAML schema as
 A plant may also have an optional `nickname:` field (a short friendly name,
 e.g. `nickname: "Flamingo"` for the anthurium). The list view shows the
 nickname when present and falls back to the proper `name` otherwise; the
-detail view always shows the proper `name`.
+detail view shows the proper `name` in its header and also surfaces the
+nickname (as "aka …") just above the location when one is set.
 
 ## Adding a Photo of a Plant
 

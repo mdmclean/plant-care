@@ -371,6 +371,8 @@ def render(results, today):
     /* ── Detail ── */
     #detail-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
                       padding: 1.1rem .9rem 6rem; }}
+    .d-nick {{ font-size: .8rem; font-weight: 700; color: var(--accent);
+               margin-bottom: .35rem; letter-spacing: -.01em; }}
     .d-loc {{ font-size: .82rem; color: var(--text-2); margin-bottom: 1rem; }}
     .badge {{ padding: .5rem .75rem; border-radius: var(--radius-sm); margin: .35rem 0;
               font-size: .85rem; line-height: 1.4; font-weight: 500; border-left: 3px solid; }}
@@ -710,6 +712,7 @@ function renderDetail(i, dir) {{
   scr.innerHTML = `<div class="${{animClass}} d-body">
     ${{photoHTML}}
     <div class="d-content">
+      ${{p.nickname ? `<div class="d-nick">🏷️ aka “${{p.nickname}}”</div>` : ''}}
       ${{p.location ? `<div class="d-loc">📍 ${{p.location}}</div>` : ''}}
       <div class="badge ${{p.waterStatus}}">💧 ${{p.waterMsg}}</div>
       <div class="badge ${{p.fertStatus}}">🌱 ${{p.fertMsg}}</div>
