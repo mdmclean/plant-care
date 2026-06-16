@@ -162,9 +162,13 @@ def evaluate(log_key, log_entry, plant):
     season = "spring_summer" if month in SPRING_SUMMER else "fall_winter"
 
     name = plant.get("name", log_key)
+    # Optional friendly nickname used in the list view (falls back to `name`).
+    nickname = plant.get("nickname") or ""
     suffix = re.search(r"-(\d+)$", log_key)
     if suffix:
         name = f"{name} #{suffix.group(1)}"
+        if nickname:
+            nickname = f"{nickname} #{suffix.group(1)}"
 
     location = plant.get("location") or ""
 
@@ -203,6 +207,7 @@ def evaluate(log_key, log_entry, plant):
     photos = photo_list(plant)
     return dict(
         name=name,
+        nickname=nickname,
         location=location,
         photos=photos,
         thumb=thumb_for(photos),
@@ -222,6 +227,7 @@ def render(results, today):
 
     plants_json = json.dumps([{
         "name": r["name"],
+        "nickname": r["nickname"],
         "location": r["location"],
         "photos": r["photos"],
         "thumb": r["thumb"],
@@ -640,7 +646,7 @@ function rowHTML(p, i) {{
   return `<div class="row${{p.hasAction ? ' urgent' : ''}}" data-i="${{i}}">
   ${{avatar}}
   <div class="row-info">
-    <div class="row-name">${{p.name}}</div>${{loc}}${{needs}}
+    <div class="row-name">${{p.nickname || p.name}}</div>${{loc}}${{needs}}
   </div>
   <div class="row-dots">
     <button class="${{cls('w', a.w)}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">💧</button>

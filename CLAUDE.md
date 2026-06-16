@@ -90,6 +90,11 @@ git push -u origin <branch>
 Create a new file in `plants/` following the same YAML schema as
 `plants/hoya-krimson-queen.yaml`. Add a matching entry in `care_log.yaml`.
 
+A plant may also have an optional `nickname:` field (a short friendly name,
+e.g. `nickname: "Flamingo"` for the anthurium). The list view shows the
+nickname when present and falls back to the proper `name` otherwise; the
+detail view always shows the proper `name`.
+
 ## Adding a Photo of a Plant
 
 Plants keep a **photo history** — each photo is dated, and the report shows a
