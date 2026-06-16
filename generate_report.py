@@ -324,10 +324,10 @@ def render(results, today):
                   text-transform: uppercase; color: var(--text-2);
                   padding: 1.1rem 1.15rem .4rem; }}
     .sec-label.warn {{ color: var(--warn-text); }}
-    .row {{ position: relative; display: flex; align-items: center; gap: .7rem;
+    .row {{ position: relative; display: flex; align-items: center; gap: .6rem;
             background: var(--surface); border: 1px solid var(--border);
             margin: .45rem .8rem; border-radius: var(--radius);
-            padding: .9rem 1rem; cursor: pointer; box-shadow: var(--shadow);
+            padding: .9rem .8rem; cursor: pointer; box-shadow: var(--shadow);
             transition: transform .12s ease, background .12s ease; }}
     .row:active {{ transform: scale(.988); background: var(--surface-2); }}
     .row.urgent::before {{ content: ''; position: absolute; left: 0; top: 13px; bottom: 13px;
@@ -335,9 +335,9 @@ def render(results, today):
     /* Small uniform thumbnail docked at the far left. A leaf emoji sits behind
        as the placeholder; the photo covers it when loaded and removes itself on
        error, falling back to the leaf. Sized to keep the row compact. */
-    .row-avatar {{ position: relative; width: 46px; height: 46px; flex-shrink: 0;
-                   border-radius: 12px; overflow: hidden; display: flex;
-                   align-items: center; justify-content: center; font-size: 1.35rem;
+    .row-avatar {{ position: relative; width: 40px; height: 40px; flex-shrink: 0;
+                   border-radius: 11px; overflow: hidden; display: flex;
+                   align-items: center; justify-content: center; font-size: 1.2rem;
                    background: var(--surface-2); border: 1px solid var(--border); }}
     .row-avatar img {{ position: absolute; inset: 0; width: 100%; height: 100%;
                        object-fit: cover; }}
@@ -359,8 +359,8 @@ def render(results, today):
     .need-chip.fert    {{ background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }}
     .need-chip.unknown {{ background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger); }}
     .need-chip.soon    {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--border); }}
-    .row-dots {{ display: flex; gap: .35rem; flex-shrink: 0; }}
-    .chevron {{ color: var(--text-3); font-size: 1.1rem; flex-shrink: 0; margin-left: .1rem; }}
+    .row-dots {{ display: flex; gap: .25rem; flex-shrink: 0; }}
+    .chevron {{ color: var(--text-3); font-size: 1.05rem; flex-shrink: 0; margin-left: 0; }}
 
     /* ── Detail ── */
     #detail-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
@@ -426,8 +426,8 @@ def render(results, today):
     .g-dot.active {{ background: #fff; width: 7px; height: 7px; }}
 
     /* ── Check-off toggles (list rows) ── */
-    .chk {{ width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
-            border: 1.5px solid var(--border); background: var(--surface-2); font-size: 1.05rem;
+    .chk {{ width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+            border: 1.5px solid var(--border); background: var(--surface-2); font-size: 1rem;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; opacity: .5; filter: grayscale(1);
             transition: opacity .15s, filter .15s, box-shadow .15s, background .15s, transform .1s; }}
