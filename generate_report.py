@@ -406,9 +406,13 @@ def render(results, today):
     /* A button this plant needs today: orange, drawing the eye. */
     .chk.need {{ opacity: 1; filter: none; background: var(--warn-bg);
                  border-color: var(--warn); box-shadow: inset 0 0 0 1.5px var(--warn); }}
-    /* Checked off: green (applies to all three, incl. soil-still-wet). */
+    /* Checked off as done (watered / fertilized): green. */
     .chk.done {{ opacity: 1; filter: none; background: var(--ok-bg);
                  border-color: var(--ok); box-shadow: inset 0 0 0 2px var(--ok); }}
+    /* Soil checked but still wet: a neutral "snoozed/delayed" state, not a
+       completion — gray so it reads differently from the green done states. */
+    .chk.snooze {{ opacity: 1; filter: none; background: var(--paused-bg);
+                   border-color: var(--paused); box-shadow: inset 0 0 0 2px var(--paused); }}
 
     /* ── Action bar (list view) ── */
     .action-bar {{ flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
@@ -435,6 +439,7 @@ def render(results, today):
     .d-chk:active {{ transform: scale(.96); }}
     .d-chk.need {{ background: var(--warn); color: #fff; border-color: var(--warn); }}
     .d-chk.done {{ background: var(--ok-solid); color: #fff; border-color: var(--ok-solid); }}
+    .d-chk.snooze {{ background: var(--paused); color: #fff; border-color: var(--paused); }}
 
     /* ── Toast ── */
     .toast {{ position: fixed; left: 50%; bottom: 5.5rem; z-index: 50;
@@ -478,7 +483,7 @@ def render(results, today):
   <div id="list-scroll"></div>
   <div class="action-bar" id="action-bar">
     <span class="bar-count" id="bar-count">Tap 💧 / 💦 / 🌱 to check off as you go</span>
-    <button class="clear-btn hidden" id="clear-btn">Clear</button>
+    <button class="clear-btn hidden" id="clear-btn">Clear selections</button>
     <button class="copy-btn" id="copy-btn" disabled>📋 Copy</button>
   </div>
 </div>
@@ -573,7 +578,7 @@ function rowHTML(p, i) {{
   // (watered / soil-still-wet) is checked, the other drops to neutral.
   const cls = (act, done) => {{
     let c = 'chk' + (act === 'wet' ? ' wet' : '');
-    if (done) return c + ' done';
+    if (done) return c + (act === 'wet' ? ' snooze' : ' done');
     if (act === 'w' && a.wet) return c;
     if (act === 'wet' && a.w) return c;
     if ((act === 'w' || act === 'wet') && (waterNeed || noRecord)) c += ' need';
@@ -631,7 +636,7 @@ function renderDetail(i, dir) {{
   // Same rules as the list: orange = needs attention, green = checked off,
   // and the unchosen half of the water pair stays neutral.
   const dCls = k => {{
-    if (a[k]) return 'd-chk done';
+    if (a[k]) return 'd-chk ' + (k === 'wet' ? 'snooze' : 'done');
     if (k === 'w' && a.wet) return 'd-chk';
     if (k === 'wet' && a.w) return 'd-chk';
     if ((k === 'w' || k === 'wet') && waterNeed) return 'd-chk need';
@@ -739,7 +744,9 @@ function updateBar() {{
     if (fed.length) parts.push(`🌱 ${{fed.length}} fertilized`);
     count.textContent = parts.join('  ·  ');
   }}
-  document.getElementById('copy-btn').disabled = total === 0;
+  const copyBtn = document.getElementById('copy-btn');
+  copyBtn.disabled = total === 0;
+  copyBtn.textContent = total > 0 ? `📋 Copy ${{total}}` : '📋 Copy';
   document.getElementById('clear-btn').classList.toggle('hidden', total === 0);
 }}
 
@@ -793,7 +800,7 @@ document.getElementById('copy-btn').addEventListener('click', () => {{
   const text = buildSummary();
   if (!text) return;
   copyText(text)
-    .then(() => showToast('📋 Copied — paste into your chat'))
+    .then(() => showToast('✓ Copied to clipboard'))
     .catch(() => showToast('Copy failed — long-press to select'));
 }});
 
