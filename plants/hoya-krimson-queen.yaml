@@ -1,7 +1,10 @@
 # hoya-krimson-queen
 id: hoya-krimson-queen
 name: "Hoya 'Krimson Queen'"
-image: "images/hoya-krimson-queen.jpeg"
+photos:
+  - file: "images/hoya-krimson-queen.jpeg"
+  - file: "images/hoya-krimson-queen-2026-06-16.jpeg"
+    date: "2026-06-16"
 botanical_name: "Hoya carnosa 'Krimson Queen'"
 type: "Epiphytic Vine / Semi-Succulent"
 toxicity: "Non-toxic to cats and dogs"
@@ -47,3 +50,4 @@ pruning: >
 notes:
   - "Acclimation: Transitioned slowly from a lower-light bathroom to the West-facing window — started 3–4 feet back, moved closer over two weeks to prevent sunburn."
   - "Hoya pauses are normal: if care is correct but growth has stalled, the plant is likely building its root system underground."
+  - "Photo check (2026-06-16): Young 4\" nursery plant (price tag still attached) in a striped cachepot. Foliage looks healthy — leaves are firm, glossy, and well-variegated with creamy-white margins around green centers; no yellowing, browning, or scorch on the white edges. A couple of long, bare tendrils are reaching out, which is normal Krimson Queen behavior — leave them to find a support to climb. New growth shows a faint pink blush at the edges, a sign it's getting good light. Soil looks like the original nursery mix, so plan to repot into the chunky airy mix only once it's rootbound."
