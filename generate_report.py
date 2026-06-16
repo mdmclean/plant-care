@@ -487,10 +487,18 @@ def render(results, today):
     .from-left  {{ animation: fromLeft  .22s ease-out; }}
 
     /* ── Wide screens (desktop browser) ── */
-    /* Mobile shows a cropped 260px banner; on a wide window that becomes a
-       thin sliver. Here we lay the detail out in two columns: the full,
-       uncropped photo on the left and the care info beside it. */
+    /* The single-column list reads as a thin ribbon on a wide window, so here
+       we flow the cards into a responsive multi-column tile grid. The section
+       labels span the full width; each .row becomes a tile (it's already a
+       self-contained card). Mobile keeps the stacked list above. */
     @media (min-width: 720px) {{
+      #list-scroll {{ display: grid; align-content: start;
+                      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                      gap: .8rem; padding: 1.2rem 1.4rem calc(1.2rem + .4rem);
+                      max-width: 1200px; margin: 0 auto; width: 100%; }}
+      .sec-label {{ grid-column: 1 / -1; padding: .9rem .2rem .1rem; }}
+      .row {{ margin: 0; }}
+
       #detail-scroll {{ padding: 1.6rem 1.6rem 6rem; }}
       .d-body {{ display: flex; align-items: flex-start; gap: 1.8rem;
                  max-width: 1100px; margin: 0 auto; }}
