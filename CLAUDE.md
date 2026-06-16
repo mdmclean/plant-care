@@ -131,5 +131,20 @@ When the user supplies a photo of a plant, do the following:
    growth, and anything that suggests a care adjustment. Keep it specific to
    what is actually visible in the image. With a photo history, also compare
    against earlier shots and note visible change (new growth, decline, etc.).
-4. **Regenerate the report** by running `python3 generate_report.py` (it renders
+4. **(Optional) Make a background-removed list thumbnail.** The list view shows a
+   small avatar per plant from its newest photo. For plants that cut out cleanly
+   you can replace that with a background-removed version so the plant floats on
+   the card color:
+   ```bash
+   pip install rembg onnxruntime pillow      # not needed to build the report
+   python3 make_thumbnail.py <plant-id>      # writes docs/images/<photo-stem>-thumb.png
+   ```
+   The report auto-prefers a `<photo-stem>-thumb.png` cutout when it exists and
+   otherwise uses the full photo — so this is purely additive. **Only keep a
+   cutout when it looks clean.** Solid foliage and clear pots cut out well; fine
+   or spiky foliage (palms, ferns, spilling vines) and busy/dark backgrounds
+   ghost badly at thumbnail size — for those, delete the generated `-thumb.png`
+   and let the plant keep its full-photo avatar. Eyeball the result before
+   committing.
+5. **Regenerate the report** by running `python3 generate_report.py` (it renders
    the gallery and overlays each photo's date), then commit and push.

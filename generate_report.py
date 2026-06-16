@@ -144,6 +144,18 @@ def photo_list(plant):
     return items
 
 
+def thumb_for(photos):
+    """Return a background-removed cutout thumbnail for the newest photo, if one
+    has been generated (see make_thumbnail.py). The cutout sits at
+    `<photo-stem>-thumb.png` next to the photo; when present the list-view avatar
+    uses it (plant floating on the card color) instead of the full photo."""
+    if not photos:
+        return None
+    src = photos[-1]["src"]  # newest (photos are oldest→newest)
+    cand = src.rsplit(".", 1)[0] + "-thumb.png"
+    return cand if (OUTPUT.parent / cand).exists() else None
+
+
 def evaluate(log_key, log_entry, plant):
     today = date.today()
     month = today.month
@@ -188,10 +200,12 @@ def evaluate(log_key, log_entry, plant):
     if isinstance(notes, str):
         notes = [notes]
 
+    photos = photo_list(plant)
     return dict(
         name=name,
         location=location,
-        photos=photo_list(plant),
+        photos=photos,
+        thumb=thumb_for(photos),
         water_status=water[0],
         water_msg=water[1],
         fert_status=fert[0],
@@ -210,6 +224,7 @@ def render(results, today):
         "name": r["name"],
         "location": r["location"],
         "photos": r["photos"],
+        "thumb": r["thumb"],
         "waterStatus": r["water_status"],
         "waterMsg": r["water_msg"],
         "fertStatus": r["fert_status"],
@@ -326,6 +341,10 @@ def render(results, today):
                    background: var(--surface-2); border: 1px solid var(--border); }}
     .row-avatar img {{ position: absolute; inset: 0; width: 100%; height: 100%;
                        object-fit: cover; }}
+    /* Cutout thumbnails are transparent: let the card color show through and
+       give the plant a little breathing room rather than cropping to the edge. */
+    .row-avatar.cut img {{ inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px);
+                           object-fit: contain; }}
     .row-info {{ flex: 1; min-width: 0; }}
     .row-name {{ font-weight: 700; font-size: .96rem; letter-spacing: -.01em;
                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
@@ -584,12 +603,20 @@ function rowHTML(p, i) {{
   if (fertPending) chips.push('<span class="need-chip soon">🌱 Feed at next watering</span>');
   const needs = chips.length ? `<div class="row-needs">${{chips.join('')}}</div>` : '';
 
-  // Thumbnail: newest photo (photos are oldest→newest) with a leaf fallback.
+  // Thumbnail. A background-removed cutout (p.thumb), when available, floats on
+  // the card color — so no leaf sits behind it (it would show through the
+  // transparent areas); if it fails to load we drop in the leaf instead.
+  // Otherwise the newest photo fills the tile over a leaf fallback.
   const photos = p.photos || [];
   const latest = photos.length ? photos[photos.length - 1] : null;
-  const avatar = `<div class="row-avatar">🌿${{
-    latest ? `<img src="${{latest.src}}" alt="" loading="lazy" onerror="this.remove()">` : ''
-  }}</div>`;
+  let avatar;
+  if (p.thumb) {{
+    avatar = `<div class="row-avatar cut"><img src="${{p.thumb}}" alt="" loading="lazy" onerror="this.parentNode.textContent='🌿'"></div>`;
+  }} else if (latest) {{
+    avatar = `<div class="row-avatar">🌿<img src="${{latest.src}}" alt="" loading="lazy" onerror="this.remove()"></div>`;
+  }} else {{
+    avatar = `<div class="row-avatar">🌿</div>`;
+  }}
 
   // Orange = needs attention, green = checked off. Once one of the water pair
   // (watered / soil-still-wet) is checked, the other drops to neutral.
