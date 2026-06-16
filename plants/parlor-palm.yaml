@@ -8,7 +8,7 @@ type: "Tropical Palm / Houseplant"
 toxicity: "Non-toxic to cats and dogs (ASPCA approved)"
 growth_habit: "Slow-growing, upright, and clumping. Delicate feathery deep green fronds growing from a central base."
 
-location: ""  # Shared pot with Anthurium
+location: "Big Room (upstairs), West-facing window"  # Shared pot with Anthurium
 
 light:
   ideal: "Medium to bright, indirect sunlight"
