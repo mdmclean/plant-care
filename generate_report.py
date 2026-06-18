@@ -453,6 +453,12 @@ def render(results, today):
        completion — gray so it reads differently from the green done states. */
     .chk.snooze {{ opacity: 1; filter: none; background: var(--paused-bg);
                    border-color: var(--paused); box-shadow: inset 0 0 0 2px var(--paused); }}
+    /* Feed is overdue but waiting on the next watering — informational, not an
+       attention item. A calm blue highlight on the 🌱 button carries that data
+       in the "All good" section without a layout-disrupting chip (and reads
+       distinctly from the orange "needs attention" state). */
+    .chk.pending {{ opacity: 1; filter: none; background: var(--info-bg);
+                    border-color: var(--info); box-shadow: inset 0 0 0 1.5px var(--info); }}
 
     /* ── Action bar (list view) ── */
     .action-bar {{ flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
@@ -620,7 +626,9 @@ function rowHTML(p, i) {{
   if (waterNeed) chips.push('<span class="need-chip water">💧 Soil check due</span>');
   if (noRecord)  chips.push('<span class="need-chip unknown">💧 No water record</span>');
   if (fertNeed)  chips.push('<span class="need-chip fert">🌱 Feed due</span>');
-  if (fertPending) chips.push('<span class="need-chip soon">🌱 Feed at next watering</span>');
+  // A pending feed (overdue but waiting on the next watering) is an "All good"
+  // plant — we skip the long "Feed at next watering" chip (it wraps and
+  // disrupts the row layout) and instead highlight the 🌱 button below.
   const needs = chips.length ? `<div class="row-needs">${{chips.join('')}}</div>` : '';
 
   // Thumbnail. A background-removed cutout (p.thumb), when available, floats on
@@ -647,8 +655,12 @@ function rowHTML(p, i) {{
     if (act === 'wet' && a.w) return c;
     if ((act === 'w' || act === 'wet') && (waterNeed || noRecord)) c += ' need';
     if (act === 'f' && fertNeed) c += ' need';
+    // Pending feed: calm blue highlight instead of the orange "need" alarm.
+    if (act === 'f' && fertPending) c += ' pending';
     return c;
   }};
+  // With the chip gone, let the 🌱 button's tooltip carry the pending detail.
+  const fertTitle = fertPending ? 'Feed due at next watering' : 'Fertilized';
   return `<div class="row${{p.hasAction ? ' urgent' : ''}}" data-i="${{i}}">
   ${{avatar}}
   <div class="row-info">
@@ -657,7 +669,7 @@ function rowHTML(p, i) {{
   <div class="row-dots">
     <button class="${{cls('w', a.w)}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">💧</button>
     <button class="${{cls('wet', a.wet)}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">💦</button>
-    <button class="${{cls('f', a.f)}}" data-i="${{i}}" data-act="f" aria-label="Mark fertilized" title="Fertilized">🌱</button>
+    <button class="${{cls('f', a.f)}}" data-i="${{i}}" data-act="f" aria-label="${{fertTitle}}" title="${{fertTitle}}">🌱</button>
   </div>
   <div class="chevron">›</div>
 </div>`;
