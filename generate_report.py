@@ -726,9 +726,14 @@ function renderDetail(i, dir) {{
   document.getElementById('prev-btn').disabled = i === 0;
   document.getElementById('next-btn').disabled = i === P.length - 1;
 
-  const adj = P[i + 1] || P[i - 1];
+  // Hint between the ← / → buttons. A bare name is ambiguous (next? previous?),
+  // so label it directionally: normally it previews the next plant; on the last
+  // plant the → is disabled, so it points back to the previous one instead.
+  const nextP = P[i + 1], prevP = P[i - 1];
+  const nextName = n => n.nickname || n.name;
   document.getElementById('nav-hint').textContent =
-    P[i + 1] ? P[i + 1].name : (P[i - 1] ? P[i - 1].name : '');
+    nextP ? `Next: ${{nextName(nextP)}} →`
+          : (prevP ? `← Prev: ${{nextName(prevP)}}` : '');
 
   const notesHTML = p.notes && p.notes.length
     ? `<div class="notes"><strong>💡 Notes</strong><ul>${{
