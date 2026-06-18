@@ -324,6 +324,7 @@ def render(results, today):
                  border-radius: 10px; padding: .42rem .8rem; font-size: .85rem;
                  font-weight: 600; cursor: pointer; flex-shrink: 0; }}
     .back-btn:active {{ background: rgba(255,255,255,.32); }}
+    .icon-btn {{ padding: .42rem .58rem; line-height: 1; }}
 
     /* ── List ── */
     #list-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
@@ -542,6 +543,7 @@ def render(results, today):
   <div class="hdr">
     <button class="back-btn" id="back-btn">&#8592; List</button>
     <span class="hdr-title" id="d-title"></span>
+    <button class="back-btn icon-btn" id="link-btn" aria-label="Copy link to this plant" title="Copy link">🔗</button>
     <span class="hdr-sub" id="d-counter"></span>
   </div>
   <div id="detail-scroll"></div>
@@ -919,6 +921,14 @@ document.getElementById('back-btn').addEventListener('click', () => {{
   // If there's no hash (deep-linked straight to a detail), switch directly.
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   showList();
+}});
+// Copy a shareable deep link to the plant currently shown in the detail view.
+document.getElementById('link-btn').addEventListener('click', () => {{
+  const url = location.origin + location.pathname + location.search
+            + '#' + encodeURIComponent(P[cur].id);
+  copyText(url)
+    .then(() => showToast('🔗 Link copied'))
+    .catch(() => showToast('Copy failed — long-press to select'));
 }});
 document.getElementById('prev-btn').addEventListener('click', () => goTo(cur - 1, -1));
 document.getElementById('next-btn').addEventListener('click', () => goTo(cur + 1,  1));
