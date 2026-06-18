@@ -91,10 +91,11 @@ Create a new file in `plants/` following the same YAML schema as
 `plants/hoya-krimson-queen.yaml`. Add a matching entry in `care_log.yaml`.
 
 A plant may also have an optional `nickname:` field (a short friendly name,
-e.g. `nickname: "Flamingo"` for the anthurium). The list view shows the
-nickname when present and falls back to the proper `name` otherwise; the
-detail view shows the proper `name` in its header and also surfaces the
-nickname (as "aka …") just above the location when one is set.
+e.g. `nickname: "Flamingo"` for the anthurium). Both the list view and the
+detail-view header show the nickname when present and fall back to the proper
+`name` otherwise (the short nickname keeps the mobile header uncluttered). The
+detail view shows the full proper `name` as a heading just below the photo,
+above the location.
 
 ## Adding a Photo of a Plant
 
