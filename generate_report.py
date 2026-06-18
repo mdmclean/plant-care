@@ -206,6 +206,7 @@ def evaluate(log_key, log_entry, plant):
 
     photos = photo_list(plant)
     return dict(
+        id=log_key,
         name=name,
         nickname=nickname,
         location=location,
@@ -226,6 +227,7 @@ def render(results, today):
     ordered = action + good
 
     plants_json = json.dumps([{
+        "id": r["id"],
         "name": r["name"],
         "nickname": r["nickname"],
         "location": r["location"],
@@ -660,12 +662,47 @@ function rowHTML(p, i) {{
 }}
 
 // ── Detail ──
-function openDetail(i) {{
-  cur = i;
+// Each plant has a stable `id` (its care-log key). We mirror the open plant
+// into the URL hash (e.g. #money-tree) so a detail page is directly
+// shareable / bookmarkable and the browser back button works.
+function plantIndexById(id) {{
+  for (let i = 0; i < P.length; i++) if (P[i].id === id) return i;
+  return -1;
+}}
+
+function detailShown() {{
+  return !document.getElementById('detail-view').classList.contains('hidden');
+}}
+
+function showDetail(i, dir) {{
   document.getElementById('list-view').classList.add('hidden');
   document.getElementById('detail-view').classList.remove('hidden');
-  renderDetail(i, 0);
+  renderDetail(i, dir);  // sets cur = i
 }}
+
+function showList() {{
+  document.getElementById('detail-view').classList.add('hidden');
+  document.getElementById('list-view').classList.remove('hidden');
+  buildList();
+}}
+
+// Open a plant by writing the hash; the hashchange handler does the rendering,
+// which keeps a real history entry so back returns to the list.
+function openDetail(i) {{
+  location.hash = encodeURIComponent(P[i].id);
+}}
+
+// Drive the visible view from the current URL hash.
+function applyHash() {{
+  const id = decodeURIComponent(location.hash.slice(1));
+  const i = id ? plantIndexById(id) : -1;
+  if (i >= 0) {{
+    if (!detailShown() || cur !== i) showDetail(i, 0);
+  }} else if (detailShown()) {{
+    showList();
+  }}
+}}
+window.addEventListener('hashchange', applyHash);
 
 function renderDetail(i, dir) {{
   cur = i;
@@ -778,7 +815,11 @@ function initGallery(root) {{
 
 function goTo(i, dir) {{
   if (i < 0 || i >= P.length) return;
-  renderDetail(i, dir);
+  renderDetail(i, dir);  // animate first (sets cur = i)…
+  // …then sync the hash. cur is already i, so the resulting hashchange is a
+  // no-op — this just keeps the URL shareable without re-rendering.
+  const h = encodeURIComponent(P[i].id);
+  if (location.hash.slice(1) !== h) location.hash = h;
 }}
 
 // ── Action bar: copy / clear ──
@@ -874,9 +915,10 @@ document.getElementById('clear-btn').addEventListener('click', () => {{
 
 // ── Events ──
 document.getElementById('back-btn').addEventListener('click', () => {{
-  document.getElementById('detail-view').classList.add('hidden');
-  document.getElementById('list-view').classList.remove('hidden');
-  buildList();
+  // Drop the plant from the URL; the hashchange handler returns to the list.
+  // If there's no hash (deep-linked straight to a detail), switch directly.
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  showList();
 }});
 document.getElementById('prev-btn').addEventListener('click', () => goTo(cur - 1, -1));
 document.getElementById('next-btn').addEventListener('click', () => goTo(cur + 1,  1));
@@ -906,6 +948,7 @@ document.addEventListener('keydown', e => {{
 }});
 
 buildList();
+applyHash();  // honor a shared/bookmarked #plant-id deep link on load
 </script>
 <script>
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
