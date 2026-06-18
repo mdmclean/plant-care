@@ -435,6 +435,33 @@ def render(results, today):
     .g-dot {{ width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.55);
               cursor: pointer; transition: background .15s, width .15s, height .15s; }}
     .g-dot.active {{ background: #fff; width: 7px; height: 7px; }}
+    /* A small "maximize" affordance on each slide; the photo itself is also
+       tappable. Both open the full-screen zoomable viewer. */
+    .plant-photo {{ cursor: zoom-in; }}
+    .g-zoom {{ position: absolute; top: .5rem; right: .5rem; width: 32px; height: 32px;
+               border-radius: 50%; border: none; background: rgba(0,0,0,.42); color: #fff;
+               font-size: 1rem; line-height: 1; cursor: pointer; display: flex;
+               align-items: center; justify-content: center; }}
+    .g-zoom:active {{ background: rgba(0,0,0,.72); }}
+
+    /* ── Full-screen photo viewer (lightbox) ── */
+    .lightbox {{ position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.94);
+                 opacity: 0; pointer-events: none; transition: opacity .2s ease;
+                 overflow: hidden; touch-action: none; overscroll-behavior: contain; }}
+    .lightbox.show {{ opacity: 1; pointer-events: auto; }}
+    .lightbox img {{ position: absolute; inset: 0; width: 100%; height: 100%;
+                     object-fit: contain; transform-origin: 0 0; will-change: transform;
+                     user-select: none; -webkit-user-drag: none; }}
+    .lb-close {{ position: fixed; top: calc(.55rem + env(safe-area-inset-top)); right: .7rem;
+                 width: 42px; height: 42px; border-radius: 50%; border: none; z-index: 101;
+                 background: rgba(255,255,255,.18); color: #fff; font-size: 1.25rem;
+                 cursor: pointer; display: flex; align-items: center; justify-content: center; }}
+    .lb-close:active {{ background: rgba(255,255,255,.34); }}
+    .lb-hint {{ position: fixed; left: 50%; transform: translateX(-50%); z-index: 101;
+                bottom: calc(1rem + env(safe-area-inset-bottom)); pointer-events: none;
+                color: rgba(255,255,255,.72); font-size: .76rem; font-weight: 600;
+                background: rgba(0,0,0,.4); padding: .35rem .8rem; border-radius: var(--radius-pill);
+                transition: opacity .3s ease; }}
 
     /* ── Check-off toggles (list rows) ── */
     .chk {{ width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
@@ -543,6 +570,13 @@ def render(results, today):
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- Full-screen zoomable photo viewer -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <img id="lb-img" alt="">
+  <button class="lb-close" id="lb-close" aria-label="Close photo">&#10005;</button>
+  <div class="lb-hint" id="lb-hint">Pinch, double-tap, or scroll to zoom</div>
+</div>
 
 <!-- Detail view -->
 <div class="view hidden" id="detail-view">
@@ -779,6 +813,15 @@ function renderDetail(i, dir) {{
   scr.scrollTop = 0;
   initGallery(scr);
 
+  // Tapping a photo (or its ⤢ button) opens the full-screen zoomable viewer.
+  scr.querySelectorAll('.plant-photo').forEach(im =>
+    im.addEventListener('click', () => openLightbox(im.src, im.alt))
+  );
+  scr.querySelectorAll('.g-zoom').forEach(b => b.addEventListener('click', e => {{
+    e.stopPropagation();
+    openLightbox(b.dataset.src, '');
+  }}));
+
   scr.querySelectorAll('.d-chk').forEach(b => b.addEventListener('click', () => {{
     toggleA(p.name, b.dataset.act);
     renderDetail(i, 0);  // re-render so mutually-exclusive buttons refresh
@@ -792,6 +835,7 @@ function galleryHTML(p) {{
   const slides = photos.map(ph => `<div class="slide">
       <img class="plant-photo" src="${{ph.src}}" alt="${{p.name}}"
            onerror="this.closest('.slide').style.display='none'">
+      <button class="g-zoom" type="button" aria-label="Maximize photo" data-src="${{ph.src}}">⤢</button>
       ${{ph.label ? `<span class="photo-date">${{ph.label}}</span>` : ''}}
     </div>`).join('');
   const multi = photos.length > 1;
@@ -968,11 +1012,137 @@ scr.addEventListener('touchend', e => {{
 
 // Arrow keys / Escape
 document.addEventListener('keydown', e => {{
+  // While the full-screen photo viewer is up, Escape closes it (and it swallows
+  // the other keys so they don't page the underlying detail view).
+  const lb = document.getElementById('lightbox');
+  if (lb.isShown && lb.isShown()) {{
+    if (e.key === 'Escape') lb.close();
+    return;
+  }}
   if (document.getElementById('detail-view').classList.contains('hidden')) return;
   if (e.key === 'ArrowRight') goTo(cur + 1,  1);
   if (e.key === 'ArrowLeft')  goTo(cur - 1, -1);
   if (e.key === 'Escape')     document.getElementById('back-btn').click();
 }});
+
+// ── Full-screen zoomable photo viewer ──
+// Transform-based pan/zoom. The <img> fills the overlay (object-fit: contain)
+// with transform-origin 0 0, so viewport coords map straight to the element and
+// the focal-point zoom math stays simple. Supports pinch (touch), wheel and
+// double-tap/double-click to zoom, and drag to pan while zoomed.
+const lightboxOpen = (() => {{
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lb-img');
+  const hint = document.getElementById('lb-hint');
+  const MIN = 1, MAX = 6;
+  let scale = 1, tx = 0, ty = 0;
+  const pts = new Map();              // active pointers
+  let pinchDist = 0, pinchScale = 1;  // gesture baselines
+  let lastTap = 0;
+
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const apply = () => {{ img.style.transform = `translate(${{tx}}px,${{ty}}px) scale(${{scale}})`; }};
+
+  function clampPan() {{
+    const W = lb.clientWidth, H = lb.clientHeight;
+    const sw = W * scale, sh = H * scale;
+    tx = sw <= W ? (W - sw) / 2 : clamp(tx, W - sw, 0);
+    ty = sh <= H ? (H - sh) / 2 : clamp(ty, H - sh, 0);
+  }}
+
+  function zoomAt(factor, fx, fy) {{
+    const ns = clamp(scale * factor, MIN, MAX);
+    const f = ns / scale;
+    tx = fx - (fx - tx) * f;
+    ty = fy - (fy - ty) * f;
+    scale = ns;
+    clampPan();
+    apply();
+  }}
+
+  function reset() {{ scale = 1; tx = 0; ty = 0; clampPan(); apply(); }}
+
+  function open(src, alt) {{
+    img.src = src; img.alt = alt || '';
+    reset();
+    lb.classList.add('show');
+    lb.setAttribute('aria-hidden', 'false');
+    hint.style.opacity = '1';
+    clearTimeout(hint._t);
+    hint._t = setTimeout(() => {{ hint.style.opacity = '0'; }}, 2200);
+  }}
+
+  function close() {{
+    lb.classList.remove('show');
+    lb.setAttribute('aria-hidden', 'true');
+    pts.clear();
+  }}
+  lb.isShown = () => lb.classList.contains('show');
+  lb.close = close;
+
+  // Two-finger helpers.
+  const two = () => [...pts.values()];
+  const dist = () => {{ const [a, b] = two(); return Math.hypot(a.x - b.x, a.y - b.y); }};
+  const mid  = () => {{ const [a, b] = two(); return {{x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}}; }};
+
+  lb.addEventListener('pointerdown', e => {{
+    pts.set(e.pointerId, {{x: e.clientX, y: e.clientY}});
+    lb.setPointerCapture(e.pointerId);
+    if (pts.size === 2) {{ pinchDist = dist(); pinchScale = scale; }}
+  }});
+
+  lb.addEventListener('pointermove', e => {{
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId);
+    pts.set(e.pointerId, {{x: e.clientX, y: e.clientY}});
+    if (pts.size === 2 && pinchDist) {{
+      const m = mid();
+      const target = pinchScale * (dist() / pinchDist);
+      zoomAt(clamp(target, MIN, MAX) / scale, m.x, m.y);
+    }} else if (pts.size === 1 && scale > 1) {{
+      tx += e.clientX - prev.x;
+      ty += e.clientY - prev.y;
+      clampPan();
+      apply();
+    }}
+  }});
+
+  function endPointer(e) {{
+    pts.delete(e.pointerId);
+    if (pts.size < 2) pinchDist = 0;
+  }}
+  lb.addEventListener('pointerup', endPointer);
+  lb.addEventListener('pointercancel', endPointer);
+
+  // Double-tap (touch) to toggle zoom around the tap point.
+  lb.addEventListener('pointerup', e => {{
+    if (e.pointerType === 'mouse') return;
+    const now = Date.now();
+    if (now - lastTap < 300) {{
+      if (scale > 1.05) reset(); else zoomAt(3 / scale, e.clientX, e.clientY);
+      lastTap = 0;
+    }} else {{
+      lastTap = now;
+    }}
+  }});
+
+  img.addEventListener('dblclick', e => {{
+    e.preventDefault();
+    if (scale > 1.05) reset(); else zoomAt(3 / scale, e.clientX, e.clientY);
+  }});
+
+  lb.addEventListener('wheel', e => {{
+    e.preventDefault();
+    zoomAt(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX, e.clientY);
+  }}, {{passive: false}});
+
+  // Tap the backdrop (not the photo) to close.
+  lb.addEventListener('click', e => {{ if (e.target === lb) close(); }});
+  document.getElementById('lb-close').addEventListener('click', close);
+
+  return open;
+}})();
+function openLightbox(src, alt) {{ lightboxOpen(src, alt); }}
 
 buildList();
 applyHash();  // honor a shared/bookmarked #plant-id deep link on load
