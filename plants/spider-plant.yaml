@@ -1,0 +1,52 @@
+# spider-plant
+id: spider-plant
+name: "Spider Plant (Variegated)"
+nickname: "Spiderling"
+photos:
+  - file: "images/spider-plant-2026-06-18.jpeg"
+    date: "2026-06-18"
+botanical_name: "Chlorophytum comosum 'Variegatum'"
+type: "Tropical Evergreen Houseplant"
+toxicity: "Non-toxic to cats and dogs — safe even if nibbled (though cats are often drawn to the arching leaves)"
+growth_habit: "Rosette-forming clump of long, arching, grass-like strap leaves. Matures into a fountain shape and, once established, sends out wiry runners (stolons) tipped with baby plantlets ('spiderettes') that can be potted up."
+
+location: ""
+
+light:
+  ideal: "Bright, indirect light — keeps the variegation crisp and the leaves full"
+  too_much: "Direct midday sun scorches and bleaches the leaves, leaving pale or brown patches"
+  too_little: "Growth slows and the creamy variegation fades toward solid green; leaves may flop"
+
+watering:
+  when: "Keep the soil lightly moist while young and establishing; once established, let the top 2–3 cm (1 inch) dry out between waterings. Always check the soil before watering."
+  how: "Water thoroughly until it drains freely; empty any saucer immediately and never let it sit in standing water."
+  water_quality: "Sensitive to fluoride, chlorine, and salt buildup in tap water — a common cause of brown leaf tips. Use filtered, distilled, or rainwater when possible, and flush the soil occasionally."
+  overwatering_signs: "Yellowing leaves; mushy crown or rotting roots"
+  underwatering_signs: "Leaves curl, dull, or develop crispy brown tips"
+  estimated_interval_days:
+    spring_summer: 7
+    fall_winter: 12
+
+environment:
+  temperature: "18°C–24°C (65°F–75°F). Tolerant but keep away from cold drafts and direct heat/AC vents."
+  humidity: "Adapts to average household humidity; appreciates moderate humidity, which helps keep leaf tips from going crispy."
+
+soil:
+  mix: "Standard well-draining houseplant potting mix"
+  recipe: "General potting soil amended with a little perlite for drainage and aeration"
+  repotting: "Fast-growing with thick, fleshy roots that quickly fill a pot and can push the plant upward. Pot up one size when roots crowd the surface or circle the pot — typically every 1–2 years. Currently a young plantlet in a biodegradable peat pot, which can be planted directly into a slightly larger container once it has rooted in."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during spring and summer. Pause feeding in fall and winter. Avoid over-feeding, which can worsen brown leaf tips."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+propagation: >
+  Once mature, the spider plant sends out runners with baby plantlets. Pot a
+  plantlet up in moist soil (it can stay attached to the mother plant until
+  rooted, or be rooted in water first) to make new plants.
+
+notes:
+  - "Newly potted plantlet — keep the soil lightly moist (not soggy) while it establishes roots, and hold off on fertilizer until it shows active new growth."
+  - "Grows from a young plantlet into a full arching fountain; the peat pot it's in can be planted whole into its next container so the tender roots aren't disturbed."
+  - "Photo check (2026-06-18): A young variegated spider plant in a small biodegradable peat pot. Leaves are long, narrow, and arching with healthy green centers and creamy variegation along the edges — good color with no yellowing, mushiness, or pest signs visible. Leaf tips are clean with no browning yet; since spider plants are sensitive to fluoride/chlorine/salts, using filtered or distilled water will help keep the tips from going crispy as it grows. The peat pot wicks moisture quickly and can dry out fast, so check the soil often while it's this small. Still a single small clump with no runners yet, as expected at this size."
