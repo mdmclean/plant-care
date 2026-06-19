@@ -1,0 +1,56 @@
+# tradescantia-nanouk-2
+id: tradescantia-nanouk-2
+name: "Tradescantia 'Nanouk'"
+nickname: "Nanouk #2"
+photos:
+  - file: "images/tradescantia-nanouk-2-2026-06-19.jpeg"
+    date: "2026-06-19"
+botanical_name: "Tradescantia albiflora 'Nanouk' (Fantasy Venice)"
+type: "Trailing Herbaceous Perennial"
+toxicity: "Mildly toxic to cats and dogs — sap can cause mouth/stomach irritation and the foliage can cause skin dermatitis"
+growth_habit: "Fast-growing, trailing/spreading. Fleshy stems with broad, striped leaves in green, pink, and cream; vivid purple undersides."
+
+location: "Kitchen"
+
+light:
+  ideal: "Bright, indirect light — the more light, the stronger the pink/lilac variegation"
+  placement: "An East or West-facing window is ideal. A little gentle direct morning sun is fine."
+  too_much: "Scorched, bleached, or crispy patches from harsh midday direct sun"
+  too_little: "Leggy, stretched stems with wide gaps between leaves; pink fades and growth reverts toward plain green"
+  notes: "Pinch/rotate regularly to keep it full and the colors vibrant."
+
+watering:
+  when: "Just potted from a water-rooted cutting — keep lightly moist while it transitions to soil; once established, let the top 1–2 inches dry out between waterings. Check before watering."
+  how: "Water thoroughly until it drains from the holes, then empty the saucer. Sensitive to staying soggy."
+  overwatering_signs: "Mushy, blackening stems; rot at the soil line"
+  underwatering_signs: "Limp, curling, or crispy leaves; stems go thin and dry"
+  estimated_interval_days:
+    spring_summer: 5
+    fall_winter: 10
+
+environment:
+  temperature: "55°F–80°F. Keep away from cold drafts and frost."
+  humidity: "Tolerates average household humidity; appreciates 50%+."
+
+soil:
+  mix: "Light, well-draining potting mix"
+  recipe: "2/3 indoor potting soil + 1/3 perlite"
+  repotting: "Started in a biodegradable peat pot — plant the whole pot into its next container once roots establish, so the tender new roots aren't disturbed."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during active growing season (Spring and Summer). Pause in Fall and Winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Pinch back stem tips regularly to encourage dense, bushy growth and prevent
+  legginess. Tip cuttings root easily in water or straight into moist soil.
+
+propagation:
+  method: "Stem-tip cuttings — root in water or directly in moist soil"
+  notes: "This is a second Nanouk grown from a water-rooted cutting, potted 2026-06-18. Keep soil consistently lightly moist (not soggy) and in bright indirect light until new growth confirms the roots have adapted to soil, then shift to the normal dry-down watering routine."
+
+notes:
+  - "Newly potted water-rooted cutting (2026-06-18): prioritize steady light moisture and warmth over a strict watering interval until it settles into soil. Water-rooted cuttings can sulk for a week or two while they grow soil roots."
+  - "Variegation is light-dependent — if the pink dwindles, give it more bright indirect light. Prune any all-green reverting stems."
+  - "Photo check (2026-06-19): Healthy young cutting in a biodegradable peat pot. Strong variegation — leaves striped green, cream, and pink/lilac with vivid magenta-purple stems and undersides, which means it's getting good light. Foliage is firm with no mushiness, yellowing, browning, or pest signs. Stem is a touch leggy with the leaves spreading wide (normal for a water-rooted cutting and easily fixed by pinching once it's actively growing). The peat pot wicks moisture and dries quickly, so check the soil often while it's this small."
