@@ -760,16 +760,25 @@ function rowHTML(p, i) {{
   }};
   // With the chip gone, let the sprout button's tooltip carry the pending detail.
   const fertTitle = fertPending ? 'Feed due at next watering' : 'Fertilized';
+
+  // Only surface the action icons a plant actually needs. An "All good" plant
+  // (no attention item) needs no watering today — otherwise it would sit under
+  // "Needs attention" — so we drop the two water buttons there and keep the
+  // sprout only when a feed is waiting on the next watering (or already ticked).
+  const waterBtns =
+      `<button class="${{cls('w', a.w)}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">${{icon('droplet')}}</button>`
+    + `<button class="${{cls('wet', a.wet)}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">${{icon('droplets')}}</button>`;
+  const fertBtn =
+      `<button class="${{cls('f', a.f)}}" data-i="${{i}}" data-act="f" aria-label="${{fertTitle}}" title="${{fertTitle}}">${{icon('sprout')}}</button>`;
+  const dots = p.hasAction ? (waterBtns + fertBtn) : ((fertPending || a.f) ? fertBtn : '');
+  const dotsHTML = dots ? `<div class="row-dots">${{dots}}</div>` : '';
+
   return `<div class="row${{p.hasAction ? ' urgent' : ''}}" data-i="${{i}}">
   ${{avatar}}
   <div class="row-info">
     <div class="row-name">${{p.nickname || p.name}}</div>${{loc}}${{needs}}
   </div>
-  <div class="row-dots">
-    <button class="${{cls('w', a.w)}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">${{icon('droplet')}}</button>
-    <button class="${{cls('wet', a.wet)}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">${{icon('droplets')}}</button>
-    <button class="${{cls('f', a.f)}}" data-i="${{i}}" data-act="f" aria-label="${{fertTitle}}" title="${{fertTitle}}">${{icon('sprout')}}</button>
-  </div>
+  ${{dotsHTML}}
   <div class="chevron">${{icon('chevron-right')}}</div>
 </div>`;
 }}
