@@ -17,6 +17,41 @@ OUTPUT = BASE / "docs" / "index.html"
 
 SPRING_SUMMER = set(range(3, 9))  # March–August
 
+# ── Lucide icons (inline SVG) ──────────────────────────────────────────────
+# Inner markup for each Lucide icon we use (Lucide v1.21.0, ISC licensed). The
+# icons are inlined rather than loaded from a CDN so the PWA stays fully offline
+# (the service worker only caches local assets). The same map is also injected
+# into the page's JS so client-rendered markup can build icons too.
+ICON_PATHS = {
+    "leaf": '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
+    "droplet": '<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+    "droplets": '<path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>',
+    "sprout": '<path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"/><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"/><path d="M5 21h14"/>',
+    "map-pin": '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+    "triangle-alert": '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+    "circle-check": '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    "lightbulb": '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+    "link": '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+    "check": '<path d="M20 6 9 17l-5-5"/>',
+    "maximize": '<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/><path d="M9 21H3v-6"/>',
+    "x": '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+    "chevron-left": '<path d="m15 18-6-6 6-6"/>',
+    "arrow-left": '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+    "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+    "clipboard": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+}
+
+
+def icon(name, cls=""):
+    """Render an inline Lucide SVG icon. `cls` adds extra classes alongside `ic`."""
+    classes = ("ic " + cls).strip()
+    return (
+        f'<svg class="{classes}" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+        'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+        f'aria-hidden="true">{ICON_PATHS[name]}</svg>'
+    )
+
 MANIFEST = {
     "name": "Plant Care",
     "short_name": "Plants",
@@ -241,6 +276,8 @@ def render(results, today):
         "hasAction": r["has_action"],
     } for r in ordered])
 
+    icons_json = json.dumps(ICON_PATHS)
+
     day = today.strftime("%-d")
     short_date = today.strftime(f"%b {day}")
 
@@ -249,7 +286,7 @@ def render(results, today):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>🌿 Plant Care</title>
+  <title>Plant Care</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#064e3b" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#053a2b" media="(prefers-color-scheme: dark)">
@@ -300,6 +337,24 @@ def render(results, today):
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }}
     .hidden {{ display: none !important; }}
+
+    /* ── Inline Lucide icons ── */
+    /* Icons scale with the surrounding font-size (1em) and inherit text color
+       via currentColor, so they slot in wherever an emoji used to sit. */
+    .ic {{ width: 1em; height: 1em; display: inline-block; vertical-align: -.14em;
+           stroke: currentColor; fill: none; flex: none; }}
+    .hdr-title .ic {{ vertical-align: -.16em; margin-right: .15rem; }}
+    .sec-label {{ display: flex; align-items: center; gap: .35rem; }}
+    .sec-label .ic {{ width: 1.05em; height: 1.05em; }}
+    .row-avatar > .ic {{ width: 22px; height: 22px; color: var(--text-3); }}
+    .need-chip .ic {{ width: .95em; height: .95em; }}
+    .chevron {{ display: flex; align-items: center; }}
+    .chk .ic, .d-chk .ic {{ width: 1.25em; height: 1.25em; }}
+    .back-btn {{ display: inline-flex; align-items: center; gap: .3rem; }}
+    .nav-btn {{ display: inline-flex; align-items: center; justify-content: center; }}
+    .nav-btn .ic {{ width: 1.2em; height: 1.2em; }}
+    .copy-btn, .d-chk {{ display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }}
+    .badge .ic, .d-loc .ic, .row-loc .ic, .bar-count .ic {{ vertical-align: -.15em; }}
     html, body {{ height: 100%; overflow: hidden; }}
     body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
             background: var(--bg); color: var(--text);
@@ -341,7 +396,7 @@ def render(results, today):
     .row:active {{ transform: scale(.988); background: var(--surface-2); }}
     .row.urgent::before {{ content: ''; position: absolute; left: 0; top: 13px; bottom: 13px;
                            width: 4px; border-radius: 0 4px 4px 0; background: var(--warn); }}
-    /* Small uniform thumbnail docked at the far left. A leaf emoji sits behind
+    /* Small uniform thumbnail docked at the far left. A leaf icon sits behind
        as the placeholder; the photo covers it when loaded and removes itself on
        error, falling back to the leaf. Sized to keep the row compact. */
     .row-avatar {{ position: relative; width: 40px; height: 40px; flex-shrink: 0;
@@ -471,20 +526,20 @@ def render(results, today):
             transition: opacity .15s, filter .15s, box-shadow .15s, background .15s, transform .1s; }}
     .chk:active {{ transform: scale(.9); }}
     /* A button this plant needs today: orange, drawing the eye. */
-    .chk.need {{ opacity: 1; filter: none; background: var(--warn-bg);
+    .chk.need {{ opacity: 1; filter: none; background: var(--warn-bg); color: var(--warn-text);
                  border-color: var(--warn); box-shadow: inset 0 0 0 1.5px var(--warn); }}
     /* Checked off as done (watered / fertilized): green. */
-    .chk.done {{ opacity: 1; filter: none; background: var(--ok-bg);
+    .chk.done {{ opacity: 1; filter: none; background: var(--ok-bg); color: var(--ok-text);
                  border-color: var(--ok); box-shadow: inset 0 0 0 2px var(--ok); }}
     /* Soil checked but still wet: a neutral "snoozed/delayed" state, not a
        completion — gray so it reads differently from the green done states. */
-    .chk.snooze {{ opacity: 1; filter: none; background: var(--paused-bg);
+    .chk.snooze {{ opacity: 1; filter: none; background: var(--paused-bg); color: var(--paused-text);
                    border-color: var(--paused); box-shadow: inset 0 0 0 2px var(--paused); }}
     /* Feed is overdue but waiting on the next watering — informational, not an
-       attention item. A calm blue highlight on the 🌱 button carries that data
-       in the "All good" section without a layout-disrupting chip (and reads
+       attention item. A calm blue highlight on the sprout button carries that
+       data in the "All good" section without a layout-disrupting chip (and reads
        distinctly from the orange "needs attention" state). */
-    .chk.pending {{ opacity: 1; filter: none; background: var(--info-bg);
+    .chk.pending {{ opacity: 1; filter: none; background: var(--info-bg); color: var(--info-text);
                     border-color: var(--info); box-shadow: inset 0 0 0 1.5px var(--info); }}
 
     /* ── Action bar (list view) ── */
@@ -558,14 +613,14 @@ def render(results, today):
 <!-- List view -->
 <div class="view" id="list-view">
   <div class="hdr">
-    <span class="hdr-title">🌿 Plant Care</span>
+    <span class="hdr-title">{icon('leaf')} Plant Care</span>
     <span class="hdr-sub">{short_date}</span>
   </div>
   <div id="list-scroll"></div>
   <div class="action-bar" id="action-bar">
-    <span class="bar-count" id="bar-count">Tap 💧 / 💦 / 🌱 to check off as you go</span>
+    <span class="bar-count" id="bar-count">Tap {icon('droplet')} / {icon('droplets')} / {icon('sprout')} to check off as you go</span>
     <button class="clear-btn hidden" id="clear-btn">Clear selections</button>
-    <button class="copy-btn" id="copy-btn" disabled>📋 Copy</button>
+    <button class="copy-btn" id="copy-btn" disabled>{icon('clipboard')} Copy</button>
   </div>
 </div>
 
@@ -574,29 +629,39 @@ def render(results, today):
 <!-- Full-screen zoomable photo viewer -->
 <div class="lightbox" id="lightbox" aria-hidden="true">
   <img id="lb-img" alt="">
-  <button class="lb-close" id="lb-close" aria-label="Close photo">&#10005;</button>
+  <button class="lb-close" id="lb-close" aria-label="Close photo">{icon('x')}</button>
   <div class="lb-hint" id="lb-hint">Pinch, double-tap, or scroll to zoom</div>
 </div>
 
 <!-- Detail view -->
 <div class="view hidden" id="detail-view">
   <div class="hdr">
-    <button class="back-btn" id="back-btn">&#8592; List</button>
+    <button class="back-btn" id="back-btn">{icon('arrow-left')} List</button>
     <span class="hdr-title" id="d-title"></span>
-    <button class="back-btn icon-btn" id="link-btn" aria-label="Copy link to this plant" title="Copy link">🔗</button>
+    <button class="back-btn icon-btn" id="link-btn" aria-label="Copy link to this plant" title="Copy link">{icon('link')}</button>
     <span class="hdr-sub" id="d-counter"></span>
   </div>
   <div id="detail-scroll"></div>
   <div class="d-nav" id="d-nav">
-    <button class="nav-btn" id="prev-btn">&#8592;</button>
+    <button class="nav-btn" id="prev-btn">{icon('arrow-left')}</button>
     <span class="nav-hint" id="nav-hint"></span>
-    <button class="nav-btn" id="next-btn">&#8594;</button>
+    <button class="nav-btn" id="next-btn">{icon('arrow-right')}</button>
   </div>
 </div>
 
 <script>
 const P = {plants_json};
 let cur = 0;
+
+// ── Inline Lucide icons (mirrors the Python ICON_PATHS map) ──
+const ICONS = {icons_json};
+function icon(name, cls) {{
+  return '<svg class="ic ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" '
+       + 'stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+       + 'stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+}}
+// Drop a leaf icon into an avatar tile when its photo fails to load.
+function avatarFallback(el) {{ el.classList.remove('cut'); el.innerHTML = icon('leaf'); }}
 
 // ── Check-off state (persisted per-day) ──
 const TODAY = "{today.isoformat()}";
@@ -625,11 +690,11 @@ function buildList() {{
   const ok     = P.filter(p => !p.hasAction);
   let h = '';
   if (urgent.length) {{
-    h += `<div class="sec-label warn">⚠️ Needs attention (${{urgent.length}})</div>`;
+    h += `<div class="sec-label warn">${{icon('triangle-alert')}} Needs attention (${{urgent.length}})</div>`;
     urgent.forEach((p, i) => h += rowHTML(p, i));
   }}
   if (ok.length) {{
-    h += `<div class="sec-label">✅ All good (${{ok.length}})</div>`;
+    h += `<div class="sec-label">${{icon('circle-check')}} All good (${{ok.length}})</div>`;
     ok.forEach((p, i) => h += rowHTML(p, urgent.length + i));
   }}
   const el = document.getElementById('list-scroll');
@@ -648,7 +713,7 @@ function buildList() {{
 }}
 
 function rowHTML(p, i) {{
-  const loc = p.location ? `<div class="row-loc">📍 ${{p.location}}</div>` : '';
+  const loc = p.location ? `<div class="row-loc">${{icon('map-pin')}} ${{p.location}}</div>` : '';
   const a = getA(p.name);
   // What does this plant need today? Drives both the chips and which buttons glow.
   const waterNeed = p.waterStatus === 'check';
@@ -657,12 +722,12 @@ function rowHTML(p, i) {{
   const fertPending = p.fertStatus === 'pending';
 
   const chips = [];
-  if (waterNeed) chips.push('<span class="need-chip water">💧 Soil check due</span>');
-  if (noRecord)  chips.push('<span class="need-chip unknown">💧 No water record</span>');
-  if (fertNeed)  chips.push('<span class="need-chip fert">🌱 Feed due</span>');
+  if (waterNeed) chips.push(`<span class="need-chip water">${{icon('droplet')}} Soil check due</span>`);
+  if (noRecord)  chips.push(`<span class="need-chip unknown">${{icon('droplet')}} No water record</span>`);
+  if (fertNeed)  chips.push(`<span class="need-chip fert">${{icon('sprout')}} Feed due</span>`);
   // A pending feed (overdue but waiting on the next watering) is an "All good"
   // plant — we skip the long "Feed at next watering" chip (it wraps and
-  // disrupts the row layout) and instead highlight the 🌱 button below.
+  // disrupts the row layout) and instead highlight the sprout button below.
   const needs = chips.length ? `<div class="row-needs">${{chips.join('')}}</div>` : '';
 
   // Thumbnail. A background-removed cutout (p.thumb), when available, floats on
@@ -673,11 +738,11 @@ function rowHTML(p, i) {{
   const latest = photos.length ? photos[photos.length - 1] : null;
   let avatar;
   if (p.thumb) {{
-    avatar = `<div class="row-avatar cut"><img src="${{p.thumb}}" alt="" loading="lazy" onerror="this.parentNode.textContent='🌿'"></div>`;
+    avatar = `<div class="row-avatar cut"><img src="${{p.thumb}}" alt="" loading="lazy" onerror="avatarFallback(this.parentNode)"></div>`;
   }} else if (latest) {{
-    avatar = `<div class="row-avatar">🌿<img src="${{latest.src}}" alt="" loading="lazy" onerror="this.remove()"></div>`;
+    avatar = `<div class="row-avatar">${{icon('leaf')}}<img src="${{latest.src}}" alt="" loading="lazy" onerror="this.remove()"></div>`;
   }} else {{
-    avatar = `<div class="row-avatar">🌿</div>`;
+    avatar = `<div class="row-avatar">${{icon('leaf')}}</div>`;
   }}
 
   // Orange = needs attention, green = checked off. Once one of the water pair
@@ -693,7 +758,7 @@ function rowHTML(p, i) {{
     if (act === 'f' && fertPending) c += ' pending';
     return c;
   }};
-  // With the chip gone, let the 🌱 button's tooltip carry the pending detail.
+  // With the chip gone, let the sprout button's tooltip carry the pending detail.
   const fertTitle = fertPending ? 'Feed due at next watering' : 'Fertilized';
   return `<div class="row${{p.hasAction ? ' urgent' : ''}}" data-i="${{i}}">
   ${{avatar}}
@@ -701,11 +766,11 @@ function rowHTML(p, i) {{
     <div class="row-name">${{p.nickname || p.name}}</div>${{loc}}${{needs}}
   </div>
   <div class="row-dots">
-    <button class="${{cls('w', a.w)}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">💧</button>
-    <button class="${{cls('wet', a.wet)}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">💦</button>
-    <button class="${{cls('f', a.f)}}" data-i="${{i}}" data-act="f" aria-label="${{fertTitle}}" title="${{fertTitle}}">🌱</button>
+    <button class="${{cls('w', a.w)}}" data-i="${{i}}" data-act="w" aria-label="Mark watered" title="Watered">${{icon('droplet')}}</button>
+    <button class="${{cls('wet', a.wet)}}" data-i="${{i}}" data-act="wet" aria-label="Soil still wet" title="Checked — soil still wet">${{icon('droplets')}}</button>
+    <button class="${{cls('f', a.f)}}" data-i="${{i}}" data-act="f" aria-label="${{fertTitle}}" title="${{fertTitle}}">${{icon('sprout')}}</button>
   </div>
-  <div class="chevron">›</div>
+  <div class="chevron">${{icon('chevron-right')}}</div>
 </div>`;
 }}
 
@@ -770,16 +835,16 @@ function renderDetail(i, dir) {{
           : (prevP ? `← Prev: ${{nextName(prevP)}}` : '');
 
   const notesHTML = p.notes && p.notes.length
-    ? `<div class="notes"><strong>💡 Notes</strong><ul>${{
+    ? `<div class="notes"><strong>${{icon('lightbulb')}} Notes</strong><ul>${{
         p.notes.map(n => `<li>${{n}}</li>`).join('')}}</ul></div>`
     : '';
 
   const photoHTML = galleryHTML(p);
 
   const dLabels = {{
-    w:   {{on: '💧 Watered ✓',      off: '💧 Mark watered'}},
-    wet: {{on: '💦 Soil still wet ✓', off: '💦 Soil still wet'}},
-    f:   {{on: '🌱 Fertilized ✓',   off: '🌱 Mark fertilized'}},
+    w:   {{icon: 'droplet',  on: 'Watered',        off: 'Mark watered'}},
+    wet: {{icon: 'droplets', on: 'Soil still wet', off: 'Soil still wet'}},
+    f:   {{icon: 'sprout',   on: 'Fertilized',     off: 'Mark fertilized'}},
   }};
   const a = getA(p.name);
   const waterNeed = p.waterStatus === 'check' || p.waterStatus === 'unknown';
@@ -794,7 +859,11 @@ function renderDetail(i, dir) {{
     if (k === 'f' && fertNeed) return 'd-chk need';
     return 'd-chk';
   }};
-  const dBtn = k => `<button class="${{dCls(k)}}" data-act="${{k}}">${{a[k] ? dLabels[k].on : dLabels[k].off}}</button>`;
+  const dBtn = k => {{
+    const l = dLabels[k];
+    const tail = a[k] ? ' ' + icon('check') : '';
+    return `<button class="${{dCls(k)}}" data-act="${{k}}">${{icon(l.icon)}} ${{a[k] ? l.on : l.off}}${{tail}}</button>`;
+  }};
   const actionsHTML = `<div class="d-actions">${{dBtn('w')}}${{dBtn('wet')}}${{dBtn('f')}}</div>`;
 
   const animClass = dir > 0 ? 'from-right' : dir < 0 ? 'from-left' : '';
@@ -803,9 +872,9 @@ function renderDetail(i, dir) {{
     ${{photoHTML}}
     <div class="d-content">
       <div class="d-name">${{p.name}}</div>
-      ${{p.location ? `<div class="d-loc">📍 ${{p.location}}</div>` : ''}}
-      <div class="badge ${{p.waterStatus}}">💧 ${{p.waterMsg}}</div>
-      <div class="badge ${{p.fertStatus}}">🌱 ${{p.fertMsg}}</div>
+      ${{p.location ? `<div class="d-loc">${{icon('map-pin')}} ${{p.location}}</div>` : ''}}
+      <div class="badge ${{p.waterStatus}}">${{icon('droplet')}} ${{p.waterMsg}}</div>
+      <div class="badge ${{p.fertStatus}}">${{icon('sprout')}} ${{p.fertMsg}}</div>
       ${{actionsHTML}}
       ${{notesHTML}}
     </div>
@@ -813,7 +882,7 @@ function renderDetail(i, dir) {{
   scr.scrollTop = 0;
   initGallery(scr);
 
-  // Tapping a photo (or its ⤢ button) opens the full-screen zoomable viewer.
+  // Tapping a photo (or its maximize button) opens the full-screen zoomable viewer.
   scr.querySelectorAll('.plant-photo').forEach(im =>
     im.addEventListener('click', () => openLightbox(im.src, im.alt))
   );
@@ -835,13 +904,13 @@ function galleryHTML(p) {{
   const slides = photos.map(ph => `<div class="slide">
       <img class="plant-photo" src="${{ph.src}}" alt="${{p.name}}"
            onerror="this.closest('.slide').style.display='none'">
-      <button class="g-zoom" type="button" aria-label="Maximize photo" data-src="${{ph.src}}">⤢</button>
+      <button class="g-zoom" type="button" aria-label="Maximize photo" data-src="${{ph.src}}">${{icon('maximize')}}</button>
       ${{ph.label ? `<span class="photo-date">${{ph.label}}</span>` : ''}}
     </div>`).join('');
   const multi = photos.length > 1;
   const nav = multi
-    ? `<button class="g-nav g-prev" aria-label="Older photo">&#8249;</button>
-       <button class="g-nav g-next" aria-label="Newer photo">&#8250;</button>
+    ? `<button class="g-nav g-prev" aria-label="Older photo">${{icon('chevron-left')}}</button>
+       <button class="g-nav g-next" aria-label="Newer photo">${{icon('chevron-right')}}</button>
        <div class="g-dots">${{photos.map((_, i) => `<span class="g-dot" data-i="${{i}}"></span>`).join('')}}</div>`
     : '';
   return `<div class="gallery"><div class="gallery-track">${{slides}}</div>${{nav}}</div>`;
@@ -902,17 +971,17 @@ function updateBar() {{
   const total = watered.length + stillWet.length + fed.length;
   const count = document.getElementById('bar-count');
   if (total === 0) {{
-    count.textContent = 'Tap 💧 / 💦 / 🌱 to check off as you go';
+    count.innerHTML = `Tap ${{icon('droplet')}} / ${{icon('droplets')}} / ${{icon('sprout')}} to check off as you go`;
   }} else {{
     const parts = [];
-    if (watered.length) parts.push(`💧 ${{watered.length}} watered`);
-    if (stillWet.length) parts.push(`💦 ${{stillWet.length}} still wet`);
-    if (fed.length) parts.push(`🌱 ${{fed.length}} fertilized`);
-    count.textContent = parts.join('  ·  ');
+    if (watered.length) parts.push(`${{icon('droplet')}} ${{watered.length}} watered`);
+    if (stillWet.length) parts.push(`${{icon('droplets')}} ${{stillWet.length}} still wet`);
+    if (fed.length) parts.push(`${{icon('sprout')}} ${{fed.length}} fertilized`);
+    count.innerHTML = parts.join('  ·  ');
   }}
   const copyBtn = document.getElementById('copy-btn');
   copyBtn.disabled = total === 0;
-  copyBtn.textContent = total > 0 ? `📋 Copy ${{total}}` : '📋 Copy';
+  copyBtn.innerHTML = total > 0 ? `${{icon('clipboard')}} Copy ${{total}}` : `${{icon('clipboard')}} Copy`;
   document.getElementById('clear-btn').classList.toggle('hidden', total === 0);
 }}
 
@@ -966,7 +1035,7 @@ document.getElementById('copy-btn').addEventListener('click', () => {{
   const text = buildSummary();
   if (!text) return;
   copyText(text)
-    .then(() => showToast('✓ Copied to clipboard'))
+    .then(() => showToast('Copied to clipboard'))
     .catch(() => showToast('Copy failed — long-press to select'));
 }});
 
@@ -988,7 +1057,7 @@ document.getElementById('link-btn').addEventListener('click', () => {{
   const url = location.origin + location.pathname + location.search
             + '#' + encodeURIComponent(P[cur].id);
   copyText(url)
-    .then(() => showToast('🔗 Link copied'))
+    .then(() => showToast('Link copied'))
     .catch(() => showToast('Copy failed — long-press to select'));
 }});
 document.getElementById('prev-btn').addEventListener('click', () => goTo(cur - 1, -1));
