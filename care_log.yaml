@@ -2,8 +2,8 @@
 # Dates use YYYY-MM-DD format.
 
 hoya-krimson-queen:
-  last_watered: 2026-06-15
-  last_fertilized: 2026-05-23
+  last_watered: 2026-06-26
+  last_fertilized: 2026-06-26
   notes: ""
 
 dieffenbachia:
@@ -17,8 +17,8 @@ rieger-begonia:
   notes: ""
 
 kalanchoe:
-  last_watered: 2026-06-09
-  last_fertilized: 2026-05-23
+  last_watered: 2026-06-26
+  last_fertilized: 2026-06-26
   notes: ""
 
 monstera-deliciosa:
@@ -32,8 +32,8 @@ money-tree:
   notes: ""
 
 anthurium:
-  last_watered: 2026-06-16
-  last_fertilized: 2026-05-23
+  last_watered: 2026-06-26
+  last_fertilized: 2026-06-26
   notes: ""
 
 marble-queen-pothos:
@@ -52,8 +52,8 @@ dracaena-malaika:
   notes: ""
 
 parlor-palm:
-  last_watered: 2026-06-16
-  last_fertilized: 2026-05-23
+  last_watered: 2026-06-26
+  last_fertilized: 2026-06-26
   notes: "Shared pot with Anthurium"
 
 snake-plant-1:
@@ -82,6 +82,6 @@ jade-plant:
   notes: "Established but stalled (leggy from low light) — water only when fully dry; started feeding 2026-06-15 to encourage active growth"
 
 spider-plant:
-  last_watered: 2026-06-18
+  last_watered: 2026-06-26
   last_fertilized: ""
   notes: "Newly potted plantlet — keep lightly moist until established; do not fertilize yet"
