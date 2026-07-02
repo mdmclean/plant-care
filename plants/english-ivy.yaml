@@ -1,0 +1,56 @@
+# english-ivy
+id: english-ivy
+name: "English Ivy"
+nickname: "Ivy"
+photos:
+  - file: "images/english-ivy-2026-07-02.jpeg"
+    date: "2026-07-02"
+botanical_name: "Hedera helix"
+type: "Evergreen Trailing / Climbing Vine"
+toxicity: "Toxic to cats, dogs, and humans — leaves and sap can cause mouth/stomach irritation if eaten, and the sap can irritate skin on contact. Keep out of reach of pets and children."
+growth_habit: "Vigorous trailing/climbing vine. Long, flexible stems with lobed, palmate leaves; trails from a pot or climbs any support with aerial rootlets."
+
+location: "Kitchen"
+
+light:
+  ideal: "Bright, indirect light — keeps the variegation crisp and growth compact"
+  placement: "An East or West-facing window is ideal. Tolerates medium light but grows slower and leggier there."
+  too_much: "Harsh direct midday sun scorches and bleaches the leaves, leaving pale or crispy patches"
+  too_little: "Leggy, stretched stems with wide gaps between leaves; any variegation fades toward solid green"
+
+watering:
+  when: "Just potted from water propagation — keep lightly moist while it transitions to soil; once established, let the top 1–2 inches dry out between waterings. Check before watering. Ivy prefers to be kept on the moist side but dislikes staying soggy."
+  how: "Water thoroughly until it drains from the holes, then empty the saucer. Never let it sit in standing water."
+  overwatering_signs: "Yellowing leaves; mushy stems; brown-then-black leaf patches (root rot)"
+  underwatering_signs: "Dry, crispy brown leaf edges and tips; limp, wilting stems"
+  estimated_interval_days:
+    spring_summer: 7
+    fall_winter: 12
+
+environment:
+  temperature: "50°F–75°F. Prefers cooler rooms; keep away from hot, dry air and direct heat/AC vents."
+  humidity: "Loves moderate-to-high humidity. Dry indoor air invites spider mites — mist occasionally or group with other plants."
+
+soil:
+  mix: "Standard well-draining houseplant potting mix"
+  recipe: "General potting soil amended with a little perlite for drainage and aeration"
+  repotting: "Freshly potted from water-rooted cuttings — leave it to establish in this pot. Pot up one size only once roots fill the container, typically every 1–2 years."
+
+feeding:
+  fertilizer: "Balanced liquid houseplant fertilizer at half-strength"
+  schedule: "Once monthly during active growing season (Spring and Summer). Pause in Fall and Winter. Hold off entirely until the newly potted cuttings show active new growth."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Pinch and trim regularly to keep it full and prevent bare, leggy vines. Tip
+  cuttings root readily in water (as these did) or straight into moist soil.
+
+propagation:
+  method: "Stem-tip cuttings — root in water or directly in moist soil"
+  notes: "This plant was grown from water-propagated cuttings and potted into soil on 2026-07-02. Keep the soil consistently lightly moist (not soggy) and in bright indirect light until new growth confirms the roots have adapted to soil, then shift to the normal dry-down watering routine."
+
+notes:
+  - "Newly potted water-rooted cuttings (2026-07-02): prioritize steady light moisture and warmth over a strict watering interval until it settles into soil. Water-rooted cuttings can sulk for a week or two while they grow soil roots."
+  - "Toxic to pets and people — the classic-lobed leaves are tempting to curious cats; site it out of reach."
+  - "Watch for spider mites, ivy's most common pest indoors, especially in warm dry air — check the undersides of leaves and keep humidity up."
+  - "Photo check (2026-07-02): A small cluster of English ivy cuttings freshly potted into a terracotta-colored plastic pot, sitting on a black saucer (a second glass of water-rooting cuttings is visible alongside). Foliage is a healthy medium-to-deep green with the classic 3–5 lobed leaves and pale silvery veins — firm and glossy, no yellowing, browning, or scorch. Stems are a little open/spread (normal for water-rooted cuttings), which will fill in once it's actively growing and pinched. Fresh soil is still visible on some lower leaves from potting. Keep it lightly moist and in bright indirect light while the water roots convert to soil roots."
