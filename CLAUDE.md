@@ -24,6 +24,7 @@ plants/              # One YAML file per plant — static care instructions
 care_log.yaml        # Tracks the last time each plant was watered / fertilized
 generate_report.py   # Generates docs/index.html for GitHub Pages
 docs/index.html      # GitHub Pages report (auto-generated — do not edit manually)
+smoke_test.js        # Headless-browser smoke test for the report (needs playwright)
 CLAUDE.md            # This file — instructions for the daily routine
 ```
 
