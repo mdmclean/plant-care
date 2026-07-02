@@ -40,6 +40,9 @@ ICON_PATHS = {
     "arrow-left": '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
     "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
     "clipboard": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+    "menu": '<line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/>',
+    "images": '<path d="M18 22H4a2 2 0 0 1-2-2V6"/><path d="m22 13-1.296-1.296a2.41 2.41 0 0 0-3.408 0L11 18"/><circle cx="12" cy="8" r="2"/><rect width="16" height="16" x="6" y="2" rx="2"/>',
+    "list-checks": '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
 }
 
 
@@ -499,6 +502,54 @@ def render(results, today):
                align-items: center; justify-content: center; }}
     .g-zoom:active {{ background: rgba(0,0,0,.72); }}
 
+    /* ── Header sub menu ── */
+    .menu-wrap {{ position: relative; flex-shrink: 0; }}
+    .menu-pop {{ position: absolute; top: calc(100% + .45rem); right: 0; z-index: 30;
+                 min-width: 200px; background: var(--surface); color: var(--text);
+                 border: 1px solid var(--border); border-radius: var(--radius-sm);
+                 box-shadow: var(--shadow); overflow: hidden; }}
+    .menu-item {{ display: flex; align-items: center; gap: .6rem; width: 100%;
+                  padding: .8rem .95rem; background: none; border: none;
+                  color: var(--text); font-size: .9rem; font-weight: 600;
+                  cursor: pointer; text-align: left; }}
+    .menu-item + .menu-item {{ border-top: 1px solid var(--border); }}
+    .menu-item:active {{ background: var(--surface-2); }}
+    .menu-item .ic {{ width: 1.1em; height: 1.1em; color: var(--text-2); }}
+    .menu-item .menu-check {{ margin-left: auto; color: var(--accent); }}
+
+    /* ── Gallery view ── */
+    /* A photo-first grid for showing off the plants: one tile per plant (its
+       newest photo), no care chores anywhere. Tapping a tile opens the
+       full-screen viewer in slideshow mode — swipe to keep browsing. */
+    #gallery-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+                       padding: .8rem .8rem calc(.8rem + env(safe-area-inset-bottom)); }}
+    .gal-grid {{ display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem;
+                 max-width: 1200px; margin: 0 auto; }}
+    @media (min-width: 720px) {{
+      .gal-grid {{ grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .9rem; }}
+    }}
+    .gal-card {{ position: relative; aspect-ratio: 3 / 4; border-radius: var(--radius);
+                 overflow: hidden; background: var(--surface-2);
+                 border: 1px solid var(--border); box-shadow: var(--shadow);
+                 cursor: pointer; transition: transform .12s ease;
+                 display: flex; align-items: center; justify-content: center; }}
+    .gal-card:active {{ transform: scale(.97); }}
+    .gal-card > .ic {{ width: 34px; height: 34px; color: var(--text-3); }}
+    .gal-card img {{ position: absolute; inset: 0; width: 100%; height: 100%;
+                     object-fit: cover; display: block; }}
+    .gal-name {{ position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+                 padding: 1.6rem .65rem .55rem;
+                 background: linear-gradient(transparent, rgba(0,0,0,.68));
+                 color: #fff; font-weight: 700; font-size: .88rem; letter-spacing: -.01em;
+                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+    .gal-count {{ position: absolute; top: .5rem; right: .5rem; z-index: 1;
+                  display: inline-flex; align-items: center; gap: .3rem;
+                  background: rgba(0,0,0,.55); color: #fff; font-size: .7rem;
+                  font-weight: 700; padding: .24rem .55rem;
+                  border-radius: var(--radius-pill); }}
+    .gal-empty {{ padding: 3.5rem 1.5rem; text-align: center; color: var(--text-2);
+                  font-size: .9rem; grid-column: 1 / -1; }}
+
     /* ── Full-screen photo viewer (lightbox) ── */
     .lightbox {{ position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.94);
                  opacity: 0; pointer-events: none; transition: opacity .2s ease;
@@ -517,6 +568,21 @@ def render(results, today):
                 color: rgba(255,255,255,.72); font-size: .76rem; font-weight: 600;
                 background: rgba(0,0,0,.4); padding: .35rem .8rem; border-radius: var(--radius-pill);
                 transition: opacity .3s ease; }}
+    /* Slideshow chrome (only shown when the viewer is opened from the gallery):
+       a caption naming the plant, and prev/next arrows for non-touch use. */
+    .lb-cap {{ position: fixed; top: calc(.9rem + env(safe-area-inset-top)); left: 50%;
+               transform: translateX(-50%); z-index: 101; pointer-events: none;
+               max-width: calc(100% - 7.5rem); white-space: nowrap; overflow: hidden;
+               text-overflow: ellipsis; color: #fff; font-size: .85rem; font-weight: 700;
+               background: rgba(0,0,0,.45); padding: .4rem .9rem;
+               border-radius: var(--radius-pill); }}
+    .lb-nav {{ position: fixed; top: 50%; transform: translateY(-50%); z-index: 101;
+               width: 42px; height: 42px; border-radius: 50%; border: none;
+               background: rgba(255,255,255,.18); color: #fff; font-size: 1.2rem;
+               cursor: pointer; display: flex; align-items: center; justify-content: center; }}
+    .lb-nav:active {{ background: rgba(255,255,255,.34); }}
+    .lb-prev {{ left: .7rem; }}
+    .lb-next {{ right: .7rem; }}
 
     /* ── Check-off toggles (list rows) ── */
     .chk {{ width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
@@ -615,6 +681,13 @@ def render(results, today):
   <div class="hdr">
     <span class="hdr-title">{icon('leaf')} Plant Care</span>
     <span class="hdr-sub">{short_date}</span>
+    <div class="menu-wrap">
+      <button class="back-btn icon-btn" id="menu-btn" aria-label="Menu" aria-haspopup="true">{icon('menu')}</button>
+      <div class="menu-pop hidden" id="menu-pop">
+        <button class="menu-item" id="menu-care">{icon('list-checks')} Care checklist <span class="menu-check">{icon('check')}</span></button>
+        <button class="menu-item" id="menu-gallery">{icon('images')} Plant gallery</button>
+      </div>
+    </div>
   </div>
   <div id="list-scroll"></div>
   <div class="action-bar" id="action-bar">
@@ -630,7 +703,20 @@ def render(results, today):
 <div class="lightbox" id="lightbox" aria-hidden="true">
   <img id="lb-img" alt="">
   <button class="lb-close" id="lb-close" aria-label="Close photo">{icon('x')}</button>
+  <div class="lb-cap hidden" id="lb-cap"></div>
+  <button class="lb-nav lb-prev hidden" id="lb-prev" aria-label="Previous photo">{icon('chevron-left')}</button>
+  <button class="lb-nav lb-next hidden" id="lb-next" aria-label="Next photo">{icon('chevron-right')}</button>
   <div class="lb-hint" id="lb-hint">Pinch, double-tap, or scroll to zoom</div>
+</div>
+
+<!-- Gallery view: photo-first, no care chores — for handing the phone over -->
+<div class="view hidden" id="gallery-view">
+  <div class="hdr">
+    <button class="back-btn" id="gal-back-btn">{icon('arrow-left')} List</button>
+    <span class="hdr-title">{icon('images')} Plant Gallery</span>
+    <span class="hdr-sub" id="gal-sub"></span>
+  </div>
+  <div id="gallery-scroll"></div>
 </div>
 
 <!-- Detail view -->
@@ -796,16 +882,29 @@ function detailShown() {{
   return !document.getElementById('detail-view').classList.contains('hidden');
 }}
 
+function galleryShown() {{
+  return !document.getElementById('gallery-view').classList.contains('hidden');
+}}
+
 function showDetail(i, dir) {{
   document.getElementById('list-view').classList.add('hidden');
+  document.getElementById('gallery-view').classList.add('hidden');
   document.getElementById('detail-view').classList.remove('hidden');
   renderDetail(i, dir);  // sets cur = i
 }}
 
 function showList() {{
   document.getElementById('detail-view').classList.add('hidden');
+  document.getElementById('gallery-view').classList.add('hidden');
   document.getElementById('list-view').classList.remove('hidden');
   buildList();
+}}
+
+function showGallery() {{
+  document.getElementById('list-view').classList.add('hidden');
+  document.getElementById('detail-view').classList.add('hidden');
+  document.getElementById('gallery-view').classList.remove('hidden');
+  buildGallery();
 }}
 
 // Open a plant by writing the hash; the hashchange handler does the rendering,
@@ -814,13 +913,18 @@ function openDetail(i) {{
   location.hash = encodeURIComponent(P[i].id);
 }}
 
-// Drive the visible view from the current URL hash.
+// Drive the visible view from the current URL hash. `#gallery` is a reserved
+// hash for the gallery view; anything else is a plant id (detail view).
 function applyHash() {{
   const id = decodeURIComponent(location.hash.slice(1));
+  if (id === 'gallery') {{
+    if (!galleryShown()) showGallery();
+    return;
+  }}
   const i = id ? plantIndexById(id) : -1;
   if (i >= 0) {{
     if (!detailShown() || cur !== i) showDetail(i, 0);
-  }} else if (detailShown()) {{
+  }} else if (detailShown() || galleryShown()) {{
     showList();
   }}
 }}
@@ -953,6 +1057,72 @@ function initGallery(root) {{
   // Open focused on the latest photo (rightmost), then let the user scroll back.
   requestAnimationFrame(() => {{ track.scrollLeft = track.scrollWidth; sync(); }});
 }}
+
+// ── Gallery view (show-off mode) ──
+// One tile per plant showing its newest photo — no chores, no status. Tapping
+// a tile opens the full-screen viewer in slideshow mode over every photo of
+// every plant (newest first within a plant), so from one tap you can swipe
+// through the whole collection.
+function buildGallery() {{
+  // P is ordered needs-attention-first for the checklist; that ordering is
+  // meaningless (and shuffles daily) in a gallery, so sort by display name.
+  const withPhotos = P.filter(p => (p.photos || []).length)
+    .slice().sort((a, b) => (a.nickname || a.name).localeCompare(b.nickname || b.name));
+  document.getElementById('gal-sub').textContent =
+    `${{withPhotos.length}} plant${{withPhotos.length === 1 ? '' : 's'}}`;
+
+  // Flattened slideshow playlist + each plant's starting index within it.
+  const playlist = [];
+  const startAt = {{}};
+  withPhotos.forEach(p => {{
+    startAt[p.id] = playlist.length;
+    [...p.photos].reverse().forEach(ph =>   // newest → oldest within a plant
+      playlist.push({{src: ph.src, cap: (p.nickname || p.name) + (ph.label ? ' · ' + ph.label : '')}}));
+  }});
+
+  const cards = withPhotos.map(p => {{
+    const latest = p.photos[p.photos.length - 1];
+    const count = p.photos.length > 1
+      ? `<span class="gal-count">${{icon('images')}} ${{p.photos.length}}</span>` : '';
+    return `<div class="gal-card" data-id="${{p.id}}">
+      ${{icon('leaf')}}
+      <img src="${{latest.src}}" alt="${{p.name}}" loading="lazy" onerror="this.remove()">
+      ${{count}}
+      <div class="gal-name">${{p.nickname || p.name}}</div>
+    </div>`;
+  }}).join('');
+
+  const el = document.getElementById('gallery-scroll');
+  el.innerHTML = `<div class="gal-grid">${{
+    cards || '<div class="gal-empty">No photos yet — add one and it will show up here.</div>'
+  }}</div>`;
+  el.querySelectorAll('.gal-card').forEach(c =>
+    c.addEventListener('click', () => openLightboxList(playlist, startAt[c.dataset.id]))
+  );
+}}
+
+// ── Header sub menu ──
+const menuPop = document.getElementById('menu-pop');
+document.getElementById('menu-btn').addEventListener('click', e => {{
+  e.stopPropagation();
+  menuPop.classList.toggle('hidden');
+}});
+document.addEventListener('click', e => {{
+  if (!menuPop.classList.contains('hidden') && !e.target.closest('.menu-wrap'))
+    menuPop.classList.add('hidden');
+}});
+document.getElementById('menu-care').addEventListener('click', () =>
+  menuPop.classList.add('hidden')  // already on the checklist
+);
+document.getElementById('menu-gallery').addEventListener('click', () => {{
+  menuPop.classList.add('hidden');
+  location.hash = 'gallery';  // hashchange handler renders the gallery
+}});
+document.getElementById('gal-back-btn').addEventListener('click', () => {{
+  // Same pattern as the detail back button: clear the hash, show the list.
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  showList();
+}});
 
 function goTo(i, dir) {{
   if (i < 0 || i >= P.length) return;
@@ -1090,11 +1260,18 @@ scr.addEventListener('touchend', e => {{
 
 // Arrow keys / Escape
 document.addEventListener('keydown', e => {{
-  // While the full-screen photo viewer is up, Escape closes it (and it swallows
-  // the other keys so they don't page the underlying detail view).
+  // While the full-screen photo viewer is up, Escape closes it and the arrows
+  // step the slideshow (a no-op on a single photo). Other keys are swallowed
+  // so they don't page the underlying detail view.
   const lb = document.getElementById('lightbox');
   if (lb.isShown && lb.isShown()) {{
-    if (e.key === 'Escape') lb.close();
+    if (e.key === 'Escape')     lb.close();
+    if (e.key === 'ArrowRight') lb.nav(1);
+    if (e.key === 'ArrowLeft')  lb.nav(-1);
+    return;
+  }}
+  if (galleryShown()) {{
+    if (e.key === 'Escape') document.getElementById('gal-back-btn').click();
     return;
   }}
   if (document.getElementById('detail-view').classList.contains('hidden')) return;
@@ -1108,15 +1285,22 @@ document.addEventListener('keydown', e => {{
 // with transform-origin 0 0, so viewport coords map straight to the element and
 // the focal-point zoom math stays simple. Supports pinch (touch), wheel and
 // double-tap/double-click to zoom, and drag to pan while zoomed.
-const lightboxOpen = (() => {{
+const LB = (() => {{
   const lb = document.getElementById('lightbox');
   const img = document.getElementById('lb-img');
   const hint = document.getElementById('lb-hint');
+  const cap = document.getElementById('lb-cap');
+  const prevB = document.getElementById('lb-prev');
+  const nextB = document.getElementById('lb-next');
   const MIN = 1, MAX = 6;
   let scale = 1, tx = 0, ty = 0;
   const pts = new Map();              // active pointers
   let pinchDist = 0, pinchScale = 1;  // gesture baselines
   let lastTap = 0;
+  // Slideshow mode (opened from the gallery): a flat playlist of photos to
+  // step through. Null when opened on a single photo from the detail view.
+  let list = null, li = 0;
+  let swipe = null;                   // start point of a potential swipe
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const apply = () => {{ img.style.transform = `translate(${{tx}}px,${{ty}}px) scale(${{scale}})`; }};
@@ -1140,9 +1324,29 @@ const lightboxOpen = (() => {{
 
   function reset() {{ scale = 1; tx = 0; ty = 0; clampPan(); apply(); }}
 
-  function open(src, alt) {{
-    img.src = src; img.alt = alt || '';
+  function updateNav() {{
+    prevB.classList.toggle('hidden', !list || li === 0);
+    nextB.classList.toggle('hidden', !list || li === list.length - 1);
+  }}
+
+  function setItem() {{
+    const it = list[li];
+    img.src = it.src; img.alt = it.cap || '';
+    cap.textContent = it.cap || '';
+    cap.classList.toggle('hidden', !it.cap);
+    updateNav();
     reset();
+  }}
+
+  function nav(d) {{
+    if (!list) return;
+    const n = li + d;
+    if (n < 0 || n >= list.length) return;
+    li = n;
+    setItem();
+  }}
+
+  function present() {{
     lb.classList.add('show');
     lb.setAttribute('aria-hidden', 'false');
     hint.style.opacity = '1';
@@ -1150,13 +1354,32 @@ const lightboxOpen = (() => {{
     hint._t = setTimeout(() => {{ hint.style.opacity = '0'; }}, 2200);
   }}
 
+  function open(src, alt) {{
+    list = null;
+    img.src = src; img.alt = alt || '';
+    cap.classList.add('hidden');
+    updateNav();
+    reset();
+    present();
+  }}
+
+  function openList(arr, idx) {{
+    if (!arr || !arr.length) return;
+    list = arr;
+    li = Math.max(0, Math.min(arr.length - 1, idx || 0));
+    setItem();
+    present();
+  }}
+
   function close() {{
     lb.classList.remove('show');
     lb.setAttribute('aria-hidden', 'true');
     pts.clear();
+    swipe = null;
   }}
   lb.isShown = () => lb.classList.contains('show');
   lb.close = close;
+  lb.nav = nav;
 
   // Two-finger helpers.
   const two = () => [...pts.values()];
@@ -1165,7 +1388,10 @@ const lightboxOpen = (() => {{
 
   lb.addEventListener('pointerdown', e => {{
     pts.set(e.pointerId, {{x: e.clientX, y: e.clientY}});
-    lb.setPointerCapture(e.pointerId);
+    // Arm a slideshow swipe only for a single, unzoomed touch.
+    swipe = (list && pts.size === 1 && scale <= 1.05)
+      ? {{x: e.clientX, y: e.clientY}} : null;
+    try {{ lb.setPointerCapture(e.pointerId); }} catch (err) {{}}
     if (pts.size === 2) {{ pinchDist = dist(); pinchScale = scale; }}
   }});
 
@@ -1189,8 +1415,19 @@ const lightboxOpen = (() => {{
     pts.delete(e.pointerId);
     if (pts.size < 2) pinchDist = 0;
   }}
-  lb.addEventListener('pointerup', endPointer);
-  lb.addEventListener('pointercancel', endPointer);
+  lb.addEventListener('pointerup', e => {{
+    // Slideshow swipe: single unzoomed touch, mostly-horizontal, past threshold.
+    if (swipe && pts.size === 1 && scale <= 1.05) {{
+      const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5) {{
+        nav(dx < 0 ? 1 : -1);
+        lastTap = 0;  // a swipe isn't a tap — don't feed double-tap zoom
+      }}
+    }}
+    swipe = null;
+    endPointer(e);
+  }});
+  lb.addEventListener('pointercancel', e => {{ swipe = null; endPointer(e); }});
 
   // Double-tap (touch) to toggle zoom around the tap point.
   lb.addEventListener('pointerup', e => {{
@@ -1217,10 +1454,13 @@ const lightboxOpen = (() => {{
   // Tap the backdrop (not the photo) to close.
   lb.addEventListener('click', e => {{ if (e.target === lb) close(); }});
   document.getElementById('lb-close').addEventListener('click', close);
+  prevB.addEventListener('click', e => {{ e.stopPropagation(); nav(-1); }});
+  nextB.addEventListener('click', e => {{ e.stopPropagation(); nav(1); }});
 
-  return open;
+  return {{open, openList}};
 }})();
-function openLightbox(src, alt) {{ lightboxOpen(src, alt); }}
+function openLightbox(src, alt) {{ LB.open(src, alt); }}
+function openLightboxList(list, idx) {{ LB.openList(list, idx); }}
 
 buildList();
 applyHash();  // honor a shared/bookmarked #plant-id deep link on load
