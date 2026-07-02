@@ -37,6 +37,8 @@ ICON_PATHS = {
     "x": '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
     "chevron-right": '<path d="m9 18 6-6-6-6"/>',
     "chevron-left": '<path d="m15 18-6-6 6-6"/>',
+    "chevron-up": '<path d="m18 15-6-6-6 6"/>',
+    "chevron-down": '<path d="m6 9 6 6 6-6"/>',
     "arrow-left": '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
     "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
     "clipboard": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
@@ -564,20 +566,23 @@ def render(results, today):
                 background: rgba(0,0,0,.4); padding: .35rem .8rem; border-radius: var(--radius-pill);
                 transition: opacity .3s ease; }}
     /* Slideshow chrome (only shown when the viewer is opened from the gallery):
-       a caption naming the plant, and prev/next arrows for non-touch use. */
+       a caption naming the plant, ←/→ arrows to change plant, and ↑/↓ arrows to
+       move through the plant's photo history (newest at the top, older below). */
     .lb-cap {{ position: fixed; top: calc(.9rem + env(safe-area-inset-top)); left: 50%;
                transform: translateX(-50%); z-index: 101; pointer-events: none;
                max-width: calc(100% - 7.5rem); white-space: nowrap; overflow: hidden;
                text-overflow: ellipsis; color: #fff; font-size: .85rem; font-weight: 700;
                background: rgba(0,0,0,.45); padding: .4rem .9rem;
                border-radius: var(--radius-pill); }}
-    .lb-nav {{ position: fixed; top: 50%; transform: translateY(-50%); z-index: 101;
+    .lb-nav {{ position: fixed; z-index: 101;
                width: 42px; height: 42px; border-radius: 50%; border: none;
                background: rgba(255,255,255,.18); color: #fff; font-size: 1.2rem;
                cursor: pointer; display: flex; align-items: center; justify-content: center; }}
     .lb-nav:active {{ background: rgba(255,255,255,.34); }}
-    .lb-prev {{ left: .7rem; }}
-    .lb-next {{ right: .7rem; }}
+    .lb-prev {{ left: .7rem; top: 50%; transform: translateY(-50%); }}
+    .lb-next {{ right: .7rem; top: 50%; transform: translateY(-50%); }}
+    .lb-up   {{ left: 50%; transform: translateX(-50%); top: calc(3.6rem + env(safe-area-inset-top)); }}
+    .lb-down {{ left: 50%; transform: translateX(-50%); bottom: calc(3.6rem + env(safe-area-inset-bottom)); }}
 
     /* ── Check-off toggles (list rows) ── */
     .chk {{ width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
@@ -699,8 +704,10 @@ def render(results, today):
   <img id="lb-img" alt="">
   <button class="lb-close" id="lb-close" aria-label="Close photo">{icon('x')}</button>
   <div class="lb-cap hidden" id="lb-cap"></div>
-  <button class="lb-nav lb-prev hidden" id="lb-prev" aria-label="Previous photo">{icon('chevron-left')}</button>
-  <button class="lb-nav lb-next hidden" id="lb-next" aria-label="Next photo">{icon('chevron-right')}</button>
+  <button class="lb-nav lb-prev hidden" id="lb-prev" aria-label="Previous plant">{icon('chevron-left')}</button>
+  <button class="lb-nav lb-next hidden" id="lb-next" aria-label="Next plant">{icon('chevron-right')}</button>
+  <button class="lb-nav lb-up hidden" id="lb-up" aria-label="Newer photo">{icon('chevron-up')}</button>
+  <button class="lb-nav lb-down hidden" id="lb-down" aria-label="Older photo">{icon('chevron-down')}</button>
   <div class="lb-hint" id="lb-hint">Pinch, double-tap, or scroll to zoom</div>
 </div>
 
@@ -1055,9 +1062,10 @@ function initGallery(root) {{
 
 // ── Gallery view (show-off mode) ──
 // One tile per plant showing its newest photo — no chores, no status. Tapping
-// a tile opens the full-screen viewer in slideshow mode over that same set
-// (one photo per plant, its latest), so from one tap you can swipe through
-// the whole collection at its current best.
+// a tile opens the full-screen viewer in slideshow mode: swipe sideways to
+// move between plants (always landing on a plant's newest photo), swipe
+// up/down to move through that plant's photo history (newest first, older
+// photos "below").
 function buildGallery() {{
   // P is ordered needs-attention-first for the checklist; that ordering is
   // meaningless (and shuffles daily) in a gallery, so sort by display name.
@@ -1066,11 +1074,11 @@ function buildGallery() {{
   document.getElementById('gal-sub').textContent =
     `${{withPhotos.length}} plant${{withPhotos.length === 1 ? '' : 's'}}`;
 
-  // Slideshow playlist: each plant's latest photo, in card order.
-  const playlist = withPhotos.map(p => {{
-    const ph = p.photos[p.photos.length - 1];
-    return {{src: ph.src, cap: (p.nickname || p.name) + (ph.label ? ' · ' + ph.label : '')}};
-  }});
+  // Slideshow playlist: one entry per plant, photos newest → oldest.
+  const playlist = withPhotos.map(p => ({{
+    name: p.nickname || p.name,
+    photos: [...p.photos].reverse().map(ph => ({{src: ph.src, label: ph.label}})),
+  }}));
 
   const cards = withPhotos.map((p, i) => {{
     const latest = p.photos[p.photos.length - 1];
@@ -1257,6 +1265,8 @@ document.addEventListener('keydown', e => {{
     if (e.key === 'Escape')     lb.close();
     if (e.key === 'ArrowRight') lb.nav(1);
     if (e.key === 'ArrowLeft')  lb.nav(-1);
+    if (e.key === 'ArrowUp')    lb.navV(-1);   // newer
+    if (e.key === 'ArrowDown')  lb.navV(1);    // older
     return;
   }}
   if (galleryShown()) {{
@@ -1281,14 +1291,18 @@ const LB = (() => {{
   const cap = document.getElementById('lb-cap');
   const prevB = document.getElementById('lb-prev');
   const nextB = document.getElementById('lb-next');
+  const upB = document.getElementById('lb-up');
+  const downB = document.getElementById('lb-down');
   const MIN = 1, MAX = 6;
   let scale = 1, tx = 0, ty = 0;
   const pts = new Map();              // active pointers
   let pinchDist = 0, pinchScale = 1;  // gesture baselines
   let lastTap = 0;
-  // Slideshow mode (opened from the gallery): a flat playlist of photos to
-  // step through. Null when opened on a single photo from the detail view.
-  let list = null, li = 0;
+  // Slideshow mode (opened from the gallery): a playlist of plants, each with
+  // its photos newest → oldest. `li` picks the plant (horizontal axis), `pi`
+  // the photo within its history (vertical axis; 0 = newest, older "below").
+  // Null when opened on a single photo from the detail view.
+  let list = null, li = 0, pi = 0;
   let swipe = null;                   // start point of a potential swipe
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -1314,33 +1328,51 @@ const LB = (() => {{
   function reset() {{ scale = 1; tx = 0; ty = 0; clampPan(); apply(); }}
 
   function updateNav() {{
+    const nPhotos = list ? list[li].photos.length : 0;
     prevB.classList.toggle('hidden', !list || li === 0);
     nextB.classList.toggle('hidden', !list || li === list.length - 1);
+    upB.classList.toggle('hidden', !list || pi === 0);
+    downB.classList.toggle('hidden', !list || pi === nPhotos - 1);
   }}
 
   function setItem() {{
-    const it = list[li];
-    img.src = it.src; img.alt = it.cap || '';
-    cap.textContent = it.cap || '';
-    cap.classList.toggle('hidden', !it.cap);
+    const pl = list[li];
+    const ph = pl.photos[pi];
+    let text = pl.name;
+    if (ph.label) text += ' · ' + ph.label;
+    if (pl.photos.length > 1) text += ` · ${{pi + 1}}/${{pl.photos.length}}`;
+    img.src = ph.src; img.alt = text;
+    cap.textContent = text;
+    cap.classList.remove('hidden');
     updateNav();
     reset();
   }}
 
+  // Horizontal: change plant, always landing on its newest photo.
   function nav(d) {{
     if (!list) return;
     const n = li + d;
     if (n < 0 || n >= list.length) return;
-    li = n;
+    li = n; pi = 0;
     setItem();
   }}
 
-  function present() {{
+  // Vertical: move through the current plant's history (+1 = older, "below").
+  function navV(d) {{
+    if (!list) return;
+    const n = pi + d;
+    if (n < 0 || n >= list[li].photos.length) return;
+    pi = n;
+    setItem();
+  }}
+
+  function present(hintText) {{
+    hint.textContent = hintText;
     lb.classList.add('show');
     lb.setAttribute('aria-hidden', 'false');
     hint.style.opacity = '1';
     clearTimeout(hint._t);
-    hint._t = setTimeout(() => {{ hint.style.opacity = '0'; }}, 2200);
+    hint._t = setTimeout(() => {{ hint.style.opacity = '0'; }}, 2600);
   }}
 
   function open(src, alt) {{
@@ -1349,15 +1381,16 @@ const LB = (() => {{
     cap.classList.add('hidden');
     updateNav();
     reset();
-    present();
+    present('Pinch, double-tap, or scroll to zoom');
   }}
 
   function openList(arr, idx) {{
     if (!arr || !arr.length) return;
     list = arr;
     li = Math.max(0, Math.min(arr.length - 1, idx || 0));
+    pi = 0;  // always open on the newest photo
     setItem();
-    present();
+    present('Swipe sideways for plants · up for older photos');
   }}
 
   function close() {{
@@ -1369,6 +1402,7 @@ const LB = (() => {{
   lb.isShown = () => lb.classList.contains('show');
   lb.close = close;
   lb.nav = nav;
+  lb.navV = navV;
 
   // Two-finger helpers.
   const two = () => [...pts.values()];
@@ -1405,12 +1439,17 @@ const LB = (() => {{
     if (pts.size < 2) pinchDist = 0;
   }}
   lb.addEventListener('pointerup', e => {{
-    // Slideshow swipe: single unzoomed touch, mostly-horizontal, past threshold.
+    // Slideshow swipes: single unzoomed touch past a threshold. Horizontal
+    // changes plant; vertical moves through the plant's history — swiping up
+    // pulls the next-older photo into view (older photos sit "below").
     if (swipe && pts.size === 1 && scale <= 1.05) {{
       const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
       if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5) {{
         nav(dx < 0 ? 1 : -1);
         lastTap = 0;  // a swipe isn't a tap — don't feed double-tap zoom
+      }} else if (Math.abs(dy) > 55 && Math.abs(dy) > Math.abs(dx) * 1.5) {{
+        navV(dy < 0 ? 1 : -1);
+        lastTap = 0;
       }}
     }}
     swipe = null;
@@ -1445,6 +1484,8 @@ const LB = (() => {{
   document.getElementById('lb-close').addEventListener('click', close);
   prevB.addEventListener('click', e => {{ e.stopPropagation(); nav(-1); }});
   nextB.addEventListener('click', e => {{ e.stopPropagation(); nav(1); }});
+  upB.addEventListener('click', e => {{ e.stopPropagation(); navV(-1); }});
+  downB.addEventListener('click', e => {{ e.stopPropagation(); navV(1); }});
 
   return {{open, openList}};
 }})();
