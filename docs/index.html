@@ -256,11 +256,6 @@
                  background: linear-gradient(transparent, rgba(0,0,0,.68));
                  color: #fff; font-weight: 700; font-size: .88rem; letter-spacing: -.01em;
                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .gal-count { position: absolute; top: .5rem; right: .5rem; z-index: 1;
-                  display: inline-flex; align-items: center; gap: .3rem;
-                  background: rgba(0,0,0,.55); color: #fff; font-size: .7rem;
-                  font-weight: 700; padding: .24rem .55rem;
-                  border-radius: var(--radius-pill); }
     .gal-empty { padding: 3.5rem 1.5rem; text-align: center; color: var(--text-2);
                   font-size: .9rem; grid-column: 1 / -1; }
 
@@ -774,9 +769,9 @@ function initGallery(root) {
 
 // ── Gallery view (show-off mode) ──
 // One tile per plant showing its newest photo — no chores, no status. Tapping
-// a tile opens the full-screen viewer in slideshow mode over every photo of
-// every plant (newest first within a plant), so from one tap you can swipe
-// through the whole collection.
+// a tile opens the full-screen viewer in slideshow mode over that same set
+// (one photo per plant, its latest), so from one tap you can swipe through
+// the whole collection at its current best.
 function buildGallery() {
   // P is ordered needs-attention-first for the checklist; that ordering is
   // meaningless (and shuffles daily) in a gallery, so sort by display name.
@@ -785,23 +780,17 @@ function buildGallery() {
   document.getElementById('gal-sub').textContent =
     `${withPhotos.length} plant${withPhotos.length === 1 ? '' : 's'}`;
 
-  // Flattened slideshow playlist + each plant's starting index within it.
-  const playlist = [];
-  const startAt = {};
-  withPhotos.forEach(p => {
-    startAt[p.id] = playlist.length;
-    [...p.photos].reverse().forEach(ph =>   // newest → oldest within a plant
-      playlist.push({src: ph.src, cap: (p.nickname || p.name) + (ph.label ? ' · ' + ph.label : '')}));
+  // Slideshow playlist: each plant's latest photo, in card order.
+  const playlist = withPhotos.map(p => {
+    const ph = p.photos[p.photos.length - 1];
+    return {src: ph.src, cap: (p.nickname || p.name) + (ph.label ? ' · ' + ph.label : '')};
   });
 
-  const cards = withPhotos.map(p => {
+  const cards = withPhotos.map((p, i) => {
     const latest = p.photos[p.photos.length - 1];
-    const count = p.photos.length > 1
-      ? `<span class="gal-count">${icon('images')} ${p.photos.length}</span>` : '';
-    return `<div class="gal-card" data-id="${p.id}">
+    return `<div class="gal-card" data-i="${i}">
       ${icon('leaf')}
       <img src="${latest.src}" alt="${p.name}" loading="lazy" onerror="this.remove()">
-      ${count}
       <div class="gal-name">${p.nickname || p.name}</div>
     </div>`;
   }).join('');
@@ -811,7 +800,7 @@ function buildGallery() {
     cards || '<div class="gal-empty">No photos yet — add one and it will show up here.</div>'
   }</div>`;
   el.querySelectorAll('.gal-card').forEach(c =>
-    c.addEventListener('click', () => openLightboxList(playlist, startAt[c.dataset.id]))
+    c.addEventListener('click', () => openLightboxList(playlist, +c.dataset.i))
   );
 }
 
