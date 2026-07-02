@@ -3,6 +3,7 @@ name: Update Plant Care Report
 on:
   push:
     branches: [main]
+  workflow_dispatch:  # allow kicking a rebuild by hand (e.g. after a Pages deploy hiccup)
 
 permissions:
   contents: write
