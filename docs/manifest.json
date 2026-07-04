@@ -3,8 +3,8 @@
   "short_name": "Plants",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#eef1ef",
-  "theme_color": "#064e3b",
+  "background_color": "#e9efeb",
+  "theme_color": "#e9efeb",
   "icons": [
     {
       "src": "icon-192.png",
