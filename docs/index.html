@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Plant Care</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#064e3b" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#053a2b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#e9efeb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0e0c" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Plant Care">
@@ -14,42 +14,61 @@
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #eef1ef; --surface: #ffffff; --surface-2: #f3f5f4;
-      --border: #e4e8e6;
-      --shadow: 0 1px 2px rgba(16,24,20,.05), 0 6px 16px rgba(16,24,20,.06);
-      --shadow-up: 0 -1px 16px rgba(16,24,20,.07);
-      --text: #111714; --text-2: #5d6a64; --text-3: #aeb6b1;
+      /* Liquid-glass material system: translucent surfaces over an ambient
+         color field, frosted with backdrop blur + saturation, edged with a
+         hairline and a specular top rim. */
+      --bg: #e9efeb;
+      --surface: rgba(255,255,255,.6);
+      --surface-2: rgba(255,255,255,.5);
+      --edge: rgba(15,23,19,.08);
+      --glass: rgba(244,248,246,.55);
+      --glass-strong: rgba(248,251,249,.72);
+      --glass-rim: rgba(255,255,255,.65);
+      --chip: rgba(15,23,19,.05);
+      --chip-press: rgba(15,23,19,.12);
+      --blur: blur(22px) saturate(1.8);
+      --blur-card: blur(14px) saturate(1.5);
+      --shadow: 0 1px 1px rgba(16,24,20,.04), 0 10px 30px rgba(16,24,20,.08);
+      --shadow-float: 0 2px 6px rgba(16,24,20,.06), 0 16px 40px rgba(16,24,20,.16);
+      --text: #101713; --text-2: #56635d; --text-3: #9aa69f;
       --accent: #059669; --accent-press: #047857; --on-accent: #ffffff;
-      --accent-shadow: 0 6px 18px rgba(5,150,105,.32);
-      --header-bg: linear-gradient(135deg, #064e3b 0%, #0a7d59 100%);
-      --warn: #f59e0b; --warn-bg: #fff3df; --warn-text: #8a3a05;
-      --info: #3b82f6; --info-bg: #e7eeff; --info-text: #1d4ed8;
-      --ok: #10b981; --ok-bg: #e1f6ee; --ok-text: #047857;
+      --accent-grad: linear-gradient(135deg, #10b981, #047857);
+      --accent-shadow: 0 8px 24px rgba(5,150,105,.35);
+      --warn: #f59e0b; --warn-bg: rgba(245,158,11,.14); --warn-text: #8a4a05;
+      --info: #3b82f6; --info-bg: rgba(59,130,246,.12); --info-text: #1d4ed8;
+      --ok: #10b981; --ok-bg: rgba(16,185,129,.14); --ok-text: #047857;
       --ok-solid: #059669; --info-solid: #2563eb;
-      --paused: #9aa7a1; --paused-bg: #eef1ef; --paused-text: #6b766f;
-      --danger: #ef4444; --danger-bg: #fce8ea; --danger-text: #be123c;
-      --note-bg: #fff8e6; --note-border: #f59e0b; --note-text: #7a5e16;
-      --toast-bg: #16201c; --toast-text: #f2f5f3;
-      --radius: 16px; --radius-sm: 12px; --radius-pill: 999px;
+      --paused: #93a19a; --paused-bg: rgba(120,134,127,.1); --paused-text: #67736c;
+      --danger: #ef4444; --danger-bg: rgba(239,68,68,.12); --danger-text: #be123c;
+      --note-bg: rgba(245,158,11,.1); --note-border: #f59e0b; --note-text: #7a5e16;
+      --toast-bg: rgba(18,26,22,.78); --toast-text: #f2f5f3;
+      --radius: 20px; --radius-sm: 14px; --radius-pill: 999px;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0c100e; --surface: #161d19; --surface-2: #1e2622;
-        --border: rgba(255,255,255,.09);
-        --shadow: 0 1px 2px rgba(0,0,0,.5), 0 8px 20px rgba(0,0,0,.4);
-        --shadow-up: 0 -2px 18px rgba(0,0,0,.45);
-        --text: #e9efec; --text-2: #93a29b; --text-3: #5e6a64;
+        --bg: #0a0e0c;
+        --surface: rgba(30,40,34,.5);
+        --surface-2: rgba(255,255,255,.06);
+        --edge: rgba(255,255,255,.09);
+        --glass: rgba(16,22,19,.55);
+        --glass-strong: rgba(22,30,25,.75);
+        --glass-rim: rgba(255,255,255,.1);
+        --chip: rgba(255,255,255,.08);
+        --chip-press: rgba(255,255,255,.16);
+        --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.45);
+        --shadow-float: 0 2px 8px rgba(0,0,0,.4), 0 18px 48px rgba(0,0,0,.55);
+        --text: #e9efec; --text-2: #94a29b; --text-3: #5e6a64;
         --accent: #10b981; --accent-press: #0c9a6c; --on-accent: #04130d;
-        --accent-shadow: 0 6px 20px rgba(16,185,129,.28);
-        --header-bg: linear-gradient(135deg, #053a2b 0%, #066a4b 100%);
-        --warn: #fbbf24; --warn-bg: rgba(251,191,36,.14); --warn-text: #fcd34d;
-        --info: #60a5fa; --info-bg: rgba(96,165,250,.15); --info-text: #93c5fd;
-        --ok: #34d399; --ok-bg: rgba(52,211,153,.15); --ok-text: #6ee7b7;
+        --accent-grad: linear-gradient(135deg, #12c48c, #059669);
+        --accent-shadow: 0 8px 26px rgba(16,185,129,.3);
+        --warn: #fbbf24; --warn-bg: rgba(251,191,36,.15); --warn-text: #fcd34d;
+        --info: #60a5fa; --info-bg: rgba(96,165,250,.16); --info-text: #93c5fd;
+        --ok: #34d399; --ok-bg: rgba(52,211,153,.16); --ok-text: #6ee7b7;
         --ok-solid: #047857; --info-solid: #1d4ed8;
-        --paused: #6b766f; --paused-bg: rgba(255,255,255,.05); --paused-text: #9aa7a1;
-        --danger: #f87171; --danger-bg: rgba(248,113,113,.15); --danger-text: #fca5a5;
+        --paused: #6b766f; --paused-bg: rgba(255,255,255,.06); --paused-text: #9aa7a1;
+        --danger: #f87171; --danger-bg: rgba(248,113,113,.16); --danger-text: #fca5a5;
         --note-bg: rgba(251,191,36,.1); --note-border: #fbbf24; --note-text: #e6d6a8;
-        --toast-bg: #eef1ef; --toast-text: #15201c;
+        --toast-bg: rgba(238,241,239,.9); --toast-text: #15201c;
       }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -73,53 +92,83 @@
     .copy-btn, .d-chk { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }
     .badge .ic, .d-loc .ic, .row-loc .ic, .bar-count .ic { vertical-align: -.15em; }
     html, body { height: 100%; overflow: hidden; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', 'Inter', sans-serif;
             background: var(--bg); color: var(--text);
             -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    /* Ambient color field: soft green/sky/amber blooms behind every view so
+       the glass surfaces have something to refract. */
+    body::before { content: ''; position: fixed; inset: -10%; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(55% 45% at 14% 6%, rgba(16,185,129,.2), transparent 62%),
+        radial-gradient(45% 38% at 88% 10%, rgba(56,189,248,.16), transparent 60%),
+        radial-gradient(60% 50% at 78% 92%, rgba(245,158,11,.12), transparent 62%),
+        radial-gradient(50% 45% at 8% 90%, rgba(16,185,129,.1), transparent 60%),
+        var(--bg); }
+    @media (prefers-color-scheme: dark) {
+      body::before { background:
+        radial-gradient(55% 45% at 14% 6%, rgba(16,185,129,.14), transparent 62%),
+        radial-gradient(45% 38% at 88% 10%, rgba(56,189,248,.1), transparent 60%),
+        radial-gradient(60% 50% at 78% 92%, rgba(245,158,11,.07), transparent 62%),
+        var(--bg); }
+    }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
 
     /* ── Views ── */
     .view { position: fixed; inset: 0; display: flex; flex-direction: column; }
 
-    /* ── Header ── */
-    .hdr { background: var(--header-bg); color: #fff;
+    /* ── Header: frosted glass bar the content scrolls beneath ── */
+    .hdr { position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+            background: var(--glass);
+            -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--edge);
+            box-shadow: inset 0 1px 0 var(--glass-rim);
+            color: var(--text);
             display: flex; align-items: center; gap: .65rem;
-            padding: calc(.95rem + env(safe-area-inset-top)) 1.1rem .95rem;
-            flex-shrink: 0; position: relative; z-index: 2; }
+            padding: calc(.8rem + env(safe-area-inset-top)) 1.1rem .8rem; }
     .hdr-title { flex: 1; font-size: 1.15rem; font-weight: 800; min-width: 0;
                   letter-spacing: -.02em;
                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hdr-title .ic { color: var(--accent); }
     .hdr-sub { font-size: .68rem; font-weight: 700; letter-spacing: .06em;
                 text-transform: uppercase; white-space: nowrap;
-                background: rgba(255,255,255,.18); color: #fff;
+                background: var(--ok-bg); color: var(--ok-text);
+                border: 1px solid rgba(16,185,129,.25);
                 padding: .3rem .6rem; border-radius: var(--radius-pill); }
-    .back-btn { background: rgba(255,255,255,.16); border: none; color: #fff;
-                 border-radius: 10px; padding: .42rem .8rem; font-size: .85rem;
+    .back-btn { background: var(--chip); border: 1px solid var(--edge); color: var(--text);
+                 border-radius: var(--radius-pill); padding: .42rem .85rem; font-size: .85rem;
                  font-weight: 600; cursor: pointer; flex-shrink: 0; }
-    .back-btn:active { background: rgba(255,255,255,.32); }
-    .icon-btn { padding: .42rem .58rem; line-height: 1; }
+    .back-btn:active { background: var(--chip-press); }
+    .icon-btn { padding: .42rem .6rem; line-height: 1; }
 
     /* ── List ── */
     #list-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                    padding-bottom: .4rem; }
+                    padding: calc(3.7rem + env(safe-area-inset-top)) 0
+                             calc(6.4rem + env(safe-area-inset-bottom)); }
     .sec-label { font-size: .7rem; font-weight: 800; letter-spacing: .09em;
                   text-transform: uppercase; color: var(--text-2);
                   padding: 1.1rem 1.15rem .4rem; }
     .sec-label.warn { color: var(--warn-text); }
     .row { position: relative; display: flex; align-items: center; gap: .6rem;
-            background: var(--surface); border: 1px solid var(--border);
+            background: var(--surface);
+            -webkit-backdrop-filter: var(--blur-card); backdrop-filter: var(--blur-card);
+            border: 1px solid var(--edge);
             margin: .45rem .8rem; border-radius: var(--radius);
-            padding: .9rem .8rem; cursor: pointer; box-shadow: var(--shadow);
-            transition: transform .12s ease, background .12s ease; }
-    .row:active { transform: scale(.988); background: var(--surface-2); }
-    .row.urgent::before { content: ''; position: absolute; left: 0; top: 13px; bottom: 13px;
+            padding: .9rem .8rem; cursor: pointer;
+            box-shadow: var(--shadow), inset 0 1px 0 var(--glass-rim);
+            transition: transform .12s ease, background .12s ease, box-shadow .12s ease; }
+    .row:active { transform: scale(.988); background: var(--glass-strong); }
+    .row.urgent::before { content: ''; position: absolute; left: 0; top: 15px; bottom: 15px;
                            width: 4px; border-radius: 0 4px 4px 0; background: var(--warn); }
     /* Small uniform thumbnail docked at the far left. A leaf icon sits behind
        as the placeholder; the photo covers it when loaded and removes itself on
        error, falling back to the leaf. Sized to keep the row compact. */
     .row-avatar { position: relative; width: 40px; height: 40px; flex-shrink: 0;
-                   border-radius: 11px; overflow: hidden; display: flex;
+                   border-radius: 13px; overflow: hidden; display: flex;
                    align-items: center; justify-content: center; font-size: 1.2rem;
-                   background: var(--surface-2); border: 1px solid var(--border); }
+                   background: var(--chip); border: 1px solid var(--edge); }
     .row-avatar img { position: absolute; inset: 0; width: 100%; height: 100%;
                        object-fit: cover; }
     /* Cutout thumbnails are transparent: let the card color show through and
@@ -133,23 +182,23 @@
                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .row-needs { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .4rem; }
     .need-chip { font-size: .7rem; font-weight: 700; letter-spacing: -.01em;
-                  padding: .16rem .5rem; border-radius: var(--radius-sm);
+                  padding: .18rem .55rem; border-radius: var(--radius-pill);
                   display: inline-flex; align-items: center; gap: .25rem;
                   border: 1px solid transparent; max-width: 100%; }
     .need-chip.water,
     .need-chip.fert    { background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }
     .need-chip.unknown { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger); }
-    .need-chip.soon    { background: var(--paused-bg); color: var(--paused-text); border-color: var(--border); }
+    .need-chip.soon    { background: var(--paused-bg); color: var(--paused-text); border-color: var(--edge); }
     .row-dots { display: flex; gap: .25rem; flex-shrink: 0; }
     .chevron { color: var(--text-3); font-size: 1.05rem; flex-shrink: 0; margin-left: 0; }
 
     /* ── Detail ── */
     #detail-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                      padding: 1.1rem .9rem 6rem; }
+                      padding: calc(4rem + env(safe-area-inset-top)) .9rem 7rem; }
     .d-name { font-size: 1.2rem; font-weight: 800; color: var(--text);
                margin-bottom: .3rem; letter-spacing: -.02em; line-height: 1.2; }
     .d-loc { font-size: .82rem; color: var(--text-2); margin-bottom: 1rem; }
-    .badge { padding: .5rem .75rem; border-radius: var(--radius-sm); margin: .35rem 0;
+    .badge { padding: .55rem .8rem; border-radius: var(--radius-sm); margin: .35rem 0;
               font-size: .85rem; line-height: 1.4; font-weight: 500; border-left: 3px solid; }
     .badge.check   { background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }
     .badge.due     { background: var(--info-bg);   color: var(--info-text);   border-color: var(--info); }
@@ -164,17 +213,20 @@
     .notes ul { margin-left: 1.1rem; margin-top: .5rem; }
     .notes li { margin: .55rem 0; line-height: 1.6; }
 
-    /* ── Detail nav bar ── */
-    .d-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex;
-              align-items: center; gap: .75rem; background: var(--surface);
-              border-top: 1px solid var(--border);
-              padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-              box-shadow: var(--shadow-up); }
-    .nav-btn { background: var(--surface-2); border: 1px solid var(--border);
-                color: var(--text); border-radius: var(--radius-sm);
+    /* ── Detail nav bar: floating glass pill ── */
+    .d-nav { position: absolute; left: .8rem; right: .8rem; z-index: 15;
+              bottom: calc(.75rem + env(safe-area-inset-bottom));
+              display: flex; align-items: center; gap: .75rem;
+              background: var(--glass-strong);
+              -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+              border: 1px solid var(--edge); border-radius: 26px;
+              box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim);
+              padding: .55rem .6rem; }
+    .nav-btn { background: var(--chip); border: 1px solid var(--edge);
+                color: var(--text); border-radius: var(--radius-pill);
                 padding: .55rem 1.1rem; font-size: 1rem; font-weight: 700;
                 cursor: pointer; flex-shrink: 0; }
-    .nav-btn:active { background: var(--bg); }
+    .nav-btn:active { background: var(--chip-press); }
     .nav-btn:disabled { opacity: .3; pointer-events: none; }
     .nav-hint { flex: 1; font-size: .73rem; color: var(--text-2); text-align: center;
                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -183,24 +235,29 @@
     .gallery { position: relative; margin-bottom: 1rem; }
     .gallery-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
                       -webkit-overflow-scrolling: touch; border-radius: var(--radius);
-                      border: 1px solid var(--border); background: var(--surface-2);
+                      border: 1px solid var(--edge); background: var(--surface-2);
+                      box-shadow: var(--shadow);
                       scrollbar-width: none; }
     .gallery-track::-webkit-scrollbar { display: none; }
     .slide { position: relative; flex: 0 0 100%; scroll-snap-align: center; }
     .plant-photo { width: 100%; height: 260px; object-fit: cover; display: block;
                     background: var(--surface-2); }
     .photo-date { position: absolute; right: .55rem; bottom: .55rem;
-                   background: rgba(0,0,0,.58); color: #fff; font-size: .72rem; font-weight: 700;
+                   background: rgba(0,0,0,.4); color: #fff; font-size: .72rem; font-weight: 700;
+                   -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
+                   border: 1px solid rgba(255,255,255,.18);
                    padding: .26rem .58rem; border-radius: var(--radius-pill);
                    letter-spacing: .02em; }
     .g-nav { position: absolute; top: 50%; transform: translateY(-50%);
-              width: 34px; height: 34px; border-radius: 50%; border: none;
-              background: rgba(0,0,0,.42); color: #fff; font-size: 1.4rem; line-height: 1;
+              width: 34px; height: 34px; border-radius: 50%;
+              border: 1px solid rgba(255,255,255,.2);
+              background: rgba(20,24,22,.35); color: #fff; font-size: 1.4rem; line-height: 1;
+              -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
               cursor: pointer; display: flex; align-items: center; justify-content: center;
               padding-bottom: 3px; }
     .g-prev { left: .5rem; }
     .g-next { right: .5rem; }
-    .g-nav:active { background: rgba(0,0,0,.72); }
+    .g-nav:active { background: rgba(0,0,0,.6); }
     .g-nav:disabled { opacity: 0; pointer-events: none; }
     .g-dots { position: absolute; left: 0; right: 0; bottom: .5rem; display: flex;
                justify-content: center; gap: .32rem; }
@@ -211,23 +268,27 @@
        tappable. Both open the full-screen zoomable viewer. */
     .plant-photo { cursor: zoom-in; }
     .g-zoom { position: absolute; top: .5rem; right: .5rem; width: 32px; height: 32px;
-               border-radius: 50%; border: none; background: rgba(0,0,0,.42); color: #fff;
+               border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
+               background: rgba(20,24,22,.35); color: #fff;
+               -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
                font-size: 1rem; line-height: 1; cursor: pointer; display: flex;
                align-items: center; justify-content: center; }
-    .g-zoom:active { background: rgba(0,0,0,.72); }
+    .g-zoom:active { background: rgba(0,0,0,.6); }
 
-    /* ── Header sub menu ── */
+    /* ── Header sub menu: frosted popover ── */
     .menu-wrap { position: relative; flex-shrink: 0; }
     .menu-pop { position: absolute; top: calc(100% + .45rem); right: 0; z-index: 30;
-                 min-width: 200px; background: var(--surface); color: var(--text);
-                 border: 1px solid var(--border); border-radius: var(--radius-sm);
-                 box-shadow: var(--shadow); overflow: hidden; }
+                 min-width: 210px; background: var(--glass-strong); color: var(--text);
+                 -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+                 border: 1px solid var(--edge); border-radius: var(--radius-sm);
+                 box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim);
+                 overflow: hidden; }
     .menu-item { display: flex; align-items: center; gap: .6rem; width: 100%;
                   padding: .8rem .95rem; background: none; border: none;
                   color: var(--text); font-size: .9rem; font-weight: 600;
                   cursor: pointer; text-align: left; }
-    .menu-item + .menu-item { border-top: 1px solid var(--border); }
-    .menu-item:active { background: var(--surface-2); }
+    .menu-item + .menu-item { border-top: 1px solid var(--edge); }
+    .menu-item:active { background: var(--chip-press); }
     .menu-item .ic { width: 1.1em; height: 1.1em; color: var(--text-2); }
     .menu-item .menu-check { margin-left: auto; color: var(--accent); }
 
@@ -236,7 +297,8 @@
        newest photo), no care chores anywhere. Tapping a tile opens the
        full-screen viewer in slideshow mode — swipe to keep browsing. */
     #gallery-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                       padding: .8rem .8rem calc(.8rem + env(safe-area-inset-bottom)); }
+                       padding: calc(3.9rem + env(safe-area-inset-top)) .8rem
+                                calc(1rem + env(safe-area-inset-bottom)); }
     .gal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem;
                  max-width: 1200px; margin: 0 auto; }
     @media (min-width: 720px) {
@@ -244,8 +306,9 @@
     }
     .gal-card { position: relative; aspect-ratio: 3 / 4; border-radius: var(--radius);
                  overflow: hidden; background: var(--surface-2);
-                 border: 1px solid var(--border); box-shadow: var(--shadow);
-                 cursor: pointer; transition: transform .12s ease;
+                 border: 1px solid var(--edge);
+                 box-shadow: var(--shadow), inset 0 1px 0 var(--glass-rim);
+                 cursor: pointer; transition: transform .12s ease, box-shadow .12s ease;
                  display: flex; align-items: center; justify-content: center; }
     .gal-card:active { transform: scale(.97); }
     .gal-card > .ic { width: 34px; height: 34px; color: var(--text-3); }
@@ -260,7 +323,8 @@
                   font-size: .9rem; grid-column: 1 / -1; }
 
     /* ── Full-screen photo viewer (lightbox) ── */
-    .lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.94);
+    .lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(4,8,6,.9);
+                 -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
                  opacity: 0; pointer-events: none; transition: opacity .2s ease;
                  overflow: hidden; touch-action: none; overscroll-behavior: contain; }
     .lightbox.show { opacity: 1; pointer-events: auto; }
@@ -268,14 +332,17 @@
                      object-fit: contain; transform-origin: 0 0; will-change: transform;
                      user-select: none; -webkit-user-drag: none; }
     .lb-close { position: fixed; top: calc(.55rem + env(safe-area-inset-top)); right: .7rem;
-                 width: 42px; height: 42px; border-radius: 50%; border: none; z-index: 101;
-                 background: rgba(255,255,255,.18); color: #fff; font-size: 1.25rem;
+                 width: 42px; height: 42px; border-radius: 50%; z-index: 101;
+                 border: 1px solid rgba(255,255,255,.22);
+                 background: rgba(255,255,255,.14); color: #fff; font-size: 1.25rem;
+                 -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4);
                  cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .lb-close:active { background: rgba(255,255,255,.34); }
+    .lb-close:active { background: rgba(255,255,255,.32); }
     .lb-hint { position: fixed; left: 50%; transform: translateX(-50%); z-index: 101;
                 bottom: calc(1rem + env(safe-area-inset-bottom)); pointer-events: none;
                 color: rgba(255,255,255,.72); font-size: .76rem; font-weight: 600;
                 background: rgba(0,0,0,.4); padding: .35rem .8rem; border-radius: var(--radius-pill);
+                -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
                 transition: opacity .3s ease; }
     /* Slideshow chrome (only shown when the viewer is opened from the gallery):
        a caption naming the plant, ←/→ arrows to change plant, and ↑/↓ arrows to
@@ -285,10 +352,13 @@
                max-width: calc(100% - 7.5rem); white-space: nowrap; overflow: hidden;
                text-overflow: ellipsis; color: #fff; font-size: .85rem; font-weight: 700;
                background: rgba(0,0,0,.45); padding: .4rem .9rem;
+               -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
                border-radius: var(--radius-pill); }
     .lb-nav { position: fixed; z-index: 101;
-               width: 42px; height: 42px; border-radius: 50%; border: none;
-               background: rgba(255,255,255,.18); color: #fff; font-size: 1.2rem;
+               width: 42px; height: 42px; border-radius: 50%;
+               border: 1px solid rgba(255,255,255,.22);
+               background: rgba(255,255,255,.14); color: #fff; font-size: 1.2rem;
+               -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4);
                cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .lb-nav:active { background: rgba(255,255,255,.34); }
     .lb-prev { left: .7rem; top: 50%; transform: translateY(-50%); }
@@ -298,7 +368,7 @@
 
     /* ── Check-off toggles (list rows) ── */
     .chk { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
-            border: 1.5px solid var(--border); background: var(--surface-2); font-size: 1rem;
+            border: 1.5px solid var(--edge); background: var(--chip); font-size: 1rem;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; opacity: .5; filter: grayscale(1);
             transition: opacity .15s, filter .15s, box-shadow .15s, background .15s, transform .1s; }
@@ -320,27 +390,32 @@
     .chk.pending { opacity: 1; filter: none; background: var(--info-bg); color: var(--info-text);
                     border-color: var(--info); box-shadow: inset 0 0 0 1.5px var(--info); }
 
-    /* ── Action bar (list view) ── */
-    .action-bar { flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
-                   background: var(--surface); border-top: 1px solid var(--border);
-                   padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-                   box-shadow: var(--shadow-up); }
+    /* ── Action bar (list view): floating glass pill ── */
+    .action-bar { position: absolute; left: .8rem; right: .8rem; z-index: 15;
+                   bottom: calc(.75rem + env(safe-area-inset-bottom));
+                   display: flex; align-items: center; gap: .6rem;
+                   background: var(--glass-strong);
+                   -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+                   border: 1px solid var(--edge); border-radius: 26px;
+                   box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim);
+                   padding: .55rem .6rem .55rem 1rem; }
     .bar-count { flex: 1; font-size: .8rem; font-weight: 500; color: var(--text-2);
                   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .clear-btn { background: none; border: none; color: var(--text-2);
                   font-size: .8rem; cursor: pointer; flex-shrink: 0; padding: .3rem .2rem; }
     .clear-btn:active { color: var(--text); }
-    .copy-btn { background: var(--accent); color: var(--on-accent); border: none;
-                 border-radius: var(--radius-sm); padding: .62rem 1.2rem; font-size: .9rem;
+    .copy-btn { background: var(--accent-grad); color: var(--on-accent); border: none;
+                 border-radius: var(--radius-pill); padding: .62rem 1.25rem; font-size: .9rem;
                  font-weight: 800; letter-spacing: -.01em; cursor: pointer; flex-shrink: 0;
-                 box-shadow: var(--accent-shadow); transition: transform .1s ease; }
+                 box-shadow: var(--accent-shadow), inset 0 1px 0 rgba(255,255,255,.25);
+                 transition: transform .1s ease, filter .1s ease; }
     .copy-btn:disabled { opacity: .4; box-shadow: none; pointer-events: none; }
-    .copy-btn:active { transform: scale(.96); background: var(--accent-press); }
+    .copy-btn:active { transform: scale(.96); filter: brightness(.92); }
 
     /* ── Detail check-off buttons ── */
     .d-actions { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.1rem; }
-    .d-chk { flex: 1 1 30%; min-width: 96px; padding: .75rem .5rem; border-radius: var(--radius-sm);
-              cursor: pointer; border: 1.5px solid var(--border); background: var(--surface-2);
+    .d-chk { flex: 1 1 30%; min-width: 96px; padding: .78rem .5rem; border-radius: var(--radius-sm);
+              cursor: pointer; border: 1.5px solid var(--edge); background: var(--chip);
               color: var(--text); font-size: .82rem; font-weight: 700; transition: transform .1s ease; }
     .d-chk:active { transform: scale(.96); }
     .d-chk.need { background: var(--warn); color: #fff; border-color: var(--warn); }
@@ -348,9 +423,11 @@
     .d-chk.snooze { background: var(--paused); color: #fff; border-color: var(--paused); }
 
     /* ── Toast ── */
-    .toast { position: fixed; left: 50%; bottom: 5.5rem; z-index: 50;
+    .toast { position: fixed; left: 50%; bottom: 6.4rem; z-index: 50;
               transform: translateX(-50%) translateY(20px);
               background: var(--toast-bg); color: var(--toast-text);
+              -webkit-backdrop-filter: blur(14px) saturate(1.6); backdrop-filter: blur(14px) saturate(1.6);
+              border: 1px solid var(--glass-rim);
               padding: .75rem 1.2rem; border-radius: var(--radius-pill);
               font-size: .85rem; font-weight: 600; max-width: 80%;
               box-shadow: 0 8px 24px rgba(0,0,0,.25);
@@ -363,25 +440,40 @@
     .from-right { animation: fromRight .22s ease-out; }
     .from-left  { animation: fromLeft  .22s ease-out; }
 
+    /* ── Pointer hover states (desktop) ── */
+    @media (hover: hover) {
+      .row:hover { transform: translateY(-2px);
+                    box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim); }
+      .gal-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-float); }
+      .menu-item:hover, .nav-btn:not(:disabled):hover, .back-btn:hover { background: var(--chip-press); }
+      .copy-btn:hover { filter: brightness(1.06); }
+    }
+
     /* ── Wide screens (desktop browser) ── */
     /* The single-column list reads as a thin ribbon on a wide window, so here
        we flow the cards into a responsive multi-column tile grid. The section
        labels span the full width; each .row becomes a tile (it's already a
-       self-contained card). Mobile keeps the stacked list above. */
+       self-contained card). Mobile keeps the stacked list above. The floating
+       bottom bars stay centered at a comfortable reading width. */
     @media (min-width: 720px) {
       #list-scroll { display: grid; align-content: start; align-items: start;
                       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                      gap: .8rem; padding: 1.2rem 1.4rem calc(1.2rem + .4rem);
+                      gap: .8rem;
+                      padding: calc(4.4rem + env(safe-area-inset-top)) 1.4rem
+                               calc(6.6rem + env(safe-area-inset-bottom));
                       max-width: 1200px; margin: 0 auto; width: 100%; }
       .sec-label { grid-column: 1 / -1; padding: .9rem .2rem .1rem; }
       .row { margin: 0; }
 
-      #detail-scroll { padding: 1.6rem 1.6rem 6rem; }
+      .action-bar, .d-nav { left: 50%; right: auto; transform: translateX(-50%);
+                             width: min(640px, calc(100vw - 2rem)); }
+
+      #detail-scroll { padding: calc(4.6rem + env(safe-area-inset-top)) 1.6rem 7rem; }
       .d-body { display: flex; align-items: flex-start; gap: 1.8rem;
                  max-width: 1100px; margin: 0 auto; }
       .gallery { flex: 0 0 48%; max-width: 480px; margin-bottom: 0;
                   position: sticky; top: 0; }
-      .plant-photo { height: auto; max-height: 78vh; object-fit: contain; }
+      .plant-photo { height: auto; max-height: 74vh; object-fit: contain; }
       .d-content { flex: 1 1 0; min-width: 0; }
     }
   </style>
@@ -392,7 +484,7 @@
 <div class="view" id="list-view">
   <div class="hdr">
     <span class="hdr-title"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg> Plant Care</span>
-    <span class="hdr-sub">Jul 3</span>
+    <span class="hdr-sub">Jul 4</span>
     <div class="menu-wrap">
       <button class="back-btn icon-btn" id="menu-btn" aria-label="Menu" aria-haspopup="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
       <div class="menu-pop hidden" id="menu-pop">
@@ -450,7 +542,7 @@
 </div>
 
 <script>
-const P = [{"id": "money-tree", "name": "Money Tree", "nickname": "", "location": "Dining room, west-facing", "photos": [{"src": "images/money-tree-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 15d ago (interval: 10d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: 41d ago)", "notes": ["Moving Stress: Money trees dislike being moved frequently. Leaf drop after relocation is normal as it adjusts to new light and humidity. Pick a good spot and leave it be.", "Trunk Care: The braided trunks are bound when young. As the plant grows, check the top of the braid to ensure nursery ties or wires aren't cutting into the bark and choking the stems.", "Photo check (2026-06-15): Foliage looks healthy \u2014 leaflets are a vibrant, even green with no yellowing, browning, or leaf drop visible. A few branches are stretching out long toward the window, which is typical reaching for light; keep up the weekly 90\u00b0 rotation to even out growth, and consider pinching back the longest stems above a node to encourage bushier branching. Sitting right at the west-facing window, so watch for leaf scorch from harsh direct afternoon sun in summer."], "hasAction": true}, {"id": "anthurium", "name": "Anthurium (Flamingo Flower)", "nickname": "Flamingo", "location": "Big Room (upstairs), West-facing window", "photos": [{"src": "images/anthurium-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 7d ago (interval: 7d). Check if fully dry before watering.", "fertStatus": "ok", "fertMsg": "Last fertilized 7d ago \u2014 next due in ~21d", "notes": ["TLC Needed: Currently showing leggy stems and some dried foliage. Pruning crispy brown leaves at the stem base, moving to a brighter spot, and consistent humidity will help it recover.", "Grooming: Use clean sharp scissors to snip completely dead or brown leaves right at the base of the stem \u2014 keeps the plant tidy and stops it wasting energy on dying foliage.", "Blooms: The colorful 'petals' are modified leaves called spathes, not true flowers. The actual flowers are the tiny bumps on the central spike (spadix).", "Photo check (2026-06-15): Leaves are glossy, deep green, and heart-shaped with a healthy sheen \u2014 overall in good shape. A couple of leaves show small brown spots/dried edges; snip those crispy bits at the stem base and keep humidity consistent. Stems still look somewhat elongated/leggy (matches earlier note), so a brighter spot will encourage sturdier growth. No blooms visible in this shot. Sharing its pot with the Parlor Palm, whose fronds appear alongside it."], "hasAction": true}, {"id": "marble-queen-pothos", "name": "Marble Queen Pothos", "nickname": "", "location": "Living Room, East-facing window", "photos": [{"src": "images/marble-queen-pothos-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}, {"src": "images/marble-queen-pothos-2026-07-02.jpeg", "date": "2026-07-02", "label": "Jul 2, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 15d ago (interval: 12d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: 41d ago)", "notes": ["Placement: Trailing vines look fantastic cascading from a high shelf or cabinet.", "Propagation: One of the easiest plants to propagate. Cut trimmed vines into segments each with one leaf and a node, place in water, and roots appear in a couple of weeks \u2014 ready to plant back into the pot.", "Photo check (2026-06-15): Trailing beautifully over the cabinet with long, full vines and strong creamy-white-and-green marbling \u2014 the high variegation confirms it's getting enough bright, indirect light. There's a cluster of crispy brown dried leaves at the center near the soil; trim these out at the base to tidy it up. A couple of leaf tips show minor browning, which can follow letting it go fully bone-dry \u2014 keep watering once the top 50\u201375% of soil is dry. No signs of pests or reversion to solid green.", "Photo check (2026-07-02): Still looking lush and vigorous \u2014 long vines cascading well over the cabinet with lots of new growth and bright, well-lit leaves. Most of the plant keeps strong creamy-white-and-green marbling, but a couple of leaves (toward the center) have reverted to full solid-green patches with little to no variegation \u2014 an early sign it could use a bit more bright, indirect light to keep producing the snowy-white color. To keep variegation up: nudge it slightly closer to the east window (still filtered, no harsh direct sun), and prune those solid-green reverted vines back to a node so the plant redirects energy into variegated growth. The cluster of crispy brown dried leaves at the center near the soil is still present (a few dead leaves and bare stems by the pot rim) \u2014 worth trimming those out at the base to tidy it up. A few leaf tips still show minor browning; keep to the top-50\u201375%-dry watering rhythm to avoid letting it go bone-dry. No signs of pests. Overall healthy and thriving compared to the June shot, just watch the reversion."], "hasAction": true}, {"id": "parlor-palm", "name": "Parlor Palm", "nickname": "", "location": "Big Room (upstairs), West-facing window", "photos": [{"src": "images/parlor-palm-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 7d ago (interval: 7d). Check if fully dry before watering.", "fertStatus": "ok", "fertMsg": "Last fertilized 7d ago \u2014 next due in ~21d", "notes": ["Shared pot: Growing together with the Anthurium. Their watering needs are compatible \u2014 water both on the same schedule.", "Currently looking full, lush, and vibrant with just minor dry pale tips on some fronds \u2014 very common indoors.", "Pest watch: Dense fine foliage can attract spider mites if air is too dry. Periodically wipe fronds with a damp cloth or give the plant a gentle shower rinse to deter pests and remove dust.", "Photo check (2026-06-15): Full, lush, and arching with deep green feathery fronds \u2014 looking vibrant and healthy. Only minor pale/dry tips on a few frond ends, which is very common indoors and may point to mineral buildup or dry air; filtered water and a touch more humidity will help. No yellowing fronds or visible pests. The Anthurium it shares space with is just out of frame to one side."], "hasAction": true}, {"id": "tradescantia-nanouk", "name": "Tradescantia 'Nanouk'", "nickname": "", "location": "Kitchen, East-facing window", "photos": [{"src": "images/tradescantia-nanouk.jpeg", "date": "", "label": ""}], "thumb": "images/tradescantia-nanouk-thumb.png", "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 13d ago (interval: 5d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: never recorded)", "notes": ["Newly propagated: prioritize steady light moisture and warmth over a strict watering interval until rooted.", "Variegation is light-dependent \u2014 if the pink dwindles, give it more bright indirect light. Prune any all-green reverting stems."], "hasAction": true}, {"id": "tradescantia-nanouk-2", "name": "Tradescantia 'Nanouk' #2", "nickname": "Nanouk #2 #2", "location": "Kitchen", "photos": [{"src": "images/tradescantia-nanouk-2-2026-06-19.jpeg", "date": "2026-06-19", "label": "Jun 19, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 10d ago (interval: 5d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: never recorded)", "notes": ["Newly potted water-rooted cutting (2026-06-18): prioritize steady light moisture and warmth over a strict watering interval until it settles into soil. Water-rooted cuttings can sulk for a week or two while they grow soil roots.", "Variegation is light-dependent \u2014 if the pink dwindles, give it more bright indirect light. Prune any all-green reverting stems.", "Photo check (2026-06-19): Healthy young cutting in a biodegradable peat pot. Strong variegation \u2014 leaves striped green, cream, and pink/lilac with vivid magenta-purple stems and undersides, which means it's getting good light. Foliage is firm with no mushiness, yellowing, browning, or pest signs. Stem is a touch leggy with the leaves spreading wide (normal for a water-rooted cutting and easily fixed by pinching once it's actively growing). The peat pot wicks moisture and dries quickly, so check the soil often while it's this small."], "hasAction": true}, {"id": "spider-plant", "name": "Spider Plant (Variegated)", "nickname": "Spiderling", "location": "", "photos": [{"src": "images/spider-plant-2026-06-18.jpeg", "date": "2026-06-18", "label": "Jun 18, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 7d ago (interval: 7d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: never recorded)", "notes": ["Newly potted plantlet \u2014 keep the soil lightly moist (not soggy) while it establishes roots, and hold off on fertilizer until it shows active new growth.", "Grows from a young plantlet into a full arching fountain; the peat pot it's in can be planted whole into its next container so the tender roots aren't disturbed.", "Photo check (2026-06-18): A young variegated spider plant in a small biodegradable peat pot. Leaves are long, narrow, and arching with healthy green centers and creamy variegation along the edges \u2014 good color with no yellowing, mushiness, or pest signs visible. Leaf tips are clean with no browning yet; since spider plants are sensitive to fluoride/chlorine/salts, using filtered or distilled water will help keep the tips from going crispy as it grows. The peat pot wicks moisture quickly and can dry out fast, so check the soil often while it's this small. Still a single small clump with no runners yet, as expected at this size."], "hasAction": true}, {"id": "hoya-krimson-queen", "name": "Hoya 'Krimson Queen'", "nickname": "", "location": "Upstairs Bathroom, skylight", "photos": [{"src": "images/hoya-krimson-queen.jpeg", "date": "", "label": ""}, {"src": "images/hoya-krimson-queen-2026-06-16.jpeg", "date": "2026-06-16", "label": "Jun 16, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 7d ago \u2014 next check in ~3d", "fertStatus": "ok", "fertMsg": "Last fertilized 7d ago \u2014 next due in ~21d", "notes": ["Acclimation: Transitioned slowly from a lower-light bathroom to the West-facing window \u2014 started 3\u20134 feet back, moved closer over two weeks to prevent sunburn.", "Hoya pauses are normal: if care is correct but growth has stalled, the plant is likely building its root system underground.", "Photo check (2026-06-16): Young 4\" nursery plant (price tag still attached) in a striped cachepot. Foliage looks healthy \u2014 leaves are firm, glossy, and well-variegated with creamy-white margins around green centers; no yellowing, browning, or scorch on the white edges. A couple of long, bare tendrils are reaching out, which is normal Krimson Queen behavior \u2014 leave them to find a support to climb. New growth shows a faint pink blush at the edges, a sign it's getting good light. Soil looks like the original nursery mix, so plan to repot into the chunky airy mix only once it's rootbound."], "hasAction": false}, {"id": "dieffenbachia", "name": "Dieffenbachia (Dumb Cane)", "nickname": "Dumb Cane", "location": "Dining Room, West-facing window", "photos": [{"src": "images/dieffenbachia-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": "images/dieffenbachia-2026-06-15-thumb.png", "waterStatus": "ok", "waterMsg": "Last watered 1d ago \u2014 next check in ~6d", "fertStatus": "ok", "fertMsg": "Last fertilized 10d ago \u2014 next due in ~18d", "notes": ["Rotate: Give the pot a quarter-turn every time you water to prevent the plant from leaning toward the light and growing lopsided.", "Sap safety: Wash hands (or wear gloves) after any contact with the sap when pruning or removing dead leaves.", "Natural aging: Shedding the lowest, oldest leaves as new growth pushes from the top is normal \u2014 this is how the characteristic thick cane forms.", "Photo check (2026-06-15): Variegation is still showing nicely \u2014 leaves keep their cream/yellow speckling, a good sign the west window is giving enough light. The plant looks a bit open and leggy, though: stems are stretching and leaning outward with bare gaps between leaves, and a few of the lower/inner leaves are drooping and slightly pale. Keep up the quarter-turn at every watering to even out the lean, and consider cutting back a leggy cane in spring/summer to encourage bushier growth lower down. No obvious scorch, pests, or rot visible. Soil looks dark/moist, so let the top 2\u20133 inches dry fully before the next water."], "hasAction": false}, {"id": "rieger-begonia", "name": "Rieger Begonia (Elatior Begonia)", "nickname": "", "location": "Big Room, West-facing window", "photos": [{"src": "images/rieger-begonia-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 1d ago \u2014 next check in ~6d", "fertStatus": "ok", "fertMsg": "Last fertilized 10d ago \u2014 next due in ~18d", "notes": ["Transition shock is normal: dropping buds or leaves in the first two weeks after bringing home from a greenhouse is very common. Be patient during acclimation.", "Seasonal bloomer: it is normal for Rieger begonias to die back after their heavy bloom cycle ends. Many treat them as long-lasting floral arrangements. With careful pruning and a resting period (reduced water, cooler temps), you can coax them to rebloom the following year.", "Photo check (2026-06-15): Looking healthy and full \u2014 sturdy green stems with glossy, deep green serrated leaves and a cluster of fresh yellow buds opening on one side, so it's actively blooming. A few spent/crispy flowers and bits of debris are sitting on the soil surface near the base; deadhead these and clear them off to prevent rot on the soil surface and redirect energy into new buds. No signs of scorch, yellowing, or pests."], "hasAction": false}, {"id": "kalanchoe", "name": "Kalanchoe (Flaming Katy)", "nickname": "", "location": "Big Room, West-facing window", "photos": [{"src": "images/kalanchoe-2026-06-16.jpeg", "date": "2026-06-16", "label": "Jun 16, 2026"}], "thumb": "images/kalanchoe-2026-06-16-thumb.png", "waterStatus": "ok", "waterMsg": "Last watered 7d ago \u2014 next check in ~7d", "fertStatus": "ok", "fertMsg": "Last fertilized 7d ago \u2014 next due in ~21d", "notes": ["Bloom finished (as of 2026-06-16): the spring flush of orange/yellow flowers has fully faded and the plant is now in its leafy growth stage.", "Deadheading: As flower clusters fade and brown, snip the flower stems off just above the leaf line with clean scissors. Keeps the plant tidy and encourages remaining buds to open.", "Reblooming: Once all flowers fade, the plant enters a leafy growth stage. To rebloom next year, give it a 6-week autumn rest period (around September\u2013October) with 14 hours of complete uninterrupted darkness each night and only 10 hours of bright light per day. Combine with very minimal watering. Resume normal care after 6 weeks and buds will form within a few weeks.", "Photo check (2026-06-16): Foliage looks excellent \u2014 lush, dense, and bushy with thick, glossy, deep-green scalloped leaves and no spotting, yellowing, or soft stems. The blooms are completely spent now, so it has shifted into leafy growth; cut any remaining spent flower stems back by about a third to encourage bushiness. A few central shoots are reaching up toward the lamp/light, a mild hint of stretching \u2014 keep it in bright light to stay compact. Now potted in a fluted light-blue ceramic pot; make sure that pot drains and never let it sit in water, since rot is this plant's biggest risk. Mark your calendar for the September\u2013October short-day rest to trigger next year's rebloom."], "hasAction": false}, {"id": "monstera-deliciosa", "name": "Monstera Deliciosa", "nickname": "", "location": "Dining room, west-facing", "photos": [{"src": "images/monstera-deliciosa-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 1d ago \u2014 next check in ~9d", "fertStatus": "ok", "fertMsg": "Last fertilized 1d ago \u2014 next due in ~27d", "notes": ["Teenage Phase: Currently in juvenile phase with solid, healthy, glossy leaves. As the plant grows larger and gets ample bright light, new leaves will naturally develop the famous splits and fenestrations.", "Support Needed: This is a natural climber \u2014 insert a moss pole or coco coir stake into the pot center to give aerial roots something to grip, encouraging larger, more dramatic upright growth.", "Maintenance: Wipe large leaves with a damp cloth every few weeks to remove dust and help the plant photosynthesize.", "Photo check (2026-06-15): Plant looks healthy and actively growing. Leaves are a vibrant, glossy deep green with no yellowing, browning, or signs of pests. Several long vines are extending outward from the coco coir moss pole, indicating strong growth energy. Plant is successfully trained on the moss pole with twist ties visible securing the vines. Aerial roots appear to be developing. The growth is somewhat sprawling/leggy rather than tightly hugging the pole \u2014 encourage aerial roots to grip the pole by misting it regularly to keep it moist. No pest damage or stress symptoms visible."], "hasAction": false}, {"id": "aloe-vera", "name": "Aloe Vera", "nickname": "", "location": "Big Room (upstairs), West-facing window", "photos": [{"src": "images/aloe-vera-2026-06-16.jpeg", "date": "2026-06-16", "label": "Jun 16, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 10d ago \u2014 next check in ~11d", "fertStatus": "paused", "fertMsg": "Feeding paused \u2014 not in active season", "notes": ["Drooping lower leaves: Caused by slightly lower light than ideal combined with the weight of water in the leaves. Moving to the sunniest window will help new center growth come in tight and vertical.", "Maintenance: Clear out dried, crispy brown debris from the base to keep clean and deter pests like mealybugs.", "First Aid Gel: Clear gel inside mature leaves soothes minor burns. If needed, snip an entire lower leaf from the very base rather than cutting the tip \u2014 the plant heals cleanly at the main stem connection.", "Photo check (2026-06-16): Leaves are plump, firm, and a healthy green with the classic young-aloe white speckling \u2014 no mushy or translucent spots, so no sign of overwatering. The rosette is splaying wide and arching outward/downward rather than growing upright, which confirms the light is a touch low; move it onto the sunniest south- or west-facing sill to tighten up new center growth. One inner leaf is yellowing \u2014 likely just an aging lower leaf, but if more follow, ease off watering. Still potted in a terracotta inner pot inside a black cachepot (good \u2014 terracotta breathes), and there's loose mix and the old nursery tag on the soil surface worth clearing out to deter pests."], "hasAction": false}, {"id": "dracaena-malaika", "name": "Dracaena 'Malaika' (Ribbon Plant)", "nickname": "", "location": "Dining room, west-facing", "photos": [{"src": "images/dracaena-malaika-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 10d ago \u2014 next check in ~4d", "fertStatus": "ok", "fertMsg": "Last fertilized 10d ago \u2014 next due in ~18d", "notes": ["Currently a beautifully compact, full rosette growing close to the soil. Over time it will naturally drop lower leaves and build a woody trunk, developing a miniature palm-like appearance.", "Grooming: Wipe long leaves with a damp cloth every few weeks to remove dust and keep them glossy. Gently peel away or snip naturally yellowing lower leaves at the base.", "Trimming tips: If leaf tips develop minor brown crispy edges, trim with sharp scissors following the natural pointed curve of the leaf \u2014 never cut straight across.", "Photo check (2026-06-15): Looking healthy and full \u2014 a dense, arching rosette of strap leaves with crisp variegation (deep green margins, mint stripes, bright white center line), which means the light level at the west window is keeping the variegation vibrant. Leaves are a glossy, even green with no yellowing or mushiness. A couple of leaf tips show very minor browning \u2014 easy to keep an eye on; since this one is sensitive to fluoride/chlorine/salts, using filtered or distilled water will help prevent crispy tips. No pests or scorch visible. Still close to the soil with no woody trunk yet, as expected for its age."], "hasAction": false}, {"id": "snake-plant-1", "name": "Snake Plant #1", "nickname": "", "location": "Big Room, upstairs", "photos": [], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 18d ago \u2014 next check in ~3d", "fertStatus": "pending", "fertMsg": "Feed with next watering \u2014 overdue but soil isn't dry yet (last: 41d ago)", "notes": ["Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out \u2014 tightly wound, circling roots confirm it's time to repot.", "Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.", "Resilience: One of the most forgiving houseplants \u2014 can tolerate neglect, low light, and irregular watering better than almost anything else."], "hasAction": false}, {"id": "snake-plant-2", "name": "Snake Plant #2", "nickname": "", "location": "Big Room, upstairs", "photos": [], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 18d ago \u2014 next check in ~3d", "fertStatus": "pending", "fertMsg": "Feed with next watering \u2014 overdue but soil isn't dry yet (last: 41d ago)", "notes": ["Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out \u2014 tightly wound, circling roots confirm it's time to repot.", "Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.", "Resilience: One of the most forgiving houseplants \u2014 can tolerate neglect, low light, and irregular watering better than almost anything else."], "hasAction": false}, {"id": "jade-plant", "name": "Jade Plant", "nickname": "", "location": "", "photos": [{"src": "images/jade-plant-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 1d ago \u2014 next check in ~13d", "fertStatus": "ok", "fertMsg": "Last fertilized 18d ago \u2014 next due in ~10d", "notes": ["Stalled growth: has stayed about the same size for a long time. Most likely cause is too little light (see the leggy form), not watering \u2014 adding water won't help and risks rot. Fix the light first.", "Photo check (2026-06-15): Small jade that's been the same size for a while. The leaves are a healthy firm green with no yellowing, mushiness, or wrinkling, so it is not water-stressed. Growth is leggy/stretched \u2014 a long bare reddish stem with leaves bunched only near the tip, a classic sign of too little light. Move it to the brightest window available (south- or west-facing) to wake up growth and keep it compact, then pinch the tip above a leaf pair to push side branching. Soil reads dry on top (normal for jade); the pale specks are perlite/mineral, not pest activity. Last watered ~2026-06-01, so it's about at its summer interval \u2014 do a soil check and only water if it's dry all the way down."], "hasAction": false}, {"id": "english-ivy", "name": "English Ivy", "nickname": "Ivy", "location": "Kitchen", "photos": [{"src": "images/english-ivy-2026-07-02.jpeg", "date": "2026-07-02", "label": "Jul 2, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 1d ago \u2014 next check in ~6d", "fertStatus": "pending", "fertMsg": "Feed with next watering \u2014 overdue but soil isn't dry yet (last: never recorded)", "notes": ["Newly potted water-rooted cuttings (2026-07-02): prioritize steady light moisture and warmth over a strict watering interval until it settles into soil. Water-rooted cuttings can sulk for a week or two while they grow soil roots.", "Toxic to pets and people \u2014 the classic-lobed leaves are tempting to curious cats; site it out of reach.", "Watch for spider mites, ivy's most common pest indoors, especially in warm dry air \u2014 check the undersides of leaves and keep humidity up.", "Photo check (2026-07-02): A small cluster of English ivy cuttings freshly potted into a terracotta-colored plastic pot, sitting on a black saucer (a second glass of water-rooting cuttings is visible alongside). Foliage is a healthy medium-to-deep green with the classic 3\u20135 lobed leaves and pale silvery veins \u2014 firm and glossy, no yellowing, browning, or scorch. Stems are a little open/spread (normal for water-rooted cuttings), which will fill in once it's actively growing and pinched. Fresh soil is still visible on some lower leaves from potting. Keep it lightly moist and in bright indirect light while the water roots convert to soil roots."], "hasAction": false}];
+const P = [{"id": "money-tree", "name": "Money Tree", "nickname": "", "location": "Dining room, west-facing", "photos": [{"src": "images/money-tree-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 16d ago (interval: 10d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: 42d ago)", "notes": ["Moving Stress: Money trees dislike being moved frequently. Leaf drop after relocation is normal as it adjusts to new light and humidity. Pick a good spot and leave it be.", "Trunk Care: The braided trunks are bound when young. As the plant grows, check the top of the braid to ensure nursery ties or wires aren't cutting into the bark and choking the stems.", "Photo check (2026-06-15): Foliage looks healthy \u2014 leaflets are a vibrant, even green with no yellowing, browning, or leaf drop visible. A few branches are stretching out long toward the window, which is typical reaching for light; keep up the weekly 90\u00b0 rotation to even out growth, and consider pinching back the longest stems above a node to encourage bushier branching. Sitting right at the west-facing window, so watch for leaf scorch from harsh direct afternoon sun in summer."], "hasAction": true}, {"id": "anthurium", "name": "Anthurium (Flamingo Flower)", "nickname": "Flamingo", "location": "Big Room (upstairs), West-facing window", "photos": [{"src": "images/anthurium-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 8d ago (interval: 7d). Check if fully dry before watering.", "fertStatus": "ok", "fertMsg": "Last fertilized 8d ago \u2014 next due in ~20d", "notes": ["TLC Needed: Currently showing leggy stems and some dried foliage. Pruning crispy brown leaves at the stem base, moving to a brighter spot, and consistent humidity will help it recover.", "Grooming: Use clean sharp scissors to snip completely dead or brown leaves right at the base of the stem \u2014 keeps the plant tidy and stops it wasting energy on dying foliage.", "Blooms: The colorful 'petals' are modified leaves called spathes, not true flowers. The actual flowers are the tiny bumps on the central spike (spadix).", "Photo check (2026-06-15): Leaves are glossy, deep green, and heart-shaped with a healthy sheen \u2014 overall in good shape. A couple of leaves show small brown spots/dried edges; snip those crispy bits at the stem base and keep humidity consistent. Stems still look somewhat elongated/leggy (matches earlier note), so a brighter spot will encourage sturdier growth. No blooms visible in this shot. Sharing its pot with the Parlor Palm, whose fronds appear alongside it."], "hasAction": true}, {"id": "marble-queen-pothos", "name": "Marble Queen Pothos", "nickname": "", "location": "Living Room, East-facing window", "photos": [{"src": "images/marble-queen-pothos-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}, {"src": "images/marble-queen-pothos-2026-07-02.jpeg", "date": "2026-07-02", "label": "Jul 2, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 16d ago (interval: 12d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: 42d ago)", "notes": ["Placement: Trailing vines look fantastic cascading from a high shelf or cabinet.", "Propagation: One of the easiest plants to propagate. Cut trimmed vines into segments each with one leaf and a node, place in water, and roots appear in a couple of weeks \u2014 ready to plant back into the pot.", "Photo check (2026-06-15): Trailing beautifully over the cabinet with long, full vines and strong creamy-white-and-green marbling \u2014 the high variegation confirms it's getting enough bright, indirect light. There's a cluster of crispy brown dried leaves at the center near the soil; trim these out at the base to tidy it up. A couple of leaf tips show minor browning, which can follow letting it go fully bone-dry \u2014 keep watering once the top 50\u201375% of soil is dry. No signs of pests or reversion to solid green.", "Photo check (2026-07-02): Still looking lush and vigorous \u2014 long vines cascading well over the cabinet with lots of new growth and bright, well-lit leaves. Most of the plant keeps strong creamy-white-and-green marbling, but a couple of leaves (toward the center) have reverted to full solid-green patches with little to no variegation \u2014 an early sign it could use a bit more bright, indirect light to keep producing the snowy-white color. To keep variegation up: nudge it slightly closer to the east window (still filtered, no harsh direct sun), and prune those solid-green reverted vines back to a node so the plant redirects energy into variegated growth. The cluster of crispy brown dried leaves at the center near the soil is still present (a few dead leaves and bare stems by the pot rim) \u2014 worth trimming those out at the base to tidy it up. A few leaf tips still show minor browning; keep to the top-50\u201375%-dry watering rhythm to avoid letting it go bone-dry. No signs of pests. Overall healthy and thriving compared to the June shot, just watch the reversion."], "hasAction": true}, {"id": "parlor-palm", "name": "Parlor Palm", "nickname": "", "location": "Big Room (upstairs), West-facing window", "photos": [{"src": "images/parlor-palm-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 8d ago (interval: 7d). Check if fully dry before watering.", "fertStatus": "ok", "fertMsg": "Last fertilized 8d ago \u2014 next due in ~20d", "notes": ["Shared pot: Growing together with the Anthurium. Their watering needs are compatible \u2014 water both on the same schedule.", "Currently looking full, lush, and vibrant with just minor dry pale tips on some fronds \u2014 very common indoors.", "Pest watch: Dense fine foliage can attract spider mites if air is too dry. Periodically wipe fronds with a damp cloth or give the plant a gentle shower rinse to deter pests and remove dust.", "Photo check (2026-06-15): Full, lush, and arching with deep green feathery fronds \u2014 looking vibrant and healthy. Only minor pale/dry tips on a few frond ends, which is very common indoors and may point to mineral buildup or dry air; filtered water and a touch more humidity will help. No yellowing fronds or visible pests. The Anthurium it shares space with is just out of frame to one side."], "hasAction": true}, {"id": "tradescantia-nanouk", "name": "Tradescantia 'Nanouk'", "nickname": "", "location": "Kitchen, East-facing window", "photos": [{"src": "images/tradescantia-nanouk.jpeg", "date": "", "label": ""}], "thumb": "images/tradescantia-nanouk-thumb.png", "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 14d ago (interval: 5d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: never recorded)", "notes": ["Newly propagated: prioritize steady light moisture and warmth over a strict watering interval until rooted.", "Variegation is light-dependent \u2014 if the pink dwindles, give it more bright indirect light. Prune any all-green reverting stems."], "hasAction": true}, {"id": "tradescantia-nanouk-2", "name": "Tradescantia 'Nanouk' #2", "nickname": "Nanouk #2 #2", "location": "Kitchen", "photos": [{"src": "images/tradescantia-nanouk-2-2026-06-19.jpeg", "date": "2026-06-19", "label": "Jun 19, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 11d ago (interval: 5d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: never recorded)", "notes": ["Newly potted water-rooted cutting (2026-06-18): prioritize steady light moisture and warmth over a strict watering interval until it settles into soil. Water-rooted cuttings can sulk for a week or two while they grow soil roots.", "Variegation is light-dependent \u2014 if the pink dwindles, give it more bright indirect light. Prune any all-green reverting stems.", "Photo check (2026-06-19): Healthy young cutting in a biodegradable peat pot. Strong variegation \u2014 leaves striped green, cream, and pink/lilac with vivid magenta-purple stems and undersides, which means it's getting good light. Foliage is firm with no mushiness, yellowing, browning, or pest signs. Stem is a touch leggy with the leaves spreading wide (normal for a water-rooted cutting and easily fixed by pinching once it's actively growing). The peat pot wicks moisture and dries quickly, so check the soil often while it's this small."], "hasAction": true}, {"id": "spider-plant", "name": "Spider Plant (Variegated)", "nickname": "Spiderling", "location": "", "photos": [{"src": "images/spider-plant-2026-06-18.jpeg", "date": "2026-06-18", "label": "Jun 18, 2026"}], "thumb": null, "waterStatus": "check", "waterMsg": "Soil check due \u2014 last watered 8d ago (interval: 7d). Check if fully dry before watering.", "fertStatus": "due", "fertMsg": "Due now \u2014 feed with today's watering (half-strength; last: never recorded)", "notes": ["Newly potted plantlet \u2014 keep the soil lightly moist (not soggy) while it establishes roots, and hold off on fertilizer until it shows active new growth.", "Grows from a young plantlet into a full arching fountain; the peat pot it's in can be planted whole into its next container so the tender roots aren't disturbed.", "Photo check (2026-06-18): A young variegated spider plant in a small biodegradable peat pot. Leaves are long, narrow, and arching with healthy green centers and creamy variegation along the edges \u2014 good color with no yellowing, mushiness, or pest signs visible. Leaf tips are clean with no browning yet; since spider plants are sensitive to fluoride/chlorine/salts, using filtered or distilled water will help keep the tips from going crispy as it grows. The peat pot wicks moisture quickly and can dry out fast, so check the soil often while it's this small. Still a single small clump with no runners yet, as expected at this size."], "hasAction": true}, {"id": "hoya-krimson-queen", "name": "Hoya 'Krimson Queen'", "nickname": "", "location": "Upstairs Bathroom, skylight", "photos": [{"src": "images/hoya-krimson-queen.jpeg", "date": "", "label": ""}, {"src": "images/hoya-krimson-queen-2026-06-16.jpeg", "date": "2026-06-16", "label": "Jun 16, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 8d ago \u2014 next check in ~2d", "fertStatus": "ok", "fertMsg": "Last fertilized 8d ago \u2014 next due in ~20d", "notes": ["Acclimation: Transitioned slowly from a lower-light bathroom to the West-facing window \u2014 started 3\u20134 feet back, moved closer over two weeks to prevent sunburn.", "Hoya pauses are normal: if care is correct but growth has stalled, the plant is likely building its root system underground.", "Photo check (2026-06-16): Young 4\" nursery plant (price tag still attached) in a striped cachepot. Foliage looks healthy \u2014 leaves are firm, glossy, and well-variegated with creamy-white margins around green centers; no yellowing, browning, or scorch on the white edges. A couple of long, bare tendrils are reaching out, which is normal Krimson Queen behavior \u2014 leave them to find a support to climb. New growth shows a faint pink blush at the edges, a sign it's getting good light. Soil looks like the original nursery mix, so plan to repot into the chunky airy mix only once it's rootbound."], "hasAction": false}, {"id": "dieffenbachia", "name": "Dieffenbachia (Dumb Cane)", "nickname": "Dumb Cane", "location": "Dining Room, West-facing window", "photos": [{"src": "images/dieffenbachia-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": "images/dieffenbachia-2026-06-15-thumb.png", "waterStatus": "ok", "waterMsg": "Last watered 2d ago \u2014 next check in ~5d", "fertStatus": "ok", "fertMsg": "Last fertilized 11d ago \u2014 next due in ~17d", "notes": ["Rotate: Give the pot a quarter-turn every time you water to prevent the plant from leaning toward the light and growing lopsided.", "Sap safety: Wash hands (or wear gloves) after any contact with the sap when pruning or removing dead leaves.", "Natural aging: Shedding the lowest, oldest leaves as new growth pushes from the top is normal \u2014 this is how the characteristic thick cane forms.", "Photo check (2026-06-15): Variegation is still showing nicely \u2014 leaves keep their cream/yellow speckling, a good sign the west window is giving enough light. The plant looks a bit open and leggy, though: stems are stretching and leaning outward with bare gaps between leaves, and a few of the lower/inner leaves are drooping and slightly pale. Keep up the quarter-turn at every watering to even out the lean, and consider cutting back a leggy cane in spring/summer to encourage bushier growth lower down. No obvious scorch, pests, or rot visible. Soil looks dark/moist, so let the top 2\u20133 inches dry fully before the next water."], "hasAction": false}, {"id": "rieger-begonia", "name": "Rieger Begonia (Elatior Begonia)", "nickname": "", "location": "Big Room, West-facing window", "photos": [{"src": "images/rieger-begonia-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 2d ago \u2014 next check in ~5d", "fertStatus": "ok", "fertMsg": "Last fertilized 11d ago \u2014 next due in ~17d", "notes": ["Transition shock is normal: dropping buds or leaves in the first two weeks after bringing home from a greenhouse is very common. Be patient during acclimation.", "Seasonal bloomer: it is normal for Rieger begonias to die back after their heavy bloom cycle ends. Many treat them as long-lasting floral arrangements. With careful pruning and a resting period (reduced water, cooler temps), you can coax them to rebloom the following year.", "Photo check (2026-06-15): Looking healthy and full \u2014 sturdy green stems with glossy, deep green serrated leaves and a cluster of fresh yellow buds opening on one side, so it's actively blooming. A few spent/crispy flowers and bits of debris are sitting on the soil surface near the base; deadhead these and clear them off to prevent rot on the soil surface and redirect energy into new buds. No signs of scorch, yellowing, or pests."], "hasAction": false}, {"id": "kalanchoe", "name": "Kalanchoe (Flaming Katy)", "nickname": "", "location": "Big Room, West-facing window", "photos": [{"src": "images/kalanchoe-2026-06-16.jpeg", "date": "2026-06-16", "label": "Jun 16, 2026"}], "thumb": "images/kalanchoe-2026-06-16-thumb.png", "waterStatus": "ok", "waterMsg": "Last watered 8d ago \u2014 next check in ~6d", "fertStatus": "ok", "fertMsg": "Last fertilized 8d ago \u2014 next due in ~20d", "notes": ["Bloom finished (as of 2026-06-16): the spring flush of orange/yellow flowers has fully faded and the plant is now in its leafy growth stage.", "Deadheading: As flower clusters fade and brown, snip the flower stems off just above the leaf line with clean scissors. Keeps the plant tidy and encourages remaining buds to open.", "Reblooming: Once all flowers fade, the plant enters a leafy growth stage. To rebloom next year, give it a 6-week autumn rest period (around September\u2013October) with 14 hours of complete uninterrupted darkness each night and only 10 hours of bright light per day. Combine with very minimal watering. Resume normal care after 6 weeks and buds will form within a few weeks.", "Photo check (2026-06-16): Foliage looks excellent \u2014 lush, dense, and bushy with thick, glossy, deep-green scalloped leaves and no spotting, yellowing, or soft stems. The blooms are completely spent now, so it has shifted into leafy growth; cut any remaining spent flower stems back by about a third to encourage bushiness. A few central shoots are reaching up toward the lamp/light, a mild hint of stretching \u2014 keep it in bright light to stay compact. Now potted in a fluted light-blue ceramic pot; make sure that pot drains and never let it sit in water, since rot is this plant's biggest risk. Mark your calendar for the September\u2013October short-day rest to trigger next year's rebloom."], "hasAction": false}, {"id": "monstera-deliciosa", "name": "Monstera Deliciosa", "nickname": "", "location": "Dining room, west-facing", "photos": [{"src": "images/monstera-deliciosa-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 2d ago \u2014 next check in ~8d", "fertStatus": "ok", "fertMsg": "Last fertilized 2d ago \u2014 next due in ~26d", "notes": ["Teenage Phase: Currently in juvenile phase with solid, healthy, glossy leaves. As the plant grows larger and gets ample bright light, new leaves will naturally develop the famous splits and fenestrations.", "Support Needed: This is a natural climber \u2014 insert a moss pole or coco coir stake into the pot center to give aerial roots something to grip, encouraging larger, more dramatic upright growth.", "Maintenance: Wipe large leaves with a damp cloth every few weeks to remove dust and help the plant photosynthesize.", "Photo check (2026-06-15): Plant looks healthy and actively growing. Leaves are a vibrant, glossy deep green with no yellowing, browning, or signs of pests. Several long vines are extending outward from the coco coir moss pole, indicating strong growth energy. Plant is successfully trained on the moss pole with twist ties visible securing the vines. Aerial roots appear to be developing. The growth is somewhat sprawling/leggy rather than tightly hugging the pole \u2014 encourage aerial roots to grip the pole by misting it regularly to keep it moist. No pest damage or stress symptoms visible."], "hasAction": false}, {"id": "aloe-vera", "name": "Aloe Vera", "nickname": "", "location": "Big Room (upstairs), West-facing window", "photos": [{"src": "images/aloe-vera-2026-06-16.jpeg", "date": "2026-06-16", "label": "Jun 16, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 11d ago \u2014 next check in ~10d", "fertStatus": "paused", "fertMsg": "Feeding paused \u2014 not in active season", "notes": ["Drooping lower leaves: Caused by slightly lower light than ideal combined with the weight of water in the leaves. Moving to the sunniest window will help new center growth come in tight and vertical.", "Maintenance: Clear out dried, crispy brown debris from the base to keep clean and deter pests like mealybugs.", "First Aid Gel: Clear gel inside mature leaves soothes minor burns. If needed, snip an entire lower leaf from the very base rather than cutting the tip \u2014 the plant heals cleanly at the main stem connection.", "Photo check (2026-06-16): Leaves are plump, firm, and a healthy green with the classic young-aloe white speckling \u2014 no mushy or translucent spots, so no sign of overwatering. The rosette is splaying wide and arching outward/downward rather than growing upright, which confirms the light is a touch low; move it onto the sunniest south- or west-facing sill to tighten up new center growth. One inner leaf is yellowing \u2014 likely just an aging lower leaf, but if more follow, ease off watering. Still potted in a terracotta inner pot inside a black cachepot (good \u2014 terracotta breathes), and there's loose mix and the old nursery tag on the soil surface worth clearing out to deter pests."], "hasAction": false}, {"id": "dracaena-malaika", "name": "Dracaena 'Malaika' (Ribbon Plant)", "nickname": "", "location": "Dining room, west-facing", "photos": [{"src": "images/dracaena-malaika-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 11d ago \u2014 next check in ~3d", "fertStatus": "ok", "fertMsg": "Last fertilized 11d ago \u2014 next due in ~17d", "notes": ["Currently a beautifully compact, full rosette growing close to the soil. Over time it will naturally drop lower leaves and build a woody trunk, developing a miniature palm-like appearance.", "Grooming: Wipe long leaves with a damp cloth every few weeks to remove dust and keep them glossy. Gently peel away or snip naturally yellowing lower leaves at the base.", "Trimming tips: If leaf tips develop minor brown crispy edges, trim with sharp scissors following the natural pointed curve of the leaf \u2014 never cut straight across.", "Photo check (2026-06-15): Looking healthy and full \u2014 a dense, arching rosette of strap leaves with crisp variegation (deep green margins, mint stripes, bright white center line), which means the light level at the west window is keeping the variegation vibrant. Leaves are a glossy, even green with no yellowing or mushiness. A couple of leaf tips show very minor browning \u2014 easy to keep an eye on; since this one is sensitive to fluoride/chlorine/salts, using filtered or distilled water will help prevent crispy tips. No pests or scorch visible. Still close to the soil with no woody trunk yet, as expected for its age."], "hasAction": false}, {"id": "snake-plant-1", "name": "Snake Plant #1", "nickname": "", "location": "Big Room, upstairs", "photos": [], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 19d ago \u2014 next check in ~2d", "fertStatus": "pending", "fertMsg": "Feed with next watering \u2014 overdue but soil isn't dry yet (last: 42d ago)", "notes": ["Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out \u2014 tightly wound, circling roots confirm it's time to repot.", "Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.", "Resilience: One of the most forgiving houseplants \u2014 can tolerate neglect, low light, and irregular watering better than almost anything else."], "hasAction": false}, {"id": "snake-plant-2", "name": "Snake Plant #2", "nickname": "", "location": "Big Room, upstairs", "photos": [], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 19d ago \u2014 next check in ~2d", "fertStatus": "pending", "fertMsg": "Feed with next watering \u2014 overdue but soil isn't dry yet (last: 42d ago)", "notes": ["Stalled growth: After 3+ years with no new growth in bright indirect light, roots are very likely circling the pot and need more space. Check by sliding the root ball out \u2014 tightly wound, circling roots confirm it's time to repot.", "Propagation: Extremely easy to propagate via leaf cuttings or by dividing pups (offshoots) at the base. Pups can be potted up individually.", "Resilience: One of the most forgiving houseplants \u2014 can tolerate neglect, low light, and irregular watering better than almost anything else."], "hasAction": false}, {"id": "jade-plant", "name": "Jade Plant", "nickname": "", "location": "", "photos": [{"src": "images/jade-plant-2026-06-15.jpeg", "date": "2026-06-15", "label": "Jun 15, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 2d ago \u2014 next check in ~12d", "fertStatus": "ok", "fertMsg": "Last fertilized 19d ago \u2014 next due in ~9d", "notes": ["Stalled growth: has stayed about the same size for a long time. Most likely cause is too little light (see the leggy form), not watering \u2014 adding water won't help and risks rot. Fix the light first.", "Photo check (2026-06-15): Small jade that's been the same size for a while. The leaves are a healthy firm green with no yellowing, mushiness, or wrinkling, so it is not water-stressed. Growth is leggy/stretched \u2014 a long bare reddish stem with leaves bunched only near the tip, a classic sign of too little light. Move it to the brightest window available (south- or west-facing) to wake up growth and keep it compact, then pinch the tip above a leaf pair to push side branching. Soil reads dry on top (normal for jade); the pale specks are perlite/mineral, not pest activity. Last watered ~2026-06-01, so it's about at its summer interval \u2014 do a soil check and only water if it's dry all the way down."], "hasAction": false}, {"id": "english-ivy", "name": "English Ivy", "nickname": "Ivy", "location": "Kitchen", "photos": [{"src": "images/english-ivy-2026-07-02.jpeg", "date": "2026-07-02", "label": "Jul 2, 2026"}], "thumb": null, "waterStatus": "ok", "waterMsg": "Last watered 2d ago \u2014 next check in ~5d", "fertStatus": "pending", "fertMsg": "Feed with next watering \u2014 overdue but soil isn't dry yet (last: never recorded)", "notes": ["Newly potted water-rooted cuttings (2026-07-02): prioritize steady light moisture and warmth over a strict watering interval until it settles into soil. Water-rooted cuttings can sulk for a week or two while they grow soil roots.", "Toxic to pets and people \u2014 the classic-lobed leaves are tempting to curious cats; site it out of reach.", "Watch for spider mites, ivy's most common pest indoors, especially in warm dry air \u2014 check the undersides of leaves and keep humidity up.", "Photo check (2026-07-02): A small cluster of English ivy cuttings freshly potted into a terracotta-colored plastic pot, sitting on a black saucer (a second glass of water-rooting cuttings is visible alongside). Foliage is a healthy medium-to-deep green with the classic 3\u20135 lobed leaves and pale silvery veins \u2014 firm and glossy, no yellowing, browning, or scorch. Stems are a little open/spread (normal for water-rooted cuttings), which will fill in once it's actively growing and pinched. Fresh soil is still visible on some lower leaves from potting. Keep it lightly moist and in bright indirect light while the water roots convert to soil roots."], "hasAction": false}];
 let cur = 0;
 
 // ── Inline Lucide icons (mirrors the Python ICON_PATHS map) ──
@@ -464,8 +556,8 @@ function icon(name, cls) {
 function avatarFallback(el) { el.classList.remove('cut'); el.innerHTML = icon('leaf'); }
 
 // ── Check-off state (persisted per-day) ──
-const TODAY = "2026-07-03";
-const SUMMARY_DATE = "Jul 3";
+const TODAY = "2026-07-04";
+const SUMMARY_DATE = "Jul 4";
 const SKEY = 'pc-actions-' + TODAY;
 let actions = {};
 try { actions = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (e) { actions = {}; }

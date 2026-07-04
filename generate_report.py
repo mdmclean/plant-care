@@ -62,8 +62,8 @@ MANIFEST = {
     "short_name": "Plants",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#eef1ef",
-    "theme_color": "#064e3b",
+    "background_color": "#e9efeb",
+    "theme_color": "#e9efeb",
     "icons": [
         {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
         {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
@@ -293,8 +293,8 @@ def render(results, today):
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Plant Care</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#064e3b" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#053a2b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#e9efeb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0e0c" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Plant Care">
@@ -302,42 +302,61 @@ def render(results, today):
   <style>
     :root {{
       color-scheme: light dark;
-      --bg: #eef1ef; --surface: #ffffff; --surface-2: #f3f5f4;
-      --border: #e4e8e6;
-      --shadow: 0 1px 2px rgba(16,24,20,.05), 0 6px 16px rgba(16,24,20,.06);
-      --shadow-up: 0 -1px 16px rgba(16,24,20,.07);
-      --text: #111714; --text-2: #5d6a64; --text-3: #aeb6b1;
+      /* Liquid-glass material system: translucent surfaces over an ambient
+         color field, frosted with backdrop blur + saturation, edged with a
+         hairline and a specular top rim. */
+      --bg: #e9efeb;
+      --surface: rgba(255,255,255,.6);
+      --surface-2: rgba(255,255,255,.5);
+      --edge: rgba(15,23,19,.08);
+      --glass: rgba(244,248,246,.55);
+      --glass-strong: rgba(248,251,249,.72);
+      --glass-rim: rgba(255,255,255,.65);
+      --chip: rgba(15,23,19,.05);
+      --chip-press: rgba(15,23,19,.12);
+      --blur: blur(22px) saturate(1.8);
+      --blur-card: blur(14px) saturate(1.5);
+      --shadow: 0 1px 1px rgba(16,24,20,.04), 0 10px 30px rgba(16,24,20,.08);
+      --shadow-float: 0 2px 6px rgba(16,24,20,.06), 0 16px 40px rgba(16,24,20,.16);
+      --text: #101713; --text-2: #56635d; --text-3: #9aa69f;
       --accent: #059669; --accent-press: #047857; --on-accent: #ffffff;
-      --accent-shadow: 0 6px 18px rgba(5,150,105,.32);
-      --header-bg: linear-gradient(135deg, #064e3b 0%, #0a7d59 100%);
-      --warn: #f59e0b; --warn-bg: #fff3df; --warn-text: #8a3a05;
-      --info: #3b82f6; --info-bg: #e7eeff; --info-text: #1d4ed8;
-      --ok: #10b981; --ok-bg: #e1f6ee; --ok-text: #047857;
+      --accent-grad: linear-gradient(135deg, #10b981, #047857);
+      --accent-shadow: 0 8px 24px rgba(5,150,105,.35);
+      --warn: #f59e0b; --warn-bg: rgba(245,158,11,.14); --warn-text: #8a4a05;
+      --info: #3b82f6; --info-bg: rgba(59,130,246,.12); --info-text: #1d4ed8;
+      --ok: #10b981; --ok-bg: rgba(16,185,129,.14); --ok-text: #047857;
       --ok-solid: #059669; --info-solid: #2563eb;
-      --paused: #9aa7a1; --paused-bg: #eef1ef; --paused-text: #6b766f;
-      --danger: #ef4444; --danger-bg: #fce8ea; --danger-text: #be123c;
-      --note-bg: #fff8e6; --note-border: #f59e0b; --note-text: #7a5e16;
-      --toast-bg: #16201c; --toast-text: #f2f5f3;
-      --radius: 16px; --radius-sm: 12px; --radius-pill: 999px;
+      --paused: #93a19a; --paused-bg: rgba(120,134,127,.1); --paused-text: #67736c;
+      --danger: #ef4444; --danger-bg: rgba(239,68,68,.12); --danger-text: #be123c;
+      --note-bg: rgba(245,158,11,.1); --note-border: #f59e0b; --note-text: #7a5e16;
+      --toast-bg: rgba(18,26,22,.78); --toast-text: #f2f5f3;
+      --radius: 20px; --radius-sm: 14px; --radius-pill: 999px;
     }}
     @media (prefers-color-scheme: dark) {{
       :root {{
-        --bg: #0c100e; --surface: #161d19; --surface-2: #1e2622;
-        --border: rgba(255,255,255,.09);
-        --shadow: 0 1px 2px rgba(0,0,0,.5), 0 8px 20px rgba(0,0,0,.4);
-        --shadow-up: 0 -2px 18px rgba(0,0,0,.45);
-        --text: #e9efec; --text-2: #93a29b; --text-3: #5e6a64;
+        --bg: #0a0e0c;
+        --surface: rgba(30,40,34,.5);
+        --surface-2: rgba(255,255,255,.06);
+        --edge: rgba(255,255,255,.09);
+        --glass: rgba(16,22,19,.55);
+        --glass-strong: rgba(22,30,25,.75);
+        --glass-rim: rgba(255,255,255,.1);
+        --chip: rgba(255,255,255,.08);
+        --chip-press: rgba(255,255,255,.16);
+        --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.45);
+        --shadow-float: 0 2px 8px rgba(0,0,0,.4), 0 18px 48px rgba(0,0,0,.55);
+        --text: #e9efec; --text-2: #94a29b; --text-3: #5e6a64;
         --accent: #10b981; --accent-press: #0c9a6c; --on-accent: #04130d;
-        --accent-shadow: 0 6px 20px rgba(16,185,129,.28);
-        --header-bg: linear-gradient(135deg, #053a2b 0%, #066a4b 100%);
-        --warn: #fbbf24; --warn-bg: rgba(251,191,36,.14); --warn-text: #fcd34d;
-        --info: #60a5fa; --info-bg: rgba(96,165,250,.15); --info-text: #93c5fd;
-        --ok: #34d399; --ok-bg: rgba(52,211,153,.15); --ok-text: #6ee7b7;
+        --accent-grad: linear-gradient(135deg, #12c48c, #059669);
+        --accent-shadow: 0 8px 26px rgba(16,185,129,.3);
+        --warn: #fbbf24; --warn-bg: rgba(251,191,36,.15); --warn-text: #fcd34d;
+        --info: #60a5fa; --info-bg: rgba(96,165,250,.16); --info-text: #93c5fd;
+        --ok: #34d399; --ok-bg: rgba(52,211,153,.16); --ok-text: #6ee7b7;
         --ok-solid: #047857; --info-solid: #1d4ed8;
-        --paused: #6b766f; --paused-bg: rgba(255,255,255,.05); --paused-text: #9aa7a1;
-        --danger: #f87171; --danger-bg: rgba(248,113,113,.15); --danger-text: #fca5a5;
+        --paused: #6b766f; --paused-bg: rgba(255,255,255,.06); --paused-text: #9aa7a1;
+        --danger: #f87171; --danger-bg: rgba(248,113,113,.16); --danger-text: #fca5a5;
         --note-bg: rgba(251,191,36,.1); --note-border: #fbbf24; --note-text: #e6d6a8;
-        --toast-bg: #eef1ef; --toast-text: #15201c;
+        --toast-bg: rgba(238,241,239,.9); --toast-text: #15201c;
       }}
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }}
@@ -361,53 +380,83 @@ def render(results, today):
     .copy-btn, .d-chk {{ display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }}
     .badge .ic, .d-loc .ic, .row-loc .ic, .bar-count .ic {{ vertical-align: -.15em; }}
     html, body {{ height: 100%; overflow: hidden; }}
-    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', 'Inter', sans-serif;
             background: var(--bg); color: var(--text);
             -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }}
+    /* Ambient color field: soft green/sky/amber blooms behind every view so
+       the glass surfaces have something to refract. */
+    body::before {{ content: ''; position: fixed; inset: -10%; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(55% 45% at 14% 6%, rgba(16,185,129,.2), transparent 62%),
+        radial-gradient(45% 38% at 88% 10%, rgba(56,189,248,.16), transparent 60%),
+        radial-gradient(60% 50% at 78% 92%, rgba(245,158,11,.12), transparent 62%),
+        radial-gradient(50% 45% at 8% 90%, rgba(16,185,129,.1), transparent 60%),
+        var(--bg); }}
+    @media (prefers-color-scheme: dark) {{
+      body::before {{ background:
+        radial-gradient(55% 45% at 14% 6%, rgba(16,185,129,.14), transparent 62%),
+        radial-gradient(45% 38% at 88% 10%, rgba(56,189,248,.1), transparent 60%),
+        radial-gradient(60% 50% at 78% 92%, rgba(245,158,11,.07), transparent 62%),
+        var(--bg); }}
+    }}
+    :focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
+    @media (prefers-reduced-motion: reduce) {{
+      * {{ animation: none !important; transition: none !important; }}
+    }}
 
     /* ── Views ── */
     .view {{ position: fixed; inset: 0; display: flex; flex-direction: column; }}
 
-    /* ── Header ── */
-    .hdr {{ background: var(--header-bg); color: #fff;
+    /* ── Header: frosted glass bar the content scrolls beneath ── */
+    .hdr {{ position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+            background: var(--glass);
+            -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--edge);
+            box-shadow: inset 0 1px 0 var(--glass-rim);
+            color: var(--text);
             display: flex; align-items: center; gap: .65rem;
-            padding: calc(.95rem + env(safe-area-inset-top)) 1.1rem .95rem;
-            flex-shrink: 0; position: relative; z-index: 2; }}
+            padding: calc(.8rem + env(safe-area-inset-top)) 1.1rem .8rem; }}
     .hdr-title {{ flex: 1; font-size: 1.15rem; font-weight: 800; min-width: 0;
                   letter-spacing: -.02em;
                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
+    .hdr-title .ic {{ color: var(--accent); }}
     .hdr-sub {{ font-size: .68rem; font-weight: 700; letter-spacing: .06em;
                 text-transform: uppercase; white-space: nowrap;
-                background: rgba(255,255,255,.18); color: #fff;
+                background: var(--ok-bg); color: var(--ok-text);
+                border: 1px solid rgba(16,185,129,.25);
                 padding: .3rem .6rem; border-radius: var(--radius-pill); }}
-    .back-btn {{ background: rgba(255,255,255,.16); border: none; color: #fff;
-                 border-radius: 10px; padding: .42rem .8rem; font-size: .85rem;
+    .back-btn {{ background: var(--chip); border: 1px solid var(--edge); color: var(--text);
+                 border-radius: var(--radius-pill); padding: .42rem .85rem; font-size: .85rem;
                  font-weight: 600; cursor: pointer; flex-shrink: 0; }}
-    .back-btn:active {{ background: rgba(255,255,255,.32); }}
-    .icon-btn {{ padding: .42rem .58rem; line-height: 1; }}
+    .back-btn:active {{ background: var(--chip-press); }}
+    .icon-btn {{ padding: .42rem .6rem; line-height: 1; }}
 
     /* ── List ── */
     #list-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                    padding-bottom: .4rem; }}
+                    padding: calc(3.7rem + env(safe-area-inset-top)) 0
+                             calc(6.4rem + env(safe-area-inset-bottom)); }}
     .sec-label {{ font-size: .7rem; font-weight: 800; letter-spacing: .09em;
                   text-transform: uppercase; color: var(--text-2);
                   padding: 1.1rem 1.15rem .4rem; }}
     .sec-label.warn {{ color: var(--warn-text); }}
     .row {{ position: relative; display: flex; align-items: center; gap: .6rem;
-            background: var(--surface); border: 1px solid var(--border);
+            background: var(--surface);
+            -webkit-backdrop-filter: var(--blur-card); backdrop-filter: var(--blur-card);
+            border: 1px solid var(--edge);
             margin: .45rem .8rem; border-radius: var(--radius);
-            padding: .9rem .8rem; cursor: pointer; box-shadow: var(--shadow);
-            transition: transform .12s ease, background .12s ease; }}
-    .row:active {{ transform: scale(.988); background: var(--surface-2); }}
-    .row.urgent::before {{ content: ''; position: absolute; left: 0; top: 13px; bottom: 13px;
+            padding: .9rem .8rem; cursor: pointer;
+            box-shadow: var(--shadow), inset 0 1px 0 var(--glass-rim);
+            transition: transform .12s ease, background .12s ease, box-shadow .12s ease; }}
+    .row:active {{ transform: scale(.988); background: var(--glass-strong); }}
+    .row.urgent::before {{ content: ''; position: absolute; left: 0; top: 15px; bottom: 15px;
                            width: 4px; border-radius: 0 4px 4px 0; background: var(--warn); }}
     /* Small uniform thumbnail docked at the far left. A leaf icon sits behind
        as the placeholder; the photo covers it when loaded and removes itself on
        error, falling back to the leaf. Sized to keep the row compact. */
     .row-avatar {{ position: relative; width: 40px; height: 40px; flex-shrink: 0;
-                   border-radius: 11px; overflow: hidden; display: flex;
+                   border-radius: 13px; overflow: hidden; display: flex;
                    align-items: center; justify-content: center; font-size: 1.2rem;
-                   background: var(--surface-2); border: 1px solid var(--border); }}
+                   background: var(--chip); border: 1px solid var(--edge); }}
     .row-avatar img {{ position: absolute; inset: 0; width: 100%; height: 100%;
                        object-fit: cover; }}
     /* Cutout thumbnails are transparent: let the card color show through and
@@ -421,23 +470,23 @@ def render(results, today):
                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
     .row-needs {{ display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .4rem; }}
     .need-chip {{ font-size: .7rem; font-weight: 700; letter-spacing: -.01em;
-                  padding: .16rem .5rem; border-radius: var(--radius-sm);
+                  padding: .18rem .55rem; border-radius: var(--radius-pill);
                   display: inline-flex; align-items: center; gap: .25rem;
                   border: 1px solid transparent; max-width: 100%; }}
     .need-chip.water,
     .need-chip.fert    {{ background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }}
     .need-chip.unknown {{ background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger); }}
-    .need-chip.soon    {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--border); }}
+    .need-chip.soon    {{ background: var(--paused-bg); color: var(--paused-text); border-color: var(--edge); }}
     .row-dots {{ display: flex; gap: .25rem; flex-shrink: 0; }}
     .chevron {{ color: var(--text-3); font-size: 1.05rem; flex-shrink: 0; margin-left: 0; }}
 
     /* ── Detail ── */
     #detail-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                      padding: 1.1rem .9rem 6rem; }}
+                      padding: calc(4rem + env(safe-area-inset-top)) .9rem 7rem; }}
     .d-name {{ font-size: 1.2rem; font-weight: 800; color: var(--text);
                margin-bottom: .3rem; letter-spacing: -.02em; line-height: 1.2; }}
     .d-loc {{ font-size: .82rem; color: var(--text-2); margin-bottom: 1rem; }}
-    .badge {{ padding: .5rem .75rem; border-radius: var(--radius-sm); margin: .35rem 0;
+    .badge {{ padding: .55rem .8rem; border-radius: var(--radius-sm); margin: .35rem 0;
               font-size: .85rem; line-height: 1.4; font-weight: 500; border-left: 3px solid; }}
     .badge.check   {{ background: var(--warn-bg);   color: var(--warn-text);   border-color: var(--warn); }}
     .badge.due     {{ background: var(--info-bg);   color: var(--info-text);   border-color: var(--info); }}
@@ -452,17 +501,20 @@ def render(results, today):
     .notes ul {{ margin-left: 1.1rem; margin-top: .5rem; }}
     .notes li {{ margin: .55rem 0; line-height: 1.6; }}
 
-    /* ── Detail nav bar ── */
-    .d-nav {{ position: fixed; bottom: 0; left: 0; right: 0; display: flex;
-              align-items: center; gap: .75rem; background: var(--surface);
-              border-top: 1px solid var(--border);
-              padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-              box-shadow: var(--shadow-up); }}
-    .nav-btn {{ background: var(--surface-2); border: 1px solid var(--border);
-                color: var(--text); border-radius: var(--radius-sm);
+    /* ── Detail nav bar: floating glass pill ── */
+    .d-nav {{ position: absolute; left: .8rem; right: .8rem; z-index: 15;
+              bottom: calc(.75rem + env(safe-area-inset-bottom));
+              display: flex; align-items: center; gap: .75rem;
+              background: var(--glass-strong);
+              -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+              border: 1px solid var(--edge); border-radius: 26px;
+              box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim);
+              padding: .55rem .6rem; }}
+    .nav-btn {{ background: var(--chip); border: 1px solid var(--edge);
+                color: var(--text); border-radius: var(--radius-pill);
                 padding: .55rem 1.1rem; font-size: 1rem; font-weight: 700;
                 cursor: pointer; flex-shrink: 0; }}
-    .nav-btn:active {{ background: var(--bg); }}
+    .nav-btn:active {{ background: var(--chip-press); }}
     .nav-btn:disabled {{ opacity: .3; pointer-events: none; }}
     .nav-hint {{ flex: 1; font-size: .73rem; color: var(--text-2); text-align: center;
                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
@@ -471,24 +523,29 @@ def render(results, today):
     .gallery {{ position: relative; margin-bottom: 1rem; }}
     .gallery-track {{ display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
                       -webkit-overflow-scrolling: touch; border-radius: var(--radius);
-                      border: 1px solid var(--border); background: var(--surface-2);
+                      border: 1px solid var(--edge); background: var(--surface-2);
+                      box-shadow: var(--shadow);
                       scrollbar-width: none; }}
     .gallery-track::-webkit-scrollbar {{ display: none; }}
     .slide {{ position: relative; flex: 0 0 100%; scroll-snap-align: center; }}
     .plant-photo {{ width: 100%; height: 260px; object-fit: cover; display: block;
                     background: var(--surface-2); }}
     .photo-date {{ position: absolute; right: .55rem; bottom: .55rem;
-                   background: rgba(0,0,0,.58); color: #fff; font-size: .72rem; font-weight: 700;
+                   background: rgba(0,0,0,.4); color: #fff; font-size: .72rem; font-weight: 700;
+                   -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
+                   border: 1px solid rgba(255,255,255,.18);
                    padding: .26rem .58rem; border-radius: var(--radius-pill);
                    letter-spacing: .02em; }}
     .g-nav {{ position: absolute; top: 50%; transform: translateY(-50%);
-              width: 34px; height: 34px; border-radius: 50%; border: none;
-              background: rgba(0,0,0,.42); color: #fff; font-size: 1.4rem; line-height: 1;
+              width: 34px; height: 34px; border-radius: 50%;
+              border: 1px solid rgba(255,255,255,.2);
+              background: rgba(20,24,22,.35); color: #fff; font-size: 1.4rem; line-height: 1;
+              -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
               cursor: pointer; display: flex; align-items: center; justify-content: center;
               padding-bottom: 3px; }}
     .g-prev {{ left: .5rem; }}
     .g-next {{ right: .5rem; }}
-    .g-nav:active {{ background: rgba(0,0,0,.72); }}
+    .g-nav:active {{ background: rgba(0,0,0,.6); }}
     .g-nav:disabled {{ opacity: 0; pointer-events: none; }}
     .g-dots {{ position: absolute; left: 0; right: 0; bottom: .5rem; display: flex;
                justify-content: center; gap: .32rem; }}
@@ -499,23 +556,27 @@ def render(results, today):
        tappable. Both open the full-screen zoomable viewer. */
     .plant-photo {{ cursor: zoom-in; }}
     .g-zoom {{ position: absolute; top: .5rem; right: .5rem; width: 32px; height: 32px;
-               border-radius: 50%; border: none; background: rgba(0,0,0,.42); color: #fff;
+               border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
+               background: rgba(20,24,22,.35); color: #fff;
+               -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
                font-size: 1rem; line-height: 1; cursor: pointer; display: flex;
                align-items: center; justify-content: center; }}
-    .g-zoom:active {{ background: rgba(0,0,0,.72); }}
+    .g-zoom:active {{ background: rgba(0,0,0,.6); }}
 
-    /* ── Header sub menu ── */
+    /* ── Header sub menu: frosted popover ── */
     .menu-wrap {{ position: relative; flex-shrink: 0; }}
     .menu-pop {{ position: absolute; top: calc(100% + .45rem); right: 0; z-index: 30;
-                 min-width: 200px; background: var(--surface); color: var(--text);
-                 border: 1px solid var(--border); border-radius: var(--radius-sm);
-                 box-shadow: var(--shadow); overflow: hidden; }}
+                 min-width: 210px; background: var(--glass-strong); color: var(--text);
+                 -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+                 border: 1px solid var(--edge); border-radius: var(--radius-sm);
+                 box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim);
+                 overflow: hidden; }}
     .menu-item {{ display: flex; align-items: center; gap: .6rem; width: 100%;
                   padding: .8rem .95rem; background: none; border: none;
                   color: var(--text); font-size: .9rem; font-weight: 600;
                   cursor: pointer; text-align: left; }}
-    .menu-item + .menu-item {{ border-top: 1px solid var(--border); }}
-    .menu-item:active {{ background: var(--surface-2); }}
+    .menu-item + .menu-item {{ border-top: 1px solid var(--edge); }}
+    .menu-item:active {{ background: var(--chip-press); }}
     .menu-item .ic {{ width: 1.1em; height: 1.1em; color: var(--text-2); }}
     .menu-item .menu-check {{ margin-left: auto; color: var(--accent); }}
 
@@ -524,7 +585,8 @@ def render(results, today):
        newest photo), no care chores anywhere. Tapping a tile opens the
        full-screen viewer in slideshow mode — swipe to keep browsing. */
     #gallery-scroll {{ flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                       padding: .8rem .8rem calc(.8rem + env(safe-area-inset-bottom)); }}
+                       padding: calc(3.9rem + env(safe-area-inset-top)) .8rem
+                                calc(1rem + env(safe-area-inset-bottom)); }}
     .gal-grid {{ display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem;
                  max-width: 1200px; margin: 0 auto; }}
     @media (min-width: 720px) {{
@@ -532,8 +594,9 @@ def render(results, today):
     }}
     .gal-card {{ position: relative; aspect-ratio: 3 / 4; border-radius: var(--radius);
                  overflow: hidden; background: var(--surface-2);
-                 border: 1px solid var(--border); box-shadow: var(--shadow);
-                 cursor: pointer; transition: transform .12s ease;
+                 border: 1px solid var(--edge);
+                 box-shadow: var(--shadow), inset 0 1px 0 var(--glass-rim);
+                 cursor: pointer; transition: transform .12s ease, box-shadow .12s ease;
                  display: flex; align-items: center; justify-content: center; }}
     .gal-card:active {{ transform: scale(.97); }}
     .gal-card > .ic {{ width: 34px; height: 34px; color: var(--text-3); }}
@@ -548,7 +611,8 @@ def render(results, today):
                   font-size: .9rem; grid-column: 1 / -1; }}
 
     /* ── Full-screen photo viewer (lightbox) ── */
-    .lightbox {{ position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.94);
+    .lightbox {{ position: fixed; inset: 0; z-index: 100; background: rgba(4,8,6,.9);
+                 -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
                  opacity: 0; pointer-events: none; transition: opacity .2s ease;
                  overflow: hidden; touch-action: none; overscroll-behavior: contain; }}
     .lightbox.show {{ opacity: 1; pointer-events: auto; }}
@@ -556,14 +620,17 @@ def render(results, today):
                      object-fit: contain; transform-origin: 0 0; will-change: transform;
                      user-select: none; -webkit-user-drag: none; }}
     .lb-close {{ position: fixed; top: calc(.55rem + env(safe-area-inset-top)); right: .7rem;
-                 width: 42px; height: 42px; border-radius: 50%; border: none; z-index: 101;
-                 background: rgba(255,255,255,.18); color: #fff; font-size: 1.25rem;
+                 width: 42px; height: 42px; border-radius: 50%; z-index: 101;
+                 border: 1px solid rgba(255,255,255,.22);
+                 background: rgba(255,255,255,.14); color: #fff; font-size: 1.25rem;
+                 -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4);
                  cursor: pointer; display: flex; align-items: center; justify-content: center; }}
-    .lb-close:active {{ background: rgba(255,255,255,.34); }}
+    .lb-close:active {{ background: rgba(255,255,255,.32); }}
     .lb-hint {{ position: fixed; left: 50%; transform: translateX(-50%); z-index: 101;
                 bottom: calc(1rem + env(safe-area-inset-bottom)); pointer-events: none;
                 color: rgba(255,255,255,.72); font-size: .76rem; font-weight: 600;
                 background: rgba(0,0,0,.4); padding: .35rem .8rem; border-radius: var(--radius-pill);
+                -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
                 transition: opacity .3s ease; }}
     /* Slideshow chrome (only shown when the viewer is opened from the gallery):
        a caption naming the plant, ←/→ arrows to change plant, and ↑/↓ arrows to
@@ -573,10 +640,13 @@ def render(results, today):
                max-width: calc(100% - 7.5rem); white-space: nowrap; overflow: hidden;
                text-overflow: ellipsis; color: #fff; font-size: .85rem; font-weight: 700;
                background: rgba(0,0,0,.45); padding: .4rem .9rem;
+               -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
                border-radius: var(--radius-pill); }}
     .lb-nav {{ position: fixed; z-index: 101;
-               width: 42px; height: 42px; border-radius: 50%; border: none;
-               background: rgba(255,255,255,.18); color: #fff; font-size: 1.2rem;
+               width: 42px; height: 42px; border-radius: 50%;
+               border: 1px solid rgba(255,255,255,.22);
+               background: rgba(255,255,255,.14); color: #fff; font-size: 1.2rem;
+               -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4);
                cursor: pointer; display: flex; align-items: center; justify-content: center; }}
     .lb-nav:active {{ background: rgba(255,255,255,.34); }}
     .lb-prev {{ left: .7rem; top: 50%; transform: translateY(-50%); }}
@@ -586,7 +656,7 @@ def render(results, today):
 
     /* ── Check-off toggles (list rows) ── */
     .chk {{ width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
-            border: 1.5px solid var(--border); background: var(--surface-2); font-size: 1rem;
+            border: 1.5px solid var(--edge); background: var(--chip); font-size: 1rem;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; opacity: .5; filter: grayscale(1);
             transition: opacity .15s, filter .15s, box-shadow .15s, background .15s, transform .1s; }}
@@ -608,27 +678,32 @@ def render(results, today):
     .chk.pending {{ opacity: 1; filter: none; background: var(--info-bg); color: var(--info-text);
                     border-color: var(--info); box-shadow: inset 0 0 0 1.5px var(--info); }}
 
-    /* ── Action bar (list view) ── */
-    .action-bar {{ flex-shrink: 0; display: flex; align-items: center; gap: .75rem;
-                   background: var(--surface); border-top: 1px solid var(--border);
-                   padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-                   box-shadow: var(--shadow-up); }}
+    /* ── Action bar (list view): floating glass pill ── */
+    .action-bar {{ position: absolute; left: .8rem; right: .8rem; z-index: 15;
+                   bottom: calc(.75rem + env(safe-area-inset-bottom));
+                   display: flex; align-items: center; gap: .6rem;
+                   background: var(--glass-strong);
+                   -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+                   border: 1px solid var(--edge); border-radius: 26px;
+                   box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim);
+                   padding: .55rem .6rem .55rem 1rem; }}
     .bar-count {{ flex: 1; font-size: .8rem; font-weight: 500; color: var(--text-2);
                   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
     .clear-btn {{ background: none; border: none; color: var(--text-2);
                   font-size: .8rem; cursor: pointer; flex-shrink: 0; padding: .3rem .2rem; }}
     .clear-btn:active {{ color: var(--text); }}
-    .copy-btn {{ background: var(--accent); color: var(--on-accent); border: none;
-                 border-radius: var(--radius-sm); padding: .62rem 1.2rem; font-size: .9rem;
+    .copy-btn {{ background: var(--accent-grad); color: var(--on-accent); border: none;
+                 border-radius: var(--radius-pill); padding: .62rem 1.25rem; font-size: .9rem;
                  font-weight: 800; letter-spacing: -.01em; cursor: pointer; flex-shrink: 0;
-                 box-shadow: var(--accent-shadow); transition: transform .1s ease; }}
+                 box-shadow: var(--accent-shadow), inset 0 1px 0 rgba(255,255,255,.25);
+                 transition: transform .1s ease, filter .1s ease; }}
     .copy-btn:disabled {{ opacity: .4; box-shadow: none; pointer-events: none; }}
-    .copy-btn:active {{ transform: scale(.96); background: var(--accent-press); }}
+    .copy-btn:active {{ transform: scale(.96); filter: brightness(.92); }}
 
     /* ── Detail check-off buttons ── */
     .d-actions {{ display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.1rem; }}
-    .d-chk {{ flex: 1 1 30%; min-width: 96px; padding: .75rem .5rem; border-radius: var(--radius-sm);
-              cursor: pointer; border: 1.5px solid var(--border); background: var(--surface-2);
+    .d-chk {{ flex: 1 1 30%; min-width: 96px; padding: .78rem .5rem; border-radius: var(--radius-sm);
+              cursor: pointer; border: 1.5px solid var(--edge); background: var(--chip);
               color: var(--text); font-size: .82rem; font-weight: 700; transition: transform .1s ease; }}
     .d-chk:active {{ transform: scale(.96); }}
     .d-chk.need {{ background: var(--warn); color: #fff; border-color: var(--warn); }}
@@ -636,9 +711,11 @@ def render(results, today):
     .d-chk.snooze {{ background: var(--paused); color: #fff; border-color: var(--paused); }}
 
     /* ── Toast ── */
-    .toast {{ position: fixed; left: 50%; bottom: 5.5rem; z-index: 50;
+    .toast {{ position: fixed; left: 50%; bottom: 6.4rem; z-index: 50;
               transform: translateX(-50%) translateY(20px);
               background: var(--toast-bg); color: var(--toast-text);
+              -webkit-backdrop-filter: blur(14px) saturate(1.6); backdrop-filter: blur(14px) saturate(1.6);
+              border: 1px solid var(--glass-rim);
               padding: .75rem 1.2rem; border-radius: var(--radius-pill);
               font-size: .85rem; font-weight: 600; max-width: 80%;
               box-shadow: 0 8px 24px rgba(0,0,0,.25);
@@ -651,25 +728,40 @@ def render(results, today):
     .from-right {{ animation: fromRight .22s ease-out; }}
     .from-left  {{ animation: fromLeft  .22s ease-out; }}
 
+    /* ── Pointer hover states (desktop) ── */
+    @media (hover: hover) {{
+      .row:hover {{ transform: translateY(-2px);
+                    box-shadow: var(--shadow-float), inset 0 1px 0 var(--glass-rim); }}
+      .gal-card:hover {{ transform: translateY(-2px); box-shadow: var(--shadow-float); }}
+      .menu-item:hover, .nav-btn:not(:disabled):hover, .back-btn:hover {{ background: var(--chip-press); }}
+      .copy-btn:hover {{ filter: brightness(1.06); }}
+    }}
+
     /* ── Wide screens (desktop browser) ── */
     /* The single-column list reads as a thin ribbon on a wide window, so here
        we flow the cards into a responsive multi-column tile grid. The section
        labels span the full width; each .row becomes a tile (it's already a
-       self-contained card). Mobile keeps the stacked list above. */
+       self-contained card). Mobile keeps the stacked list above. The floating
+       bottom bars stay centered at a comfortable reading width. */
     @media (min-width: 720px) {{
       #list-scroll {{ display: grid; align-content: start; align-items: start;
                       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                      gap: .8rem; padding: 1.2rem 1.4rem calc(1.2rem + .4rem);
+                      gap: .8rem;
+                      padding: calc(4.4rem + env(safe-area-inset-top)) 1.4rem
+                               calc(6.6rem + env(safe-area-inset-bottom));
                       max-width: 1200px; margin: 0 auto; width: 100%; }}
       .sec-label {{ grid-column: 1 / -1; padding: .9rem .2rem .1rem; }}
       .row {{ margin: 0; }}
 
-      #detail-scroll {{ padding: 1.6rem 1.6rem 6rem; }}
+      .action-bar, .d-nav {{ left: 50%; right: auto; transform: translateX(-50%);
+                             width: min(640px, calc(100vw - 2rem)); }}
+
+      #detail-scroll {{ padding: calc(4.6rem + env(safe-area-inset-top)) 1.6rem 7rem; }}
       .d-body {{ display: flex; align-items: flex-start; gap: 1.8rem;
                  max-width: 1100px; margin: 0 auto; }}
       .gallery {{ flex: 0 0 48%; max-width: 480px; margin-bottom: 0;
                   position: sticky; top: 0; }}
-      .plant-photo {{ height: auto; max-height: 78vh; object-fit: contain; }}
+      .plant-photo {{ height: auto; max-height: 74vh; object-fit: contain; }}
       .d-content {{ flex: 1 1 0; min-width: 0; }}
     }}
   </style>
