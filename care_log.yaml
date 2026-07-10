@@ -2,7 +2,7 @@
 # Dates use YYYY-MM-DD format.
 
 hoya-krimson-queen:
-  last_watered: 2026-06-26
+  last_watered: 2026-07-09
   last_fertilized: 2026-06-26
   notes: ""
 
@@ -12,7 +12,7 @@ dieffenbachia:
   notes: ""
 
 rieger-begonia:
-  last_watered: 2026-07-02
+  last_watered: 2026-07-09
   last_fertilized: 2026-06-23
   notes: ""
 
@@ -72,7 +72,7 @@ tradescantia-nanouk:
   notes: "Newly propagating — keep lightly moist until rooted; do not fertilize yet"
 
 tradescantia-nanouk-2:
-  last_watered: 2026-07-04
+  last_watered: 2026-07-09
   last_fertilized: ""
   notes: "Water-rooted cutting potted 2026-06-18 — keep lightly moist until established in soil; do not fertilize yet"
 
