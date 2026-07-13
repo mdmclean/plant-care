@@ -1,0 +1,56 @@
+# silver-jade
+id: silver-jade
+name: "Silver Dollar Jade"
+photos:
+  - file: "images/silver-jade-2026-07-13.jpeg"
+    date: "2026-07-13"
+botanical_name: "Crassula arborescens"
+type: "Succulent Evergreen Shrub"
+toxicity: "Toxic to cats and dogs — ingestion can cause vomiting, lethargy, and incoordination"
+growth_habit: "Slow-growing, branching succulent with thick stems and rounded, silvery blue-green leaves borne in opposite pairs. Leaves often carry a powdery bloom and reddish margins. Develops a shrubby, tree-like form with age; young plants can sprawl and get leggy before thickening up."
+
+location: ""
+
+light:
+  ideal: "Bright light with several hours of direct sun — a south- or west-facing window is ideal"
+  too_much: "Leaf margins deepen to red/maroon in very strong sun (cosmetic and attractive); sudden harsh sun on an unacclimated plant can scorch"
+  too_little: "Stretched, leggy growth with long gaps between leaves; weak, sprawling stems that reach toward the light; the silvery bloom and red edges fade"
+  notes: "Like all jades, insufficient light is the most common problem — it needs more sun than most houseplants to stay compact and keep its silver-blue color."
+
+watering:
+  when: "Allow the soil to dry out 100% between waterings — always check before watering. When in doubt, wait."
+  how: "Water thoroughly until it drains from the holes, then empty the saucer immediately. Never let it sit in water — highly prone to root rot."
+  seasonal_note: "Water sparingly in fall and winter when growth slows."
+  overwatering_signs: "Soft, mushy, yellowing or translucent leaves; leaves dropping at the slightest touch; rotting stem base"
+  underwatering_signs: "Wrinkled, puckered, or shriveled leaves that lose their firm plumpness"
+  estimated_interval_days:
+    spring_summer: 14
+    fall_winter: 30
+
+environment:
+  temperature: "18°C–24°C (65°F–75°F). Keep above 10°C (50°F); cannot tolerate frost."
+  humidity: "Prefers dry household air. Avoid humid rooms and never mist — moisture sitting on leaves invites rot and fungal spots, and rubs off the silvery bloom."
+
+soil:
+  mix: "Sharply draining, gritty cactus and succulent mix"
+  recipe: "Cactus/succulent potting mix with extra perlite or coarse sand for drainage"
+  repotting: "Prefers to be snug in its pot. Repot only every 2–3 years or when root-bound. Terracotta is ideal — porous clay helps the soil dry evenly."
+
+feeding:
+  fertilizer: "Balanced succulent fertilizer at half-strength"
+  schedule: "Once monthly during the active growing season (spring and summer). Do not feed in fall or winter."
+  active_months: [3, 4, 5, 6, 7, 8]  # March through August
+
+pruning: >
+  Pinch or prune leggy stems just above a leaf pair to encourage branching and a
+  bushier, sturdier shape. Pruned tips root easily as new cuttings — let the cut
+  end callous over for a day or two before placing on soil.
+
+propagation: >
+  Very easy from leaf or stem cuttings. Let the cut surface dry/callous for 1–3
+  days, set on top of barely-moist gritty soil, and keep in bright light. Water
+  only sparingly until roots establish to avoid rotting the cutting.
+
+notes:
+  - "Handle gently — the powdery silver bloom (farina) on the leaves rubs off with touch and doesn't grow back until new leaves form."
+  - "Photo check (2026-07-13): Newly acquired (June 29) young Silver Dollar Jade in a grey 'CALM' cachepot on a sunny windowsill. Leaves are plump, firm, and a healthy silvery blue-green with faint reddish edges — no yellowing, mushiness, or wrinkling, so it's well hydrated and not water-stressed. Growth is a bit sprawling/leggy with some stretch between leaf pairs, which points to wanting more direct sun; the good windowsill spot should help it firm up and keep its color. Soil surface is a gritty mineral mix reading dry on top (normal for jade). Acquired 2026-06-29 and not watered since — at ~14 days that's right at its summer interval, so do a soil check and water only if it's dry all the way down."
