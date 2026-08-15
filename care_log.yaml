@@ -2,7 +2,7 @@
 # Dates use YYYY-MM-DD format.
 
 hoya-krimson-queen:
-  last_watered: 2026-08-05
+  last_watered: 2026-08-15
   last_fertilized: 2026-06-26
   notes: ""
 
@@ -23,15 +23,15 @@ kalanchoe:
 monstera-deliciosa:
   last_watered: 2026-08-05
   last_fertilized: 2026-08-05
-  notes: ""
+  notes: "Soil checked 2026-08-15 — still wet, watering skipped."
 
 money-tree:
-  last_watered: 2026-08-04
+  last_watered: 2026-08-15
   last_fertilized: 2026-07-04
   notes: ""
 
 anthurium:
-  last_watered: 2026-08-04
+  last_watered: 2026-08-15
   last_fertilized: 2026-06-26
   notes: ""
 
@@ -41,7 +41,7 @@ marble-queen-pothos:
   notes: ""
 
 aloe-vera:
-  last_watered: 2026-07-16
+  last_watered: 2026-08-15
   last_fertilized: 2026-06-02
   notes: ""
 
@@ -51,7 +51,7 @@ dracaena-malaika:
   notes: ""
 
 parlor-palm:
-  last_watered: 2026-08-04
+  last_watered: 2026-08-15
   last_fertilized: 2026-06-26
   notes: "Shared pot with Anthurium"
 
@@ -88,7 +88,7 @@ spider-plant:
 english-ivy:
   last_watered: 2026-08-04
   last_fertilized: ""
-  notes: "Water-propagated cuttings potted into soil 2026-07-02 — keep lightly moist until established; do not fertilize yet. Soil checked 2026-08-13 — still wet, watering skipped."
+  notes: "Water-propagated cuttings potted into soil 2026-07-02 — keep lightly moist until established; do not fertilize yet. Soil checked 2026-08-13 and 2026-08-15 — still wet both times, watering skipped; 11 days since last watering, so watch drainage/light if it stays soggy."
 
 silver-jade:
   last_watered: 2026-08-04
