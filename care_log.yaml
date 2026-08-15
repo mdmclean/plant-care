@@ -7,14 +7,13 @@ hoya-krimson-queen:
   notes: ""
 
 dieffenbachia:
-  last_watered: 2026-08-04
+  last_watered: 2026-08-13
   last_fertilized: 2026-06-23
   notes: ""
 
-rieger-begonia:
-  last_watered: 2026-08-04
-  last_fertilized: 2026-06-23
-  notes: ""
+# rieger-begonia — died 2026-08-13, archived. Profile kept in
+# plants/rieger-begonia.yaml (status: died); entry removed here so it drops off
+# the daily report.
 
 kalanchoe:
   last_watered: 2026-08-04
@@ -47,7 +46,7 @@ aloe-vera:
   notes: ""
 
 dracaena-malaika:
-  last_watered: 2026-07-23
+  last_watered: 2026-08-13
   last_fertilized: 2026-06-23
   notes: ""
 
@@ -67,12 +66,12 @@ snake-plant-2:
   notes: ""
 
 tradescantia-nanouk:
-  last_watered: 2026-07-23
+  last_watered: 2026-08-13
   last_fertilized: ""
   notes: "Newly propagating — keep lightly moist until rooted; do not fertilize yet"
 
 tradescantia-nanouk-2:
-  last_watered: 2026-08-04
+  last_watered: 2026-08-13
   last_fertilized: ""
   notes: "Water-rooted cutting potted 2026-06-18 — keep lightly moist until established in soil; do not fertilize yet"
 
@@ -82,14 +81,14 @@ jade-plant:
   notes: "Established but stalled (leggy from low light) — water only when fully dry; started feeding 2026-06-15 to encourage active growth"
 
 spider-plant:
-  last_watered: 2026-08-04
+  last_watered: 2026-08-13
   last_fertilized: ""
   notes: "Newly potted plantlet — keep lightly moist until established; do not fertilize yet"
 
 english-ivy:
   last_watered: 2026-08-04
   last_fertilized: ""
-  notes: "Water-propagated cuttings potted into soil 2026-07-02 — keep lightly moist until established; do not fertilize yet"
+  notes: "Water-propagated cuttings potted into soil 2026-07-02 — keep lightly moist until established; do not fertilize yet. Soil checked 2026-08-13 — still wet, watering skipped."
 
 silver-jade:
   last_watered: 2026-08-04
