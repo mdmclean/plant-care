@@ -7,8 +7,8 @@ hoya-krimson-queen:
   notes: ""
 
 dieffenbachia:
-  last_watered: 2026-08-13
-  last_fertilized: 2026-06-23
+  last_watered: 2026-08-20
+  last_fertilized: 2026-08-20
   notes: ""
 
 # rieger-begonia — died 2026-08-13, archived. Profile kept in
@@ -16,14 +16,14 @@ dieffenbachia:
 # the daily report.
 
 kalanchoe:
-  last_watered: 2026-08-04
-  last_fertilized: 2026-06-26
+  last_watered: 2026-08-20
+  last_fertilized: 2026-08-20
   notes: ""
 
 monstera-deliciosa:
-  last_watered: 2026-08-05
+  last_watered: 2026-08-20
   last_fertilized: 2026-08-05
-  notes: "Soil checked 2026-08-15 — still wet, watering skipped."
+  notes: ""
 
 money-tree:
   last_watered: 2026-08-15
@@ -36,8 +36,8 @@ anthurium:
   notes: ""
 
 marble-queen-pothos:
-  last_watered: 2026-08-04
-  last_fertilized: 2026-07-04
+  last_watered: 2026-08-20
+  last_fertilized: 2026-08-20
   notes: ""
 
 aloe-vera:
@@ -66,31 +66,31 @@ snake-plant-2:
   notes: ""
 
 tradescantia-nanouk:
-  last_watered: 2026-08-13
+  last_watered: 2026-08-20
   last_fertilized: ""
   notes: "Newly propagating — keep lightly moist until rooted; do not fertilize yet"
 
 tradescantia-nanouk-2:
-  last_watered: 2026-08-13
+  last_watered: 2026-08-20
   last_fertilized: ""
   notes: "Water-rooted cutting potted 2026-06-18 — keep lightly moist until established in soil; do not fertilize yet"
 
 jade-plant:
-  last_watered: 2026-08-05
-  last_fertilized: 2026-07-16
+  last_watered: 2026-08-20
+  last_fertilized: 2026-08-20
   notes: "Established but stalled (leggy from low light) — water only when fully dry; started feeding 2026-06-15 to encourage active growth"
 
 spider-plant:
-  last_watered: 2026-08-13
+  last_watered: 2026-08-20
   last_fertilized: ""
   notes: "Newly potted plantlet — keep lightly moist until established; do not fertilize yet"
 
 english-ivy:
-  last_watered: 2026-08-04
+  last_watered: 2026-08-20
   last_fertilized: ""
-  notes: "Water-propagated cuttings potted into soil 2026-07-02 — keep lightly moist until established; do not fertilize yet. Soil checked 2026-08-13 and 2026-08-15 — still wet both times, watering skipped; 11 days since last watering, so watch drainage/light if it stays soggy."
+  notes: "Water-propagated cuttings potted into soil 2026-07-02 — keep lightly moist until established; do not fertilize yet. Soil was still wet at the 2026-08-13 and 2026-08-15 checks (watering skipped both times); dried out and watered 2026-08-20, so drainage looks fine — keep an eye on it if it goes soggy again."
 
 silver-jade:
-  last_watered: 2026-08-04
-  last_fertilized: ""
-  notes: "Acquired 2026-06-29; first watering 2026-07-16 — water only when fully dry"
+  last_watered: 2026-08-20
+  last_fertilized: 2026-08-20
+  notes: "Acquired 2026-06-29; first watering 2026-07-16 — water only when fully dry. First fertilizing 2026-08-20 (half-strength succulent feed)."
